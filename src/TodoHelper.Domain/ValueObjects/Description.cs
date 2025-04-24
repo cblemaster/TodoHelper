@@ -17,6 +17,7 @@ internal sealed class Description
         return !IsValid ? Result<Description>.Failure(error) : Result<Description>.Success(new Description(value));
     }
 
+    // TODO: this is the exact same validation as in Name.cs...
     private static (bool IsValid, string error) Validate(string value) =>
         string.IsNullOrWhiteSpace(value)
             ? (false, $"{nameof(value)} is required, and cannot be all whitespace characters.")
