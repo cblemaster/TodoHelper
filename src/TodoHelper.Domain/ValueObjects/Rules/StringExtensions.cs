@@ -1,7 +1,4 @@
-﻿
-using TodoHelper.Domain.Entities;
-
-namespace TodoHelper.Domain.Rules;
+﻿namespace TodoHelper.Domain.ValueObjects.Rules;
 
 internal static class StringExtensions
 {

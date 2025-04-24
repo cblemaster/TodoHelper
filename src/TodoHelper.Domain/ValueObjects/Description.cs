@@ -1,5 +1,4 @@
-﻿
-using TodoHelper.Domain.Rules;
+﻿using TodoHelper.Domain.ValueObjects.Rules;
 
 namespace TodoHelper.Domain.ValueObjects;
 
