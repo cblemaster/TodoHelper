@@ -1,4 +1,6 @@
 ﻿
+using TodoHelper.Domain.Rules;
+
 namespace TodoHelper.Domain.ValueObjects;
 
 internal sealed class Name
@@ -9,6 +11,9 @@ internal sealed class Name
 
     private Name(string value) => Value = value;
 
-    // TODO: Validation
-    internal static Name CreateNew(string value) => new(value);
+    internal static Name CreateNew(string value)
+    {
+        value = value.ReturnWithValidNameOrThrow();
+        return new(value);
+    }
 }
