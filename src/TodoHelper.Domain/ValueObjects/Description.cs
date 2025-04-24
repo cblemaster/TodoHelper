@@ -11,7 +11,7 @@ internal sealed class Description
 
     internal static Description CreateNew(string value)
     {
-        value = value.ReturnWithValidDescriptionOrThrow();
+        value = value.ReturnTodoWithValidDescriptionValueOrThrow();    // TODO: handle ex
         return new(value);
     }
 }

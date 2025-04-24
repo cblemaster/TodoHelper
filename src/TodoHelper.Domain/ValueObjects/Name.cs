@@ -13,7 +13,7 @@ internal sealed class Name
 
     internal static Name CreateNew(string value)
     {
-        value = value.ReturnWithValidNameOrThrow();
+        value = value.ReturnCategoryWithValidNameValueOrThrow();    // TODO: handle ex
         return new(value);
     }
 }
