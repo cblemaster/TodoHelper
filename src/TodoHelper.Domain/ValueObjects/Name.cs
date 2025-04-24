@@ -1,4 +1,5 @@
-﻿using TodoHelper.Domain.ValueObjects.Rules;
+﻿
+using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Domain.ValueObjects;
 
@@ -10,9 +11,16 @@ internal sealed class Name
 
     private Name(string value) => Value = value;
 
-    internal static Name CreateNew(string value)
+    internal static Result<Name> CreateNew(string value)
     {
-        value = value.ReturnCategoryWithValidNameValueOrThrow();    // TODO: handle ex
-        return new(value);
+        (bool IsValid, string error) = Validate(value);
+        return !IsValid ? Result<Name>.Failure(error) : Result<Name>.Success(new Name(value));
     }
+
+    private static (bool IsValid, string error) Validate(string value) =>
+        string.IsNullOrWhiteSpace(value)
+            ? (false, $"{nameof(value)} is required, and cannot be all whitespace characters.")
+            : value.Length > MAX_LENGTH
+                ? (false, $"{nameof(value)} must be {MAX_LENGTH} or fewer characters.")
+                : (true, string.Empty);
 }
