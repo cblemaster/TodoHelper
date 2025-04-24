@@ -8,6 +8,7 @@ internal sealed class Category : Entity<Category>
     internal override Identifier<Category> Id { get; }
     internal IEnumerable<Todo> Todos { get; }
     internal Name Name { get; }
+    internal bool CanBeDeleted => !Todos.Any();
 
     private Category(IEnumerable<Todo> todos, Name name)
     {

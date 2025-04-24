@@ -15,6 +15,8 @@ internal sealed class Todo : Entity<Todo>
     internal UpdateDate UpdateDate { get; }
     internal Importance Importance { get; }
     internal bool IsComplete => CloseDate.Value is not null;
+    internal bool CanBeUpdated => !IsComplete;
+    internal bool CanBeDeleted => !Importance.IsImportant;
 
     private Todo
     (
