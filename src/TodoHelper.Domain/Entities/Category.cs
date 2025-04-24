@@ -18,16 +18,14 @@ internal sealed class Category : Entity<Category>
         Name = name;
     }
 
-    internal static Category CreateNew(IEnumerable<Todo> todos, string name)
+    internal static Result<Category> CreateNew(IEnumerable<Todo> todos, string name)
     {
         Result<Name> nameResult = Name.CreateNew(name);
 
         return nameResult.IsSuccess && nameResult.Value is not null
-            ? new(todos, nameResult.Value)
+            ? Result<Category>.Success(new([], nameResult.Value))
             : nameResult.IsFailure && nameResult.Error is not null
-                ? InvalidCategoryName(nameResult.Error)
-                : InvalidCategoryName("An unknown error occurred while creating a new category.");
+                ? Result<Category>.Failure(nameResult.Error)
+                : Result<Category>.Failure("An unknown error occurred while creating a new category.");
     }
-
-    internal static Category InvalidCategoryName(string error) => CreateNew([], error);
 }

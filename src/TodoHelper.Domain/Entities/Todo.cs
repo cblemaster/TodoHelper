@@ -1,4 +1,5 @@
-﻿using TodoHelper.Domain.Results;
+﻿
+using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
@@ -39,25 +40,26 @@ internal sealed class Todo : Entity<Todo>
         Importance = importance;
     }
 
-    internal static Todo CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
+    internal static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
     {
         Result<Description> descriptionResult = Description.CreateNew(description);
 
         return descriptionResult.IsSuccess && descriptionResult.Value is not null
-            ? new
-            (
-                Identifier<Category>.Create(categoryId),
-                descriptionResult.Value,
-                DueDate.CreateNew(dueDate),
-                CloseDate.CreateNew(null),
-                CreateDate.CreateNew(),
-                UpdateDate.CreateNew(),
-                Importance.CreateNew(isImportant)
-            )
+            ? Result<Todo>.Success
+                (
+                    new
+                    (
+                        Identifier<Category>.Create(categoryId),
+                        descriptionResult.Value,
+                        DueDate.CreateNew(dueDate),
+                        CloseDate.CreateNew(null),
+                        CreateDate.CreateNew(),
+                        UpdateDate.CreateNew(),
+                        Importance.CreateNew(isImportant)
+                    )
+                )
             : descriptionResult.IsFailure && descriptionResult.Error is not null
-                ? InvalidTodoDescription(descriptionResult.Error)
-                : InvalidTodoDescription("An unknown error occurred while creating a new todo.");
+                ? Result<Todo>.Failure(descriptionResult.Error)
+                : Result<Todo>.Failure("An unknown error occurred while creating a new todo.");
     }
-
-    internal static Todo InvalidTodoDescription(string error) => CreateNew(Guid.Empty, error, null, false);
 }
