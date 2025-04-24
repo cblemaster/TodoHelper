@@ -15,13 +15,7 @@ internal class Result<T>
         Error = error;
     }
 
-    internal static Result<T> Success(T value)
-    {
-        return new Result<T>(true, value, null);
-    }
+    internal static Result<T> Success(T value) => new(true, value, null);
 
-    internal static Result<T> Failure(string error)
-    {
-        return new Result<T>(false, default, error);
-    }
+    internal static Result<T> Failure(string error) => new(false, default, error);
 }
