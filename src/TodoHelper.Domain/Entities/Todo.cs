@@ -19,16 +19,7 @@ internal sealed class Todo : Entity<Todo>
     internal bool CanBeUpdated => !IsComplete;
     internal bool CanBeDeleted => !Importance.IsImportant;
 
-    private Todo
-    (
-        Identifier<Category> categoryId,
-        Description description,
-        DueDate dueDate,
-        CloseDate closeDate,
-        CreateDate createDate,
-        UpdateDate updateDate,
-        Importance importance
-    )
+    private Todo(Identifier<Category> categoryId, Description description, DueDate dueDate, CloseDate closeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
     {
         Id = Identifier<Todo>.CreateNew();
         CategoryId = categoryId;
