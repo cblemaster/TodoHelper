@@ -11,21 +11,21 @@ internal sealed class Todo : Entity<Todo>
     internal Identifier<Category> CategoryId { get; }
     internal Description Description { get; }
     internal DueDate DueDate { get; }
-    internal CloseDate CloseDate { get; }
+    internal CompleteDate CompleteDate { get; }
     internal CreateDate CreateDate { get; }
     internal UpdateDate UpdateDate { get; }
     internal Importance Importance { get; }
-    internal bool IsComplete => CloseDate.Value is not null;
+    internal bool IsComplete => CompleteDate.Value is not null;
     internal bool CanBeUpdated => !IsComplete;
     internal bool CanBeDeleted => !Importance.IsImportant;
 
-    private Todo(Identifier<Category> categoryId, Description description, DueDate dueDate, CloseDate closeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
+    private Todo(Identifier<Category> categoryId, Description description, DueDate dueDate, CompleteDate closeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
     {
         Id = Identifier<Todo>.CreateNew();
         CategoryId = categoryId;
         Description = description;
         DueDate = dueDate;
-        CloseDate = closeDate;
+        CompleteDate = closeDate;
         CreateDate = createDate;
         UpdateDate = updateDate;
         Importance = importance;
@@ -43,7 +43,7 @@ internal sealed class Todo : Entity<Todo>
                         Identifier<Category>.Create(categoryId),
                         descriptionResult.Value,
                         DueDate.CreateNew(dueDate),
-                        CloseDate.CreateNew(null),
+                        CompleteDate.CreateNew(null),
                         CreateDate.CreateNew(),
                         UpdateDate.CreateNew(),
                         Importance.CreateNew(isImportant)
