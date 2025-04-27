@@ -92,7 +92,7 @@ public sealed class Todo : Entity<Todo>
                         Identifier<Category>.Create(categoryId),
                         descriptionResult.Value,
                         DueDate.Create(dueDate),
-                        CompleteDate.Create(null),
+                        CompleteDate.CreateNew(),
                         CreateDate.CreateNew(),
                         UpdateDate.CreateNew(),
                         Importance.Create(isImportant)
