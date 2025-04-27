@@ -5,7 +5,7 @@ namespace TodoHelper.Domain.ValueObjects;
 
 public sealed class Description
 {
-    private const int MAX_LENGTH = 255;
+    public const int MAX_LENGTH = 255;
 
     public string Value { get; }
 

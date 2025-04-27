@@ -11,7 +11,6 @@ internal sealed class TodosDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // IDE0058
 #pragma warning disable IDE0058
         modelBuilder.Entity<Category>(entity =>
         {
@@ -19,12 +18,10 @@ internal sealed class TodosDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasConversion(i => i.Value, i => Identifier<Category>.Create(i));
             entity.Property(e => e.Name).HasConversion(n => n.Value, n => Name.Create(n).Value!);
-            entity.Property(e => e.Name).HasMaxLength(40).IsUnicode(false);
+            entity.Property(e => e.Name).HasMaxLength(Name.MAX_LENGTH).IsUnicode(false);
             entity.HasIndex(e => e.Name).IsUnique();
             entity.Ignore(e => e.CanBeDeleted);
         });
-
-        modelBuilder.Entity<Category>().Navigation(e => e.Todos).AutoInclude();
 
         modelBuilder.Entity<Todo>(entity =>
         {
@@ -33,20 +30,23 @@ internal sealed class TodosDbContext : DbContext
             entity.Property(e => e.Id).HasConversion(i => i.Value, i => Identifier<Todo>.Create(i));
             entity.Property(e => e.CategoryId).HasConversion(c => c.Value, c => Identifier<Category>.Create(c));
             entity.Property(e => e.Description).HasConversion(d => d.Value, d => Description.Create(d).Value!);
-            entity.Property(e => e.Description).HasMaxLength(255).IsUnicode(false);
+            entity.Property(e => e.Description).HasMaxLength(Description.MAX_LENGTH).IsUnicode(false);
             entity.Property(e => e.DueDate).HasConversion(d => d.Value, d => DueDate.Create(d));
             entity.Property(e => e.CompleteDate).HasConversion(c => c.Value, c => CompleteDate.Create(c));
             entity.Property(e => e.CreateDate).HasConversion(c => c.Value, c => CreateDate.Create(c));
             entity.Property(e => e.UpdateDate).HasConversion(u => u.Value, u => UpdateDate.Create(u));
-            entity.Property(e => e.Importance).HasConversion(i => i.IsImportant, i => Importance.Create(i));
+            entity.Property(e => e.Importance).HasConversion(i => i.IsImportant, i => Importance.Create(i)).HasColumnName("IsImportant");
             entity.Ignore(e => e.IsComplete);
             entity.Ignore(e => e.CanBeUpdated);
             entity.Ignore(e => e.CanBeDeleted);
             entity.HasOne(e => e.Category)
                 .WithMany(t => t.Todos)
                 .HasForeignKey(t => t.CategoryId)
-                .OnDelete(DeleteBehavior.ClientNoAction);
-#pragma warning restore IDE0058
+                .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<Category>().Navigation(e => e.Todos).AutoInclude();
+        modelBuilder.Entity<Todo>().Navigation(e => e.Category).AutoInclude();
+#pragma warning restore IDE0058
     }
 }
