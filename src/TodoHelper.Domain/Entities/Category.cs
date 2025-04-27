@@ -8,7 +8,7 @@ internal sealed class Category : Entity<Category>
 {
     internal override Identifier<Category> Id { get; }
     internal IEnumerable<Todo> Todos { get; }
-    internal Name Name { get; }
+    internal Name Name { get; private set; }
     internal bool CanBeDeleted => !Todos.Any();
 
     private Category(IEnumerable<Todo> todos, Name name)
@@ -18,7 +18,16 @@ internal sealed class Category : Entity<Category>
         Name = name;
     }
 
-    internal static Result<Category> CreateNew(IEnumerable<Todo> todos, string name)
+    internal void Rename(string name)
+    {
+        Result<Name> nameResult = Name.CreateNew(name);
+        if (nameResult.IsSuccess && nameResult.Value is not null)
+        {
+            Name = nameResult.Value;
+        }
+    }
+
+    internal static Result<Category> CreateNew(string name)
     {
         Result<Name> nameResult = Name.CreateNew(name);
 

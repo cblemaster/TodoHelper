@@ -8,13 +8,13 @@ internal sealed class Todo : Entity<Todo>
 {
     internal override Identifier<Todo> Id { get; }
     internal Category Category { get; } = default!;
-    internal Identifier<Category> CategoryId { get; }
-    internal Description Description { get; }
-    internal DueDate DueDate { get; }
-    internal CompleteDate CompleteDate { get; }
+    internal Identifier<Category> CategoryId { get; private set; }
+    internal Description Description { get; private set; }
+    internal DueDate DueDate { get; private set; }
+    internal CompleteDate CompleteDate { get; private set; }
     internal CreateDate CreateDate { get; }
-    internal UpdateDate UpdateDate { get; }
-    internal Importance Importance { get; }
+    internal UpdateDate UpdateDate { get; private set; }
+    internal Importance Importance { get; private set; }
     internal bool IsComplete => CompleteDate.Value is not null;
     internal bool CanBeUpdated => !IsComplete;
     internal bool CanBeDeleted => !Importance.IsImportant;
@@ -29,6 +29,52 @@ internal sealed class Todo : Entity<Todo>
         CreateDate = createDate;
         UpdateDate = updateDate;
         Importance = importance;
+    }
+
+    internal void SetDescription(string description)
+    {
+        if (CanBeUpdated)
+        {
+            Result<Description> descriptionResult = Description.CreateNew(description);
+            if (descriptionResult.IsSuccess && descriptionResult.Value is not null)
+            {
+                Description = descriptionResult.Value;
+                UpdateDate = UpdateDate.CreateNew();
+            }
+        }
+    }
+
+    internal void SetDueDate(DateOnly? dueDate)
+    {
+        if (CanBeUpdated)
+        {
+            DueDate = DueDate.CreateNew(dueDate);
+            UpdateDate = UpdateDate.CreateNew();
+        }
+    }
+
+    internal void SetImportance()
+    {
+        if (CanBeUpdated)
+        {
+            Importance = Importance.CreateNew(!Importance.IsImportant);
+            UpdateDate = UpdateDate.CreateNew();
+        }
+    }
+
+    internal void SetCategoryId(Identifier<Category> categoryId)
+    {
+        if (CanBeUpdated)
+        {
+            CategoryId = categoryId;
+            UpdateDate = UpdateDate.CreateNew();
+        }
+    }
+
+    internal void SetCompleteDate(DateTimeOffset? completeDate)
+    {
+        CompleteDate = CompleteDate.CreateNew(completeDate);
+        UpdateDate = UpdateDate.CreateNew();
     }
 
     internal static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
