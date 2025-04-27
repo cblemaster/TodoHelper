@@ -3,7 +3,7 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
 
-internal abstract class Entity<T>
+public abstract class Entity<T>
 {
-    internal abstract Identifier<T> Id { get; }
+    public abstract Identifier<T> Id { get; }
 }

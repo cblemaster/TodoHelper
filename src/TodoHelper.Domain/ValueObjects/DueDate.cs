@@ -1,9 +1,9 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class DueDate
+public sealed class DueDate
 {
-    internal DateOnly? Value { get; }
+    public DateOnly? Value { get; }
 
     private DueDate(DateOnly? value) => Value = value;
 

@@ -4,20 +4,20 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
 
-internal sealed class Todo : Entity<Todo>
+public sealed class Todo : Entity<Todo>
 {
-    internal override Identifier<Todo> Id { get; }
-    internal Category Category { get; } = default!;
-    internal Identifier<Category> CategoryId { get; private set; }
-    internal Description Description { get; private set; }
-    internal DueDate DueDate { get; private set; }
-    internal CompleteDate CompleteDate { get; private set; }
-    internal CreateDate CreateDate { get; }
-    internal UpdateDate UpdateDate { get; private set; }
-    internal Importance Importance { get; private set; }
-    internal bool IsComplete => CompleteDate.Value is not null;
-    internal bool CanBeUpdated => !IsComplete;
-    internal bool CanBeDeleted => !Importance.IsImportant;
+    public override Identifier<Todo> Id { get; }
+    public Category Category { get; } = default!;
+    public Identifier<Category> CategoryId { get; private set; }
+    public Description Description { get; private set; }
+    public DueDate DueDate { get; private set; }
+    public CompleteDate CompleteDate { get; private set; }
+    public CreateDate CreateDate { get; }
+    public UpdateDate UpdateDate { get; private set; }
+    public Importance Importance { get; private set; }
+    public bool IsComplete => CompleteDate.Value is not null;
+    public bool CanBeUpdated => !IsComplete;
+    public bool CanBeDeleted => !Importance.IsImportant;
 
     private Todo(Identifier<Category> categoryId, Description description, DueDate dueDate, CompleteDate closeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
     {

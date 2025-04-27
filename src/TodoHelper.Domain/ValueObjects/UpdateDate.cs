@@ -1,9 +1,9 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class UpdateDate
+public sealed class UpdateDate
 {
-    internal DateTimeOffset? Value { get; }
+    public DateTimeOffset? Value { get; }
 
     private UpdateDate() => Value = DateTimeOffset.UtcNow;
 

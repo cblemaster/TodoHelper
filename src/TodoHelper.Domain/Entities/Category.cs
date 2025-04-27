@@ -4,12 +4,12 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
 
-internal sealed class Category : Entity<Category>
+public sealed class Category : Entity<Category>
 {
-    internal override Identifier<Category> Id { get; }
-    internal IEnumerable<Todo> Todos { get; }
-    internal Name Name { get; private set; }
-    internal bool CanBeDeleted => !Todos.Any();
+    public override Identifier<Category> Id { get; }
+    public IEnumerable<Todo> Todos { get; }
+    public Name Name { get; private set; }
+    public bool CanBeDeleted => !Todos.Any();
 
     private Category(IEnumerable<Todo> todos, Name name)
     {

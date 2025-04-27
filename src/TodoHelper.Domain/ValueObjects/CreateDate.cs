@@ -1,11 +1,11 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class CreateDate
+public sealed class CreateDate
 {
-    internal DateTimeOffset Value { get; }
+    public DateTimeOffset Value { get; }
 
-    private CreateDate() => Value = DateTimeOffset.UtcNow;
+    private CreateDate(DateTimeOffset value) => Value = value;
 
     internal static CreateDate CreateNew() => new();
 }

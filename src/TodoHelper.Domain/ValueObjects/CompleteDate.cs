@@ -1,9 +1,9 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class CompleteDate
+public sealed class CompleteDate
 {
-    internal DateTimeOffset? Value { get; }
+    public DateTimeOffset? Value { get; }
 
     private CompleteDate(DateTimeOffset? value) => Value = value;
 

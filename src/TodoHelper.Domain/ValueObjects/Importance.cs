@@ -1,9 +1,9 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class Importance
+public sealed class Importance
 {
-    internal bool IsImportant { get; }
+    public bool IsImportant { get; }
 
     private Importance(bool isImportant) => IsImportant = isImportant;
 

@@ -1,11 +1,11 @@
 ﻿
 namespace TodoHelper.Domain.Results;
 
-internal class Result<T>
+public class Result<T>
 {
     internal bool IsSuccess { get; }
     internal bool IsFailure => !IsSuccess;
-    internal T? Value { get; }
+    public T? Value { get; }
     internal string? Error { get; }
 
     private Result(bool isSucess, T? value, string? error)

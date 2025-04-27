@@ -3,11 +3,11 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class Description
+public sealed class Description
 {
     private const int MAX_LENGTH = 255;
 
-    internal string Value { get; }
+    public string Value { get; }
 
     private Description(string value) => Value = value;
 

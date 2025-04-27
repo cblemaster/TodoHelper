@@ -1,9 +1,9 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-internal sealed class Identifier<T>
+public sealed class Identifier<T>
 {
-    internal Guid Value { get; }
+    public Guid Value { get; }
 
     private Identifier() => Value = Guid.NewGuid();
     private Identifier(Guid value) => Value = value;
