@@ -21,7 +21,6 @@ An application with basic todo management features, including custom categories,
 + Delete a todo
 + Delete a category
 ### Rules
-+ Categories having todo 'children' cannot be deleted; first delete the category's todos
 + Category name must be forty (40) characters or fewer
 + Category name must be unique
 + Category name must not be null, an empty string, nor all-whitespace characters
