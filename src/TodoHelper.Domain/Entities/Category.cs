@@ -11,6 +11,9 @@ public sealed class Category : Entity<Category>
     public Name Name { get; private set; }
     public bool CanBeDeleted => !Todos.Any();
 
+#pragma warning disable CS8618
+    private Category() { }
+#pragma warning restore CS8618
     private Category(IEnumerable<Todo> todos, Name name)
     {
         Id = Identifier<Category>.CreateNew();

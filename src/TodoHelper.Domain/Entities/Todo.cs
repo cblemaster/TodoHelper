@@ -19,6 +19,9 @@ public sealed class Todo : Entity<Todo>
     public bool CanBeUpdated => !IsComplete;
     public bool CanBeDeleted => !Importance.IsImportant;
 
+#pragma warning disable CS8618
+    private Todo() { }
+#pragma warning restore CS8618
     private Todo(Identifier<Category> categoryId, Description description, DueDate dueDate, CompleteDate closeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
     {
         Id = Identifier<Todo>.CreateNew();
