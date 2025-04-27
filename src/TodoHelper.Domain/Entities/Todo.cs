@@ -38,7 +38,7 @@ public sealed class Todo : Entity<Todo>
     {
         if (CanBeUpdated)
         {
-            Result<Description> descriptionResult = Description.CreateNew(description);
+            Result<Description> descriptionResult = Description.Create(description);
             if (descriptionResult.IsSuccess && descriptionResult.Value is not null)
             {
                 Description = descriptionResult.Value;
@@ -51,7 +51,7 @@ public sealed class Todo : Entity<Todo>
     {
         if (CanBeUpdated)
         {
-            DueDate = DueDate.CreateNew(dueDate);
+            DueDate = DueDate.Create(dueDate);
             UpdateDate = UpdateDate.CreateNew();
         }
     }
@@ -60,7 +60,7 @@ public sealed class Todo : Entity<Todo>
     {
         if (CanBeUpdated)
         {
-            Importance = Importance.CreateNew(!Importance.IsImportant);
+            Importance = Importance.Create(!Importance.IsImportant);
             UpdateDate = UpdateDate.CreateNew();
         }
     }
@@ -76,13 +76,13 @@ public sealed class Todo : Entity<Todo>
 
     internal void SetCompleteDate(DateTimeOffset? completeDate)
     {
-        CompleteDate = CompleteDate.CreateNew(completeDate);
+        CompleteDate = CompleteDate.Create(completeDate);
         UpdateDate = UpdateDate.CreateNew();
     }
 
     internal static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
     {
-        Result<Description> descriptionResult = Description.CreateNew(description);
+        Result<Description> descriptionResult = Description.Create(description);
 
         return descriptionResult.IsSuccess && descriptionResult.Value is not null
             ? Result<Todo>.Success
@@ -91,11 +91,11 @@ public sealed class Todo : Entity<Todo>
                     (
                         Identifier<Category>.Create(categoryId),
                         descriptionResult.Value,
-                        DueDate.CreateNew(dueDate),
-                        CompleteDate.CreateNew(null),
+                        DueDate.Create(dueDate),
+                        CompleteDate.Create(null),
                         CreateDate.CreateNew(),
                         UpdateDate.CreateNew(),
-                        Importance.CreateNew(isImportant)
+                        Importance.Create(isImportant)
                     )
                 )
             : descriptionResult.IsFailure && descriptionResult.Error is not null

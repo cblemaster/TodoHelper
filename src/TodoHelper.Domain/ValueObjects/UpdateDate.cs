@@ -5,7 +5,8 @@ public sealed class UpdateDate
 {
     public DateTimeOffset? Value { get; }
 
-    private UpdateDate() => Value = DateTimeOffset.UtcNow;
+    private UpdateDate(DateTimeOffset? value) => Value = value;
 
-    internal static UpdateDate CreateNew() => new();
+    internal static UpdateDate CreateNew() => new(DateTimeOffset.UtcNow);
+    public static UpdateDate Create(DateTimeOffset? value) => new(value);
 }

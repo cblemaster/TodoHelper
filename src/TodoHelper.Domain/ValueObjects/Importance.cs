@@ -7,5 +7,6 @@ public sealed class Importance
 
     private Importance(bool isImportant) => IsImportant = isImportant;
 
-    internal static Importance CreateNew(bool isImportant) => new(isImportant);
+    internal static Importance CreateNew() => new(false);
+    public static Importance Create(bool isImportant) => new(isImportant);
 }

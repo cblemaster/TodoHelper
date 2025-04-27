@@ -7,5 +7,6 @@ public sealed class CompleteDate
 
     private CompleteDate(DateTimeOffset? value) => Value = value;
 
-    internal static CompleteDate CreateNew(DateTimeOffset? value) => new(value);
+    internal static CompleteDate CreateNew() => new(null);
+    public static CompleteDate Create(DateTimeOffset? value) => new(value);
 }

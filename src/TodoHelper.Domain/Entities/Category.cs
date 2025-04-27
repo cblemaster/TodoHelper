@@ -23,7 +23,7 @@ public sealed class Category : Entity<Category>
 
     internal void Rename(string name)
     {
-        Result<Name> nameResult = Name.CreateNew(name);
+        Result<Name> nameResult = Name.Create(name);
         if (nameResult.IsSuccess && nameResult.Value is not null)
         {
             Name = nameResult.Value;
@@ -32,7 +32,7 @@ public sealed class Category : Entity<Category>
 
     internal static Result<Category> CreateNew(string name)
     {
-        Result<Name> nameResult = Name.CreateNew(name);
+        Result<Name> nameResult = Name.Create(name);
 
         return nameResult.IsSuccess && nameResult.Value is not null
             ? Result<Category>.Success(new([], nameResult.Value))

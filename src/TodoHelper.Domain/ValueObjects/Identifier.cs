@@ -5,11 +5,10 @@ public sealed class Identifier<T>
 {
     public Guid Value { get; }
 
-    private Identifier() => Value = Guid.NewGuid();
     private Identifier(Guid value) => Value = value;
 
-    internal static Identifier<T> CreateNew() => new();
-    internal static Identifier<T> Create(Guid value) => new(value);
+    internal static Identifier<T> CreateNew() => new(Guid.NewGuid());
+    public static Identifier<T> Create(Guid value) => new(value);
 
     public override bool Equals(object? obj) => obj is Identifier<T> other && Value == other.Value;
 

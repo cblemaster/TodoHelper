@@ -11,7 +11,7 @@ public sealed class Description
 
     private Description(string value) => Value = value;
 
-    internal static Result<Description> CreateNew(string value)
+    public static Result<Description> Create(string value)
     {
         (bool IsValid, string error) = Validate(value);
         return !IsValid ? Result<Description>.Failure(error) : Result<Description>.Success(new Description(value));

@@ -11,7 +11,7 @@ public sealed class Name
 
     private Name(string value) => Value = value;
 
-    internal static Result<Name> CreateNew(string value)
+    public static Result<Name> Create(string value)
     {
         (bool IsValid, string error) = Validate(value);
         return !IsValid ? Result<Name>.Failure(error) : Result<Name>.Success(new Name(value));
