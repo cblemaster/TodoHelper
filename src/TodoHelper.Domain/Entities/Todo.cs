@@ -34,7 +34,7 @@ public sealed class Todo : Entity<Todo>
         Importance = importance;
     }
 
-    internal void SetDescription(string description)
+    public void SetDescription(string description)
     {
         if (CanBeUpdated)
         {
@@ -47,7 +47,7 @@ public sealed class Todo : Entity<Todo>
         }
     }
 
-    internal void SetDueDate(DateOnly? dueDate)
+    public void SetDueDate(DateOnly? dueDate)
     {
         if (CanBeUpdated)
         {
@@ -56,7 +56,7 @@ public sealed class Todo : Entity<Todo>
         }
     }
 
-    internal void SetImportance()
+    public void SetImportance()
     {
         if (CanBeUpdated)
         {
@@ -65,7 +65,7 @@ public sealed class Todo : Entity<Todo>
         }
     }
 
-    internal void SetCategoryId(Identifier<Category> categoryId)
+    public void SetCategoryId(Identifier<Category> categoryId)
     {
         if (CanBeUpdated)
         {
@@ -74,7 +74,7 @@ public sealed class Todo : Entity<Todo>
         }
     }
 
-    internal void SetCompleteDate(DateTimeOffset? completeDate)
+    public void SetCompleteDate(DateTimeOffset? completeDate)
     {
         CompleteDate = CompleteDate.Create(completeDate);
         UpdateDate = UpdateDate.CreateNew();

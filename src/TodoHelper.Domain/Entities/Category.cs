@@ -21,7 +21,7 @@ public sealed class Category : Entity<Category>
         Name = name;
     }
 
-    internal void Rename(string name)
+    public void Rename(string name)
     {
         Result<Name> nameResult = Name.Create(name);
         if (nameResult.IsSuccess && nameResult.Value is not null)
