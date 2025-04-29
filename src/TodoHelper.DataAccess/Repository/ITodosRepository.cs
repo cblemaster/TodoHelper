@@ -1,7 +1,7 @@
 ﻿using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 
-namespace TodoHelper.DataAccess;
+namespace TodoHelper.DataAccess.Repository;
 public interface ITodosRepository
 {
     void CreateCategory(Category category);

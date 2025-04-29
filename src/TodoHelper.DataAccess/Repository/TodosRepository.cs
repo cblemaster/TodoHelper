@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 
-namespace TodoHelper.DataAccess;
+namespace TodoHelper.DataAccess.Repository;
 
 public class TodosRepository(TodosDbContext context) : ITodosRepository
 {
