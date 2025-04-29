@@ -7,6 +7,9 @@ namespace TodoHelper.DataAccess;
 
 internal sealed class TodosDbContext : DbContext
 {
+    internal DbSet<Category> Categories { get; set; }
+    internal DbSet<Todo> Todos { get; set; }
+
     internal TodosDbContext(DbContextOptions<TodosDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
