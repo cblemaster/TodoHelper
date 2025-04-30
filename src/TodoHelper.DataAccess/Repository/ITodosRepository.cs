@@ -1,22 +1,23 @@
-﻿using TodoHelper.Domain.Entities;
+﻿
+using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess.Repository;
 public interface ITodosRepository
 {
-    void CreateCategory(Category category);
-    void CreateTodo(Todo todo);
-    void DeleteCategory(Category category);
-    void DeleteTodo(Todo todo);
+    Task CreateCategoryAsync(Category category);
+    Task CreateTodoAsync(Todo todo);
+    Task DeleteCategoryAsync(Category category);
+    Task DeleteTodoAsync(Todo todo);
     IOrderedEnumerable<Category> GetCategories();
     IOrderedEnumerable<Todo> GetCompleteTodos();
     IOrderedEnumerable<Todo> GetImportantTodos();
     IOrderedEnumerable<Todo> GetOverdueTodos();
     IOrderedEnumerable<Todo> GetTodosDueToday();
-    void RenameCategory(Category category, string name);
-    void UpdateTodoCategory(Todo todo, Identifier<Category> categoryId);
-    void UpdateTodoCompleteDate(Todo todo, DateTimeOffset? completeDate);
-    void UpdateTodoDescription(Todo todo, string description);
-    void UpdateTodoDueDate(Todo todo, DateOnly? dueDate);
-    void UpdateTodoImportance(Todo todo);
+    Task RenameCategoryAsync(Category category, string name);
+    Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId);
+    Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate);
+    Task UpdateTodoDescriptionAsync(Todo todo, string description);
+    Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate);
+    Task UpdateTodoImportanceAsync(Todo todo);
 }

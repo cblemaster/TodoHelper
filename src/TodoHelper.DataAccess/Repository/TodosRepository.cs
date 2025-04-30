@@ -9,84 +9,84 @@ public class TodosRepository(TodosDbContext context) : ITodosRepository
 {
     private readonly TodosDbContext _context = context;
 
-    public void CreateCategory(Category category)
+    public async Task CreateCategoryAsync(Category category)
     {
         _ = _context.Categories.Add(category);
-        Save();
+        await SaveAsync();
     }
-    public void CreateTodo(Todo todo)
+    public async Task CreateTodoAsync(Todo todo)
     {
         _ = _context.Todos.Add(todo);
-        Save();
+        await SaveAsync();
     }
 
-    public void RenameCategory(Category category, string name)
+    public async Task RenameCategoryAsync(Category category, string name)
     {
         category.Rename(name);
         _ = _context.Update(category);
-        Save();
+        await SaveAsync();
     }
-    public void UpdateTodoDescription(Todo todo, string description)
+    public async Task UpdateTodoDescriptionAsync(Todo todo, string description)
     {
         if (todo.CanBeUpdated)
         {
             todo.SetDescription(description);
             _ = _context.Update(todo);
-            Save();
+            await SaveAsync();
         }
     }
-    public void UpdateTodoCategory(Todo todo, Identifier<Category> categoryId)
+    public async Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId)
     {
         if (todo.CanBeUpdated)
         {
             todo.SetCategoryId(categoryId);
             _ = _context.Update(todo);
-            Save();
+            await SaveAsync();
         }
     }
-    public void UpdateTodoDueDate(Todo todo, DateOnly? dueDate)
+    public async Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate)
     {
         if (todo.CanBeUpdated)
         {
             todo.SetDueDate(dueDate);
             _ = _context.Update(todo);
-            Save();
+            await SaveAsync();
         }
     }
-    public void UpdateTodoImportance(Todo todo)
+    public async Task UpdateTodoImportanceAsync(Todo todo)
     {
         if (todo.CanBeUpdated)
         {
             todo.SetImportance();
             _ = _context.Update(todo);
-            Save();
+            await SaveAsync();
         }
     }
-    public void UpdateTodoCompleteDate(Todo todo, DateTimeOffset? completeDate)
+    public async Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate)
     {
         todo.SetCompleteDate(completeDate);
         _ = _context.Update(todo);
-        Save();
+        await SaveAsync();
     }
 
-    public void DeleteCategory(Category category)
+    public async Task DeleteCategoryAsync(Category category)
     {
         if (category.CanBeDeleted && _context.Categories.Contains(category))
         {
             _ = _context.Categories.Remove(category);
-            Save();
+            await SaveAsync();
         }
     }
-    public void DeleteTodo(Todo todo)
+    public async Task DeleteTodoAsync(Todo todo)
     {
         if (todo.CanBeDeleted && _context.Todos.Contains(todo))
         {
             _ = _context.Todos.Remove(todo);
-            Save();
+            await SaveAsync();
         }
     }
 
-    private void Save() => _context.SaveChanges();
+    private async Task SaveAsync() => await _context.SaveChangesAsync();
 
     public IOrderedEnumerable<Category> GetCategories() => _context.Categories.AsEnumerable().OrderBy(c => c.Name);
     private IEnumerable<Todo> GetNotCompleteTodos() => _context.Todos.Where(t => !t.IsComplete);
