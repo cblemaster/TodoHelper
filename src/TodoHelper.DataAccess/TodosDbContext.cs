@@ -35,9 +35,12 @@ public sealed class TodosDbContext : DbContext
             entity.Property(e => e.Description).HasConversion(d => d.Value, d => Description.Create(d).Value!);
             entity.Property(e => e.Description).HasMaxLength(Description.MAX_LENGTH).IsUnicode(false);
             entity.Property(e => e.DueDate).HasConversion(d => d.Value, d => DueDate.Create(d));
+            entity.Property(e => e.DueDate).IsRequired(false);
             entity.Property(e => e.CompleteDate).HasConversion(c => c.Value, c => CompleteDate.Create(c));
+            entity.Property(e => e.CompleteDate).IsRequired(false);
             entity.Property(e => e.CreateDate).HasConversion(c => c.Value, c => CreateDate.Create(c));
             entity.Property(e => e.UpdateDate).HasConversion(u => u.Value, u => UpdateDate.Create(u));
+            entity.Property(e => e.UpdateDate).IsRequired(false);
             entity.Property(e => e.Importance).HasConversion(i => i.IsImportant, i => Importance.Create(i)).HasColumnName("IsImportant");
             entity.Ignore(e => e.IsComplete);
             entity.Ignore(e => e.CanBeUpdated);
