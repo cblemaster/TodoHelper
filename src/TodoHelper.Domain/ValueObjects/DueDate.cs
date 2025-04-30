@@ -9,5 +9,4 @@ public sealed class DueDate
 
     internal static DueDate CreateNew() => new(null);
     public static DueDate Create(DateOnly? value) => new(value);
-
 }
