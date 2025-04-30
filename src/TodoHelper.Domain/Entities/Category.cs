@@ -30,7 +30,7 @@ public sealed class Category : Entity<Category>
         }
     }
 
-    internal static Result<Category> CreateNew(string name)
+    public static Result<Category> CreateNew(string name)
     {
         Result<Name> nameResult = Name.Create(name);
 

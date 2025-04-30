@@ -80,7 +80,7 @@ public sealed class Todo : Entity<Todo>
         UpdateDate = UpdateDate.CreateNew();
     }
 
-    internal static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
+    public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
     {
         Result<Description> descriptionResult = Description.Create(description);
 
