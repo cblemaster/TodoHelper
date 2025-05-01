@@ -28,39 +28,27 @@ public class TodosRepository(TodosDbContext context) : ITodosRepository
     }
     public async Task UpdateTodoDescriptionAsync(Todo todo, string description)
     {
-        if (todo.CanBeUpdated)
-        {
-            todo.SetDescription(description);
-            _ = _context.Update(todo);
-            await SaveAsync();
-        }
+        todo.SetDescription(description);
+        _ = _context.Update(todo);
+        await SaveAsync();
     }
     public async Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId)
     {
-        if (todo.CanBeUpdated)
-        {
-            todo.SetCategoryId(categoryId);
-            _ = _context.Update(todo);
-            await SaveAsync();
-        }
+        todo.SetCategoryId(categoryId);
+        _ = _context.Update(todo);
+        await SaveAsync();
     }
     public async Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate)
     {
-        if (todo.CanBeUpdated)
-        {
-            todo.SetDueDate(dueDate);
-            _ = _context.Update(todo);
-            await SaveAsync();
-        }
+        todo.SetDueDate(dueDate);
+        _ = _context.Update(todo);
+        await SaveAsync();
     }
     public async Task UpdateTodoImportanceAsync(Todo todo)
     {
-        if (todo.CanBeUpdated)
-        {
-            todo.SetImportance();
-            _ = _context.Update(todo);
-            await SaveAsync();
-        }
+        todo.SetImportance();
+        _ = _context.Update(todo);
+        await SaveAsync();
     }
     public async Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate)
     {
@@ -71,19 +59,13 @@ public class TodosRepository(TodosDbContext context) : ITodosRepository
 
     public async Task DeleteCategoryAsync(Category category)
     {
-        if (category.CanBeDeleted && _context.Categories.Contains(category))
-        {
-            _ = _context.Categories.Remove(category);
-            await SaveAsync();
-        }
+        _ = _context.Categories.Remove(category);
+        await SaveAsync();
     }
     public async Task DeleteTodoAsync(Todo todo)
     {
-        if (todo.CanBeDeleted && _context.Todos.Contains(todo))
-        {
-            _ = _context.Todos.Remove(todo);
-            await SaveAsync();
-        }
+        _ = _context.Todos.Remove(todo);
+        await SaveAsync();
     }
 
     private async Task SaveAsync() => await _context.SaveChangesAsync();
@@ -95,5 +77,5 @@ public class TodosRepository(TodosDbContext context) : ITodosRepository
     public IOrderedEnumerable<Todo> GetTodosDueToday() => GetNotCompleteTodos().Where(t => t.DueDate.Value == DateOnly.FromDateTime(DateTime.Today)).AsEnumerable().OrderBy(t => t.Description.Value);
     public IOrderedEnumerable<Todo> GetOverdueTodos() => GetNotCompleteTodos().Where(t => t.DueDate.Value < DateOnly.FromDateTime(DateTime.Today)).AsEnumerable().OrderByDescending(t => t.DueDate).ThenBy(t => t.Description.Value);
 
-    public bool CategoryOfSameNameExists(string name) => _context.Categories.Select(c => c.Name.Value).Contains(name);
+    public bool CategoryOfSameNameExists(string name) => _context.Categories.Select(c => c.Name.Value).ToList().Contains(name);
 }
