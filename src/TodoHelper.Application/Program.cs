@@ -32,7 +32,7 @@ app.MapPost(pattern: "/category",
         }
         else if (response.IsSuccess && response.Value is not null && response.Value.Category is Category c)
         {
-            return TypedResults.Created("", c);
+            return TypedResults.Created("", c);     // TODO: fix the resource uri
         }
         else
         {
@@ -51,7 +51,7 @@ app.MapPost(pattern: "/todo",
         }
         else if (response.IsSuccess && response.Value is not null && response.Value.Todo is Todo t)
         {
-            return TypedResults.Created("", t);
+            return TypedResults.Created("", t);     // TODO: fix the resource uri
         }
         else
         {
