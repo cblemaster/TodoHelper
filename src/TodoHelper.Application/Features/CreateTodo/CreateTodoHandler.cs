@@ -21,7 +21,7 @@ public class CreateTodoHandler(ITodosRepository repository) : ICommandHandler<Cr
         else if (todoResult.IsSuccess && todoResult.Value is not null)
         {
             await _repository.CreateTodoAsync(todoResult.Value);
-            return Result<CreateTodoResponse>.Success(new CreateTodoResponse(todoResult.Value));    // TODO: I want the new todo with id here...
+            return Result<CreateTodoResponse>.Success(new CreateTodoResponse(todoResult.Value));
         }
         else
         {

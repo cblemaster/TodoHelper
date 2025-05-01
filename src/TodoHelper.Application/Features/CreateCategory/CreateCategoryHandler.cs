@@ -12,6 +12,11 @@ public class CreateCategoryHandler(ITodosRepository repository) : ICommandHandle
 
     public async Task<Result<CreateCategoryResponse>> HandleAsync(CreateCategoryCommand command, CancellationToken cancellationToken = default)
     {
+        if (_repository.CategoryOfSameNameExists(command.Name))
+        {
+            return Result<CreateCategoryResponse>.Failure($"Category with name {command.Name} already exists.");
+        }
+        
         Result<Category> categoryResult = Category.CreateNew(command.Name);
 
         if (categoryResult.IsFailure && categoryResult.Error is not null)
@@ -21,7 +26,7 @@ public class CreateCategoryHandler(ITodosRepository repository) : ICommandHandle
         else if (categoryResult.IsSuccess && categoryResult.Value is not null)
         {
             await _repository.CreateCategoryAsync(categoryResult.Value);
-            return Result<CreateCategoryResponse>.Success(new CreateCategoryResponse(categoryResult.Value));    // TODO: I want the new category with id here...
+            return Result<CreateCategoryResponse>.Success(new CreateCategoryResponse(categoryResult.Value));
         }
         else
         {
