@@ -1,10 +1,13 @@
 
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application.Features.CreateCategory;
 using TodoHelper.Application.Features.CreateTodo;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess;
 using TodoHelper.DataAccess.Repository;
+using TodoHelper.Domain.Entities;
+using TodoHelper.Domain.Results;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -17,5 +20,43 @@ builder.Services.AddScoped<ICommandHandler<CreateTodoCommand, CreateTodoResponse
 WebApplication app = builder.Build();
 
 app.MapGet("/", () => "Welcome!");
+
+app.MapPost(pattern: "/category",
+    handler: async Task<Results<BadRequest<string>, Created<Category>, InternalServerError<string>>> (CreateCategoryCommand command,
+    ICommandHandler<CreateCategoryCommand, CreateCategoryResponse> handler) =>
+    {
+        Result<CreateCategoryResponse> response = await handler.HandleAsync(command);
+        if (response.IsFailure && response.Error is not null)
+        {
+            return TypedResults.BadRequest(response.Error);
+        }
+        else if (response.IsSuccess && response.Value is not null && response.Value.Category is Category c)
+        {
+            return TypedResults.Created("", c);
+        }
+        else
+        {
+            return TypedResults.InternalServerError("An unknown error occurred when creating the category.");
+        }
+    });
+
+app.MapPost(pattern: "/todo",
+    handler: async Task<Results<BadRequest<string>, Created<Todo>, InternalServerError<string>>> (CreateTodoCommand command,
+    ICommandHandler<CreateTodoCommand, CreateTodoResponse> handler) =>
+    {
+        Result<CreateTodoResponse> response = await handler.HandleAsync(command);
+        if (response.IsFailure && response.Error is not null)
+        {
+            return TypedResults.BadRequest(response.Error);
+        }
+        else if (response.IsSuccess && response.Value is not null && response.Value.Todo is Todo t)
+        {
+            return TypedResults.Created("", t);
+        }
+        else
+        {
+            return TypedResults.InternalServerError("An unknown error occurred when creating the todo.");
+        }
+    });
 
 app.Run();
