@@ -94,4 +94,6 @@ public class TodosRepository(TodosDbContext context) : ITodosRepository
     public IOrderedEnumerable<Todo> GetImportantTodos() => GetNotCompleteTodos().Where(t => t.Importance.IsImportant).AsEnumerable().OrderByDescending(t => t.DueDate).ThenBy(t => t.Description.Value);
     public IOrderedEnumerable<Todo> GetTodosDueToday() => GetNotCompleteTodos().Where(t => t.DueDate.Value == DateOnly.FromDateTime(DateTime.Today)).AsEnumerable().OrderBy(t => t.Description.Value);
     public IOrderedEnumerable<Todo> GetOverdueTodos() => GetNotCompleteTodos().Where(t => t.DueDate.Value < DateOnly.FromDateTime(DateTime.Today)).AsEnumerable().OrderByDescending(t => t.DueDate).ThenBy(t => t.Description.Value);
+
+    public bool CategoryOfSameNameExists(string name) => _context.Categories.Select(c => c.Name.Value).Contains(name);
 }

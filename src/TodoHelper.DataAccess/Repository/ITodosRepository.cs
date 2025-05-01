@@ -20,4 +20,5 @@ public interface ITodosRepository
     Task UpdateTodoDescriptionAsync(Todo todo, string description);
     Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate);
     Task UpdateTodoImportanceAsync(Todo todo);
+    bool CategoryOfSameNameExists(string name);
 }
