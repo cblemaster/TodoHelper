@@ -94,7 +94,7 @@ public sealed class Todo : Entity<Todo>
                         DueDate.Create(dueDate),
                         CompleteDate.CreateNew(),
                         CreateDate.CreateNew(),
-                        UpdateDate.CreateNew(),
+                        UpdateDate.Create(null),
                         Importance.Create(isImportant)
                     )
                 )
