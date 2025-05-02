@@ -9,11 +9,6 @@ public interface ITodosRepository
     Task CreateTodoAsync(Todo todo);
     Task DeleteCategoryAsync(Category category);
     Task DeleteTodoAsync(Todo todo);
-    IOrderedEnumerable<Category> GetCategories();
-    IOrderedEnumerable<Todo> GetCompleteTodos();
-    IOrderedEnumerable<Todo> GetImportantTodos();
-    IOrderedEnumerable<Todo> GetOverdueTodos();
-    IOrderedEnumerable<Todo> GetTodosDueToday();
     Task RenameCategoryAsync(Category category, string name);
     Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId);
     Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate);
@@ -21,4 +16,9 @@ public interface ITodosRepository
     Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate);
     Task UpdateTodoImportanceAsync(Todo todo);
     bool CategoryOfSameNameExists(string name);
+    Task<Category> GetCategoryByIdAsync(Identifier<Category> categoryId);
+    IEnumerable<Category> GetCategories();
+    Task<Todo> GetTodoByIdAsync(Identifier<Todo> todoId);
+    IEnumerable<Todo> GetTodosByCategoryId(Identifier<Category> categoryId);
+    IEnumerable<Todo> GetTodos();
 }

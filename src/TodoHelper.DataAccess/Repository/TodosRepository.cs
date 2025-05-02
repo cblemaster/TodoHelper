@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 
@@ -68,14 +69,28 @@ public class TodosRepository(TodosDbContext context) : ITodosRepository
         await SaveAsync();
     }
 
-    private async Task SaveAsync() => await _context.SaveChangesAsync();
+    public async Task<Category> GetCategoryByIdAsync(Identifier<Category> categoryId)
+    {
+        return await _context.Categories.Include(c => c.Todos).SingleAsync(c => c.Id == categoryId);
+    }
+    public IEnumerable<Category> GetCategories()
+    {
+        return _context.Categories;
+    }
+    public async Task<Todo> GetTodoByIdAsync(Identifier<Todo> todoId)
+    {
+        return await _context.Todos.SingleAsync(t => t.Id == todoId);
+    }
+    public IEnumerable<Todo> GetTodosByCategoryId(Identifier<Category> categoryId)
+    {
+        return _context.Todos.Where(t => t.CategoryId == categoryId);
+    }
+    public IEnumerable<Todo> GetTodos()
+    {
+        return _context.Todos;
+    }
 
-    public IOrderedEnumerable<Category> GetCategories() => _context.Categories.AsEnumerable().OrderBy(c => c.Name);
-    private IEnumerable<Todo> GetNotCompleteTodos() => _context.Todos.Where(t => !t.IsComplete);
-    public IOrderedEnumerable<Todo> GetCompleteTodos() => _context.Todos.Where(t => t.IsComplete).AsEnumerable().OrderByDescending(t => t.CompleteDate).ThenBy(t => t.Description.Value);
-    public IOrderedEnumerable<Todo> GetImportantTodos() => GetNotCompleteTodos().Where(t => t.Importance.IsImportant).AsEnumerable().OrderByDescending(t => t.DueDate).ThenBy(t => t.Description.Value);
-    public IOrderedEnumerable<Todo> GetTodosDueToday() => GetNotCompleteTodos().Where(t => t.DueDate.Value == DateOnly.FromDateTime(DateTime.Today)).AsEnumerable().OrderBy(t => t.Description.Value);
-    public IOrderedEnumerable<Todo> GetOverdueTodos() => GetNotCompleteTodos().Where(t => t.DueDate.Value < DateOnly.FromDateTime(DateTime.Today)).AsEnumerable().OrderByDescending(t => t.DueDate).ThenBy(t => t.Description.Value);
+    private async Task SaveAsync() => await _context.SaveChangesAsync();
 
     public bool CategoryOfSameNameExists(string name) => _context.Categories.Select(c => c.Name.Value).ToList().Contains(name);
 }
