@@ -1,4 +1,5 @@
-﻿using TodoHelper.Domain.Entities;
+﻿
+using TodoHelper.Domain.Entities;
 
 namespace TodoHelper.Application.Features.GetTodosForCategory;
 

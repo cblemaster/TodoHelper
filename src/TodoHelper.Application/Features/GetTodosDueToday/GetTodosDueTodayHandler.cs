@@ -9,7 +9,7 @@ namespace TodoHelper.Application.Features.GetTodosDueToday;
 internal sealed class GetTodosDueTodayHandler(ITodosRepository repository) : ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse>
 {
     private readonly ITodosRepository _repository = repository;
-    
+
     public Task<Result<GetTodosDueTodayResponse>> HandleAsync(GetTodosDueTodayCommand command, CancellationToken cancellationToken = default)
     {
         IOrderedEnumerable<Todo> todos =

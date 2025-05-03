@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.Domain.Entities;
-using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Application.Features.GetTodosForCategory;
 

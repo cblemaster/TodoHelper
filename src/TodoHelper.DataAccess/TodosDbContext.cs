@@ -5,12 +5,10 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess;
 
-public sealed class TodosDbContext : DbContext
+public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : DbContext(options)
 {
     internal DbSet<Category> Categories { get; set; }
     internal DbSet<Todo> Todos { get; set; }
-
-    public TodosDbContext(DbContextOptions<TodosDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

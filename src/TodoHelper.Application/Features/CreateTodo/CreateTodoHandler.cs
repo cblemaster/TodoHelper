@@ -13,7 +13,7 @@ internal sealed class CreateTodoHandler(ITodosRepository repository) : ICommandH
     public async Task<Result<CreateTodoResponse>> HandleAsync(CreateTodoCommand command, CancellationToken cancellationToken = default)
     {
         Result<Todo> todoResult = Todo.CreateNew(command.CategoryId, command.Description, command.DueDate, command.IsImportant);
-        
+
         if (todoResult.IsFailure && todoResult.Error is not null)
         {
             return Result<CreateTodoResponse>.Failure(todoResult.Error);

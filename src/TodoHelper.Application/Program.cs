@@ -29,7 +29,6 @@ builder.Services.AddScoped<ICommandHandler<GetTodosForCategoryCommand, GetTodosF
 builder.Services.AddScoped<ICommandHandler<GetTodosImportantCommand, GetTodosImportantResponse>, GetTodosImportantHandler>();
 builder.Services.AddScoped<ICommandHandler<GetTodosOverdueCommand, GetTodosOverdueResponse>, GetTodosOverdueHandler>();
 
-
 WebApplication app = builder.Build();
 
 app.MapGet("/", () => "Welcome!");

@@ -16,7 +16,7 @@ internal sealed class CreateCategoryHandler(ITodosRepository repository) : IComm
         {
             return Result<CreateCategoryResponse>.Failure($"Category with name {command.Name} already exists.");
         }
-        
+
         Result<Category> categoryResult = Category.CreateNew(command.Name);
 
         if (categoryResult.IsFailure && categoryResult.Error is not null)

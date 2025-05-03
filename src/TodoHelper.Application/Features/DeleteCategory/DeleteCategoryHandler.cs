@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.DeleteCategory;
 
-internal class DeleteCategoryHandler(ITodosRepository repository) : ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse>
+internal sealed class DeleteCategoryHandler(ITodosRepository repository) : ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse>
 {
     private readonly ITodosRepository _repository = repository;
 
@@ -18,7 +18,7 @@ internal class DeleteCategoryHandler(ITodosRepository repository) : ICommandHand
         }
         else
         {
-            _repository.DeleteCategoryAsync(category);
+            _ = _repository.DeleteCategoryAsync(category);
             return Task.FromResult(Result<DeleteCategoryResponse>.Success(new DeleteCategoryResponse(true)));
         }
     }

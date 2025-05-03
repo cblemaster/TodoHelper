@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 
@@ -69,26 +68,11 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
         await SaveAsync();
     }
 
-    public async Task<Category> GetCategoryByIdAsync(Identifier<Category> categoryId)
-    {
-        return await _context.Categories.Include(c => c.Todos).SingleAsync(c => c.Id == categoryId);
-    }
-    public IEnumerable<Category> GetCategories()
-    {
-        return _context.Categories;
-    }
-    public async Task<Todo> GetTodoByIdAsync(Identifier<Todo> todoId)
-    {
-        return await _context.Todos.SingleAsync(t => t.Id == todoId);
-    }
-    public IEnumerable<Todo> GetTodosByCategoryId(Identifier<Category> categoryId)
-    {
-        return _context.Todos.Where(t => t.CategoryId == categoryId);
-    }
-    public IEnumerable<Todo> GetTodos()
-    {
-        return _context.Todos;
-    }
+    public async Task<Category> GetCategoryByIdAsync(Identifier<Category> categoryId) => await _context.Categories.Include(c => c.Todos).SingleAsync(c => c.Id == categoryId);
+    public IEnumerable<Category> GetCategories() => _context.Categories;
+    public async Task<Todo> GetTodoByIdAsync(Identifier<Todo> todoId) => await _context.Todos.SingleAsync(t => t.Id == todoId);
+    public IEnumerable<Todo> GetTodosByCategoryId(Identifier<Category> categoryId) => _context.Todos.Where(t => t.CategoryId == categoryId);
+    public IEnumerable<Todo> GetTodos() => _context.Todos;
 
     private async Task SaveAsync() => await _context.SaveChangesAsync();
 

@@ -1,5 +1,4 @@
 ﻿
-using TodoHelper.Application.Features.DeleteCategory;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -7,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.DeleteTodo;
 
-public class DeleteTodoHandler(ITodosRepository repository) : ICommandHandler<DeleteTodoCommand, DeleteTodoResponse>
+public sealed class DeleteTodoHandler(ITodosRepository repository) : ICommandHandler<DeleteTodoCommand, DeleteTodoResponse>
 {
     private readonly ITodosRepository _repository = repository;
 
@@ -19,7 +18,7 @@ public class DeleteTodoHandler(ITodosRepository repository) : ICommandHandler<De
         }
         else
         {
-            _repository.DeleteTodoAsync(todo);
+            _ = _repository.DeleteTodoAsync(todo);
             return Task.FromResult(Result<DeleteTodoResponse>.Success(new DeleteTodoResponse(true)));
         }
     }
