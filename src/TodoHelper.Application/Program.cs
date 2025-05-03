@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application.Features.CreateCategory;
 using TodoHelper.Application.Features.CreateTodo;
+using TodoHelper.Application.Features.SeeAllCategories;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess;
 using TodoHelper.DataAccess.Repository;
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<TodosDbContext>(options => options.UseSqlServer(co
 builder.Services.AddScoped<ITodosRepository, TodosRepository>();
 builder.Services.AddScoped<ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>, CreateCategoryHandler>();
 builder.Services.AddScoped<ICommandHandler<CreateTodoCommand, CreateTodoResponse>, CreateTodoHandler>();
+builder.Services.AddScoped<ICommandHandler<SeeAllCategoriesCommand, SeeAllCategoriesResponse>, SeeAllCategoriesHandler>();
 
 WebApplication app = builder.Build();
 
@@ -37,6 +39,23 @@ app.MapPost(pattern: "/category",
         else
         {
             return TypedResults.InternalServerError("An unknown error occurred when creating the category.");
+        }
+    });
+
+app.MapGet(pattern: "/category/all",
+    handler: async Task<Results<Ok<IOrderedEnumerable<Category>>, Created<Todo>, InternalServerError<string>>>
+    (ICommandHandler<SeeAllCategoriesCommand, SeeAllCategoriesResponse> handler) =>
+    {
+        SeeAllCategoriesCommand command = new();
+
+        Result<SeeAllCategoriesResponse> response = await handler.HandleAsync(command);
+        if (response.IsSuccess && response.Value is not null && response.Value.AllCategories is IOrderedEnumerable<Category> categories)
+        {
+            return TypedResults.Ok(categories);
+        }
+        else
+        {
+            return TypedResults.InternalServerError("An unknown error occurred when getting categories.");
         }
     });
 
