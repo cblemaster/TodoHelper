@@ -17,9 +17,4 @@
     <ProjectReference Include="..\TodoHelper.DataAccess\TodoHelper.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\GetCategoriesWithTodos\" />
-    <Folder Include="Features\GetTodos\" />
-  </ItemGroup>
-
 </Project>
