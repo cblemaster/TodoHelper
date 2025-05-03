@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosCompleted;
 
-public class GetTodosCompletedHandler(ITodosRepository repository) : ICommandHandler<GetTodosCompletedCommand, GetTodosCompletedResponse>
+internal sealed class GetTodosCompletedHandler(ITodosRepository repository) : ICommandHandler<GetTodosCompletedCommand, GetTodosCompletedResponse>
 {
     private readonly ITodosRepository _repository = repository;
 

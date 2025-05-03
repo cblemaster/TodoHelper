@@ -4,4 +4,4 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.CreateCategory;
 
-public record CreateCategoryResponse(Category Category);
+internal sealed record CreateCategoryResponse(Category Category);

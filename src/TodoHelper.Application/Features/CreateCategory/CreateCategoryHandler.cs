@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.CreateCategory;
 
-public class CreateCategoryHandler(ITodosRepository repository) : ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>
+internal sealed class CreateCategoryHandler(ITodosRepository repository) : ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>
 {
     private readonly ITodosRepository _repository = repository;
 

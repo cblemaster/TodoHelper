@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetCategories;
 
-public class GetCategoriesHandler(ITodosRepository repository) : ICommandHandler<GetCategoriesCommand, GetCategoriesResponse>
+internal sealed class GetCategoriesHandler(ITodosRepository repository) : ICommandHandler<GetCategoriesCommand, GetCategoriesResponse>
 {
     private readonly ITodosRepository _repository = repository;
 

@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosOverdue;
 
-public class GetTodosOverdueHandler(ITodosRepository repository) : ICommandHandler<GetTodosOverdueCommand, GetTodosOverdueResponse>
+internal sealed class GetTodosOverdueHandler(ITodosRepository repository) : ICommandHandler<GetTodosOverdueCommand, GetTodosOverdueResponse>
 {
     private readonly ITodosRepository _repository = repository;
     

@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosDueToday;
 
-public class GetTodosDueTodayHandler(ITodosRepository repository) : ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse>
+internal sealed class GetTodosDueTodayHandler(ITodosRepository repository) : ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse>
 {
     private readonly ITodosRepository _repository = repository;
     

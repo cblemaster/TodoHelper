@@ -5,8 +5,8 @@ using TodoHelper.Domain.Entities;
 
 namespace TodoHelper.Application.Features.GetTodosImportant;
 
-public class GetTodosImportantCommand : ICommand<GetTodosImportantResponse>
+internal sealed class GetTodosImportantCommand : ICommand<GetTodosImportantResponse>
 {
-    public Expression<Func<Todo, DateOnly?>> FirstOrderByPredicate { get; } = t => t.DueDate.Value;
-    public Expression<Func<Todo, string>> SecondOrderByPredicate { get; } = t => t.Description.Value;
+    internal Expression<Func<Todo, DateOnly?>> FirstOrderByPredicate { get; } = t => t.DueDate.Value;
+    internal Expression<Func<Todo, string>> SecondOrderByPredicate { get; } = t => t.Description.Value;
 }

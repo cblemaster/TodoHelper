@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosImportant;
 
-public class GetTodosImportantHandler(ITodosRepository repository) : ICommandHandler<GetTodosImportantCommand, GetTodosImportantResponse>
+internal sealed class GetTodosImportantHandler(ITodosRepository repository) : ICommandHandler<GetTodosImportantCommand, GetTodosImportantResponse>
 {
     private readonly ITodosRepository _repository = repository;
 

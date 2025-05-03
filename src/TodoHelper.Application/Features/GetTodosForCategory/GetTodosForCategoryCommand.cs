@@ -6,11 +6,11 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Application.Features.SeeTodosForCategory;
 
-public class GetTodosForCategoryCommand(Identifier<Category> categoryId) : ICommand<GetTodosForCategoryResponse>
+internal sealed class GetTodosForCategoryCommand(Identifier<Category> categoryId) : ICommand<GetTodosForCategoryResponse>
 {
-    public Identifier<Category> CategoryId { get; } = categoryId;
+    internal Identifier<Category> CategoryId { get; } = categoryId;
 
-    public Expression<Func<Todo, bool>> FirstOrderByPredicate { get; } = t => t.IsComplete;
-    public Expression<Func<Todo, DateOnly?>> SecondOrderByPredicate { get; } = t => t.DueDate.Value;
-    public Expression<Func<Todo, string>> ThirdOrderByPredicate { get; } = t => t.Description.Value;
+    internal Expression<Func<Todo, bool>> FirstOrderByPredicate { get; } = t => t.IsComplete;
+    internal Expression<Func<Todo, DateOnly?>> SecondOrderByPredicate { get; } = t => t.DueDate.Value;
+    internal Expression<Func<Todo, string>> ThirdOrderByPredicate { get; } = t => t.Description.Value;
 }

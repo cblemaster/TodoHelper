@@ -6,7 +6,7 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.CreateTodo;
 
-public class CreateTodoHandler(ITodosRepository repository) : ICommandHandler<CreateTodoCommand, CreateTodoResponse>
+internal sealed class CreateTodoHandler(ITodosRepository repository) : ICommandHandler<CreateTodoCommand, CreateTodoResponse>
 {
     private readonly ITodosRepository _repository = repository;
 
