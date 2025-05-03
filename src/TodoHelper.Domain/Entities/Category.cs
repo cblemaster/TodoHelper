@@ -9,7 +9,6 @@ public sealed class Category : Entity<Category>
     public override Identifier<Category> Id { get; }
     public IEnumerable<Todo> Todos { get; }
     public Name Name { get; private set; }
-    public bool CanBeDeleted => !Todos.Any();
 
 #pragma warning disable CS8618
     private Category() { }

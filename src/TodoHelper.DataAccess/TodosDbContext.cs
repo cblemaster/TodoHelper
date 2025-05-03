@@ -23,7 +23,6 @@ public sealed class TodosDbContext : DbContext
             entity.Property(e => e.Name).HasConversion(n => n.Value, n => Name.Create(n).Value!);
             entity.Property(e => e.Name).HasMaxLength(Name.MAX_LENGTH).IsUnicode(false);
             entity.HasIndex(e => e.Name).IsUnique();
-            entity.Ignore(e => e.CanBeDeleted);
         });
 
         modelBuilder.Entity<Todo>(entity =>
