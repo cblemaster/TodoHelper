@@ -1,7 +1,7 @@
 ﻿
 namespace TodoHelper.Domain.Results;
 
-public class Result<T>
+public sealed class Result<T>
 {
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;

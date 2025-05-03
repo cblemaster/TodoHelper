@@ -6,7 +6,7 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess.Repository;
 
-public class TodosRepository(TodosDbContext context) : ITodosRepository
+public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
 {
     private readonly TodosDbContext _context = context;
 
