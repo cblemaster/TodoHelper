@@ -1,6 +1,5 @@
-﻿
-using TodoHelper.Domain.Entities;
+﻿using TodoHelper.Domain.Entities;
 
-namespace TodoHelper.Application.Features.SeeTodosForCategory;
+namespace TodoHelper.Application.Features.GetTodosForCategory;
 
 internal sealed record GetTodosForCategoryResponse(IOrderedEnumerable<Todo> TodosForCategory);
