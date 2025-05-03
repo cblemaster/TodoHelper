@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using TodoHelper.Application;
 using TodoHelper.Application.Features.CreateCategory;
 using TodoHelper.Application.Features.CreateTodo;
 using TodoHelper.Application.Features.DeleteCategory;
@@ -28,23 +29,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string conn = builder.Configuration.GetConnectionString("todo-helper-conn") ?? "Error getting connection string.";
 builder.Services.AddDbContext<TodosDbContext>(options => options.UseSqlServer(conn));
 builder.Services.AddScoped<ITodosRepository, TodosRepository>();
-builder.Services.AddScoped<ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>, CreateCategoryHandler>();
-builder.Services.AddScoped<ICommandHandler<CreateTodoCommand, CreateTodoResponse>, CreateTodoHandler>();
-builder.Services.AddScoped<ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse>, DeleteCategoryHandler>();
-builder.Services.AddScoped<ICommandHandler<DeleteTodoCommand, DeleteTodoResponse>, DeleteTodoHandler>();
-builder.Services.AddScoped<ICommandHandler<GetCategoriesCommand, GetCategoriesResponse>, GetCategoriesHandler>();
-builder.Services.AddScoped<ICommandHandler<GetTodosCompletedCommand, GetTodosCompletedResponse>, GetTodosCompletedHandler>();
-builder.Services.AddScoped<ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse>, GetTodosDueTodayHandler>();
-builder.Services.AddScoped<ICommandHandler<GetTodosForCategoryCommand, GetTodosForCategoryResponse>, GetTodosForCategoryHandler>();
-builder.Services.AddScoped<ICommandHandler<GetTodosImportantCommand, GetTodosImportantResponse>, GetTodosImportantHandler>();
-builder.Services.AddScoped<ICommandHandler<GetTodosOverdueCommand, GetTodosOverdueResponse>, GetTodosOverdueHandler>();
-builder.Services.AddScoped<ICommandHandler<RenameCategoryCommand, RenameCategoryResponse>, RenameCategoryHandler>();
-builder.Services.AddScoped<ICommandHandler<ToggleTodoCompletedCommand, ToggleTodoCompletedResponse>, ToggleTodoCompletedHandler>();
-builder.Services.AddScoped<ICommandHandler<ToggleTodoImportanceCommand, ToggleTodoImportanceResponse>, ToggleTodoImportanceHandler>();
-builder.Services.AddScoped<ICommandHandler<UpdateTodoCategoryCommand, UpdateTodoCategoryResponse>, UpdateTodoCategoryHandler>();
-builder.Services.AddScoped<ICommandHandler<UpdateTodoDescriptionCommand, UpdateTodoDescriptionResponse>, UpdateTodoDescriptionHandler>();
-builder.Services.AddScoped<ICommandHandler<UpdateTodoDueDateCommand, UpdateTodoDueDateResponse>, UpdateTodoDueDateHandler>();
-
+builder.RegisterHandlers();
 WebApplication app = builder.Build();
 
 app.MapGet("/", () => "Welcome!");
