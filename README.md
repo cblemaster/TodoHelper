@@ -4,15 +4,15 @@ An application with basic todo management features, including custom categories,
 ### Built with
 .NET 9, C#13
 ### Features
-+ See all categories
++ See categories, sorted by name
 + Create a new category
 + Create a todo
 + Update a todo's category
-+ See all todos for the selected category, sorted by due date descending, not including completed todos
-+ See all todos that are important, sorted by due date descending, not including completed todos
-+ See all todos due today, sorted by description, not including completed todos
-+ See all todos that are overdue, sorted by due date descending, not including completed todos
-+ See all completed todos sorted by due date descending
++ See all todos for a category, sorted by is complete descending, then by due date descending, then by description
++ See all todos that are important, not including completed todos, sorted by due date descending, then by description
++ See all todos due today, not including completed todos, sorted by description
++ See all todos that are overdue, not including completed todos, sorted by due date descending, then by description
++ See all completed todos sorted by due date descending, then by description
 + Update a todo's description
 + Update a todo's due date
 + Toggle todo is important/is not important
