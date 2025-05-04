@@ -20,7 +20,7 @@ public sealed class Category : Entity<Category>
         Name = name;
     }
 
-    public void Rename(string name)
+    public void SetName(string name)
     {
         Result<Name> nameResult = Name.Create(name);
         if (nameResult.IsSuccess && nameResult.Value is not null)
