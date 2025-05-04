@@ -12,7 +12,7 @@ internal sealed class GetTodosCompletedHandler(ITodosRepository repository) : Ha
     public override Task<Result<GetTodosCompletedResponse>> HandleAsync(GetTodosCompletedCommand command, CancellationToken cancellationToken = default)
     {
         IOrderedEnumerable<Todo> todos =
-            base._repository.GetTodos()
+            _repository.GetTodos()
                 .Where(t => t.IsComplete)
                 .OrderByDescending(command.FirstOrderByPredicate.Compile())
                 .ThenBy(command.SecondOrderByPredicate.Compile());

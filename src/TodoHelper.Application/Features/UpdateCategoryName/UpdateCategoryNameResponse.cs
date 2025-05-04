@@ -1,4 +1,4 @@
 ﻿
-namespace TodoHelper.Application.Features.RenameCategory;
+namespace TodoHelper.Application.Features.UpdateCategoryName;
 
 public sealed record UpdateCategoryNameResponse(bool IsSuccess);

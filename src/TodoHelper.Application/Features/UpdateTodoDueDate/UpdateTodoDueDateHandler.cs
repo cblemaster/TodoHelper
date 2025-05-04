@@ -11,7 +11,7 @@ internal sealed class UpdateTodoDueDateHandler(ITodosRepository repository) : Ha
 {
     public override Task<Result<UpdateTodoDueDateResponse>> HandleAsync(UpdateTodoDueDateCommand command, CancellationToken cancellationToken = default)
     {
-        if (base._repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
         {
             return Task.FromResult(Result<UpdateTodoDueDateResponse>.Failure($"Todo with id {command.TodoId} not found."));
         }

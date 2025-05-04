@@ -12,12 +12,12 @@ using TodoHelper.Application.Features.GetTodosDueToday;
 using TodoHelper.Application.Features.GetTodosForCategory;
 using TodoHelper.Application.Features.GetTodosImportant;
 using TodoHelper.Application.Features.GetTodosOverdue;
-using TodoHelper.Application.Features.RenameCategory;
-using TodoHelper.Application.Features.ToggleTodoCompleted;
-using TodoHelper.Application.Features.ToggleTodoImportance;
+using TodoHelper.Application.Features.UpdateCategoryName;
 using TodoHelper.Application.Features.UpdateTodoCategory;
+using TodoHelper.Application.Features.UpdateTodoCompleteDate;
 using TodoHelper.Application.Features.UpdateTodoDescription;
 using TodoHelper.Application.Features.UpdateTodoDueDate;
+using TodoHelper.Application.Features.UpdateTodoImportance;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess;
 using TodoHelper.DataAccess.Repository;
@@ -59,14 +59,9 @@ app.MapGet(pattern: "/category",
         GetCategoriesCommand command = new();
 
         Result<GetCategoriesResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.Categories is IOrderedEnumerable<Category> categories)
-        {
-            return TypedResults.Ok(categories);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when getting categories.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.Categories is IOrderedEnumerable<Category> categories
+            ? TypedResults.Ok(categories)
+            : TypedResults.InternalServerError("An unknown error occurred when getting categories.");
     });
 app.MapGet(pattern: "/category/{id:guid}/todo",
     handler: async Task<Results<Ok<IOrderedEnumerable<Todo>>, InternalServerError<string>>>
@@ -75,32 +70,20 @@ app.MapGet(pattern: "/category/{id:guid}/todo",
         GetTodosForCategoryCommand command = new(id);
 
         Result<GetTodosForCategoryResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.TodosForCategory is IOrderedEnumerable<Todo> todos)
-        {
-            return TypedResults.Ok(todos);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when getting todos.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.TodosForCategory is IOrderedEnumerable<Todo> todos
+            ? TypedResults.Ok(todos)
+            : TypedResults.InternalServerError("An unknown error occurred when getting todos.");
     });
 app.MapPut(pattern: "/category/{id:guid}",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateCategoryNameCommand command, ICommandHandler<UpdateCategoryNameCommand, UpdateCategoryNameResponse> handler) =>
     {
         Result<UpdateCategoryNameResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when renaming the category.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when renaming the category.");
     });
 app.MapDelete(pattern: "/category/{id:guid}",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
@@ -109,18 +92,11 @@ app.MapDelete(pattern: "/category/{id:guid}",
         DeleteTodoCommand command = new(id);
 
         Result<DeleteTodoResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when deleting the category.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when deleting the category.");
     });
 
 app.MapPost(pattern: "/todo",
@@ -128,18 +104,11 @@ app.MapPost(pattern: "/todo",
     ICommandHandler<CreateTodoCommand, CreateTodoResponse> handler) =>
     {
         Result<CreateTodoResponse> response = await handler.HandleAsync(command);
-        if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.BadRequest(response.Error);
-        }
-        else if (response.IsSuccess && response.Value is not null && response.Value.Todo is Todo t)
-        {
-            return TypedResults.Created("", t);     // TODO: fix the resource uri
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when creating the todo.");
-        }
+        return response.IsFailure && response.Error is not null
+            ? TypedResults.BadRequest(response.Error)
+            : response.IsSuccess && response.Value is not null && response.Value.Todo is Todo t
+                ? TypedResults.Created("", t)
+                : TypedResults.InternalServerError("An unknown error occurred when creating the todo.");
     });
 app.MapGet(pattern: "/todo/complete",
     handler: async Task<Results<Ok<IOrderedEnumerable<Todo>>, InternalServerError<string>>>
@@ -148,14 +117,9 @@ app.MapGet(pattern: "/todo/complete",
         GetTodosCompletedCommand command = new();
 
         Result<GetTodosCompletedResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.CompleteTodos is IOrderedEnumerable<Todo> todos)
-        {
-            return TypedResults.Ok(todos);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when getting todos.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.CompleteTodos is IOrderedEnumerable<Todo> todos
+            ? TypedResults.Ok(todos)
+            : TypedResults.InternalServerError("An unknown error occurred when getting todos.");
     });
 app.MapGet(pattern: "/todo/duetoday",
     handler: async Task<Results<Ok<IOrderedEnumerable<Todo>>, InternalServerError<string>>>
@@ -164,14 +128,9 @@ app.MapGet(pattern: "/todo/duetoday",
         GetTodosDueTodayCommand command = new();
 
         Result<GetTodosDueTodayResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.DueTodayTodos is IOrderedEnumerable<Todo> todos)
-        {
-            return TypedResults.Ok(todos);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when getting todos.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.DueTodayTodos is IOrderedEnumerable<Todo> todos
+            ? TypedResults.Ok(todos)
+            : TypedResults.InternalServerError("An unknown error occurred when getting todos.");
     });
 app.MapGet(pattern: "/todo/important",
     handler: async Task<Results<Ok<IOrderedEnumerable<Todo>>, InternalServerError<string>>>
@@ -180,14 +139,9 @@ app.MapGet(pattern: "/todo/important",
         GetTodosImportantCommand command = new();
 
         Result<GetTodosImportantResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.ImportantTodos is IOrderedEnumerable<Todo> todos)
-        {
-            return TypedResults.Ok(todos);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when getting todos.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.ImportantTodos is IOrderedEnumerable<Todo> todos
+            ? TypedResults.Ok(todos)
+            : TypedResults.InternalServerError("An unknown error occurred when getting todos.");
     });
 app.MapGet(pattern: "/todo/overdue",
     handler: async Task<Results<Ok<IOrderedEnumerable<Todo>>, InternalServerError<string>>>
@@ -196,104 +150,64 @@ app.MapGet(pattern: "/todo/overdue",
         GetTodosOverdueCommand command = new();
 
         Result<GetTodosOverdueResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.OverdueTodos is IOrderedEnumerable<Todo> todos)
-        {
-            return TypedResults.Ok(todos);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when getting todos.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.OverdueTodos is IOrderedEnumerable<Todo> todos
+            ? TypedResults.Ok(todos)
+            : TypedResults.InternalServerError("An unknown error occurred when getting todos.");
     });
 app.MapPut(pattern: "/todo/{id:guid}/category",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoCategoryCommand command, ICommandHandler<UpdateTodoCategoryCommand, UpdateTodoCategoryResponse> handler) =>
     {
         Result<UpdateTodoCategoryResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
     });
 app.MapPut(pattern: "/todo/{id:guid}/completed",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoCompleteDateCommand command, ICommandHandler<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse> handler) =>
     {
         Result<UpdateTodoCompleteDateResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
     });
 app.MapPut(pattern: "/todo/{id:guid}/description",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoDescriptionCommand command, ICommandHandler<UpdateTodoDescriptionCommand, UpdateTodoDescriptionResponse> handler) =>
     {
         Result<UpdateTodoDescriptionResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
     });
 app.MapPut(pattern: "/todo/{id:guid}/duedate",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoDueDateCommand command, ICommandHandler<UpdateTodoDueDateCommand, UpdateTodoDueDateResponse> handler) =>
     {
         Result<UpdateTodoDueDateResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
     });
 app.MapPut(pattern: "/todo/{id:guid}/importance",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoImportanceCommand command, ICommandHandler<UpdateTodoImportanceCommand, UpdateTodoImportanceResponse> handler) =>
     {
         Result<UpdateTodoImportanceResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
-        }
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
     });
 app.MapDelete(pattern: "/todo/{id:guid}",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
@@ -302,19 +216,11 @@ app.MapDelete(pattern: "/todo/{id:guid}",
         DeleteCategoryCommand command = new(id);
 
         Result<DeleteCategoryResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is not null)
-        {
-            return TypedResults.NotFound(response.Error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError("An unknown error occurred when deleting the todo.");
-        }
-
+        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
+            ? TypedResults.NoContent()
+            : response.IsFailure && response.Error is not null
+                ? TypedResults.NotFound(response.Error)
+                : TypedResults.InternalServerError("An unknown error occurred when deleting the todo.");
     });
 
 app.Run();

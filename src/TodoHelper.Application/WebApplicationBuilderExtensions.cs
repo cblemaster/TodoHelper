@@ -12,9 +12,12 @@ using TodoHelper.Application.Features.GetTodosOverdue;
 using TodoHelper.Application.Features.RenameCategory;
 using TodoHelper.Application.Features.ToggleTodoCompleted;
 using TodoHelper.Application.Features.ToggleTodoImportance;
+using TodoHelper.Application.Features.UpdateCategoryName;
 using TodoHelper.Application.Features.UpdateTodoCategory;
+using TodoHelper.Application.Features.UpdateTodoCompleteDate;
 using TodoHelper.Application.Features.UpdateTodoDescription;
 using TodoHelper.Application.Features.UpdateTodoDueDate;
+using TodoHelper.Application.Features.UpdateTodoImportance;
 using TodoHelper.Application.Interfaces;
 
 namespace TodoHelper.Application;
@@ -23,7 +26,7 @@ public static class WebApplicationBuilderExtensions
 {
     public static WebApplicationBuilder RegisterHandlers(this WebApplicationBuilder builder)
     {
-        builder.Services
+        _ = builder.Services
             .AddScoped<ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>, CreateCategoryHandler>()
             .AddScoped<ICommandHandler<CreateTodoCommand, CreateTodoResponse>, CreateTodoHandler>()
             .AddScoped<ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse>, DeleteCategoryHandler>()

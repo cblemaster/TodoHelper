@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Application.Features.Common;
+using TodoHelper.Application.Features.UpdateTodoImportance;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -11,13 +12,13 @@ internal sealed class UpdateTodoImportanceHandler(ITodosRepository repository) :
 {
     public override Task<Result<UpdateTodoImportanceResponse>> HandleAsync(UpdateTodoImportanceCommand command, CancellationToken cancellationToken = default)
     {
-        if (base._repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
         {
             return Task.FromResult(Result<UpdateTodoImportanceResponse>.Failure($"Todo with id {command.TodoId} not found."));
         }
         else
         {
-            _ = base._repository.UpdateTodoImportanceAsync(todo);
+            _ = _repository.UpdateTodoImportanceAsync(todo);
             return Task.FromResult(Result<UpdateTodoImportanceResponse>.Success(new UpdateTodoImportanceResponse(true)));
         }
     }
