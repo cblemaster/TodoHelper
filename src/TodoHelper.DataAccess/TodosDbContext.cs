@@ -21,6 +21,9 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
             entity.Property(e => e.Name).HasConversion(n => n.Value, n => Name.Create(n).Value!);
             entity.Property(e => e.Name).HasMaxLength(Name.MAX_LENGTH).IsUnicode(false);
             entity.HasIndex(e => e.Name).IsUnique();
+            entity.Property(e => e.CreateDate).HasConversion(c => c.Value, c => CreateDate.Create(c));
+            entity.Property(e => e.UpdateDate).HasConversion(u => u.Value, u => UpdateDate.Create(u));
+            entity.Property(e => e.UpdateDate).IsRequired(false);
         });
 
         modelBuilder.Entity<Todo>(entity =>
