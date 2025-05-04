@@ -5,7 +5,7 @@ An application with basic todo management features, including custom categories,
 .NET 9, C#13
 ### Features
 + See categories, sorted by name
-+ Create a new category
++ Create a category
 + Create a todo
 + Update a todo's category
 + See all todos for a category, sorted by is complete descending, then by due date descending, then by description
@@ -15,9 +15,9 @@ An application with basic todo management features, including custom categories,
 + See all completed todos sorted by due date descending, then by description
 + Update a todo's description
 + Update a todo's due date
-+ Toggle todo is important/is not important
-+ Toggle todo is complete/is not complete
-+ Rename a category
++ Update a todo's importance
++ Update a todo's complete date
++ Update a category’s name
 + Delete a todo
 + Delete a category
 ### Rules
