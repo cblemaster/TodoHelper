@@ -20,9 +20,9 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
         await SaveAsync();
     }
 
-    public async Task RenameCategoryAsync(Category category, string name)
+    public async Task UpdateCategoryNameAsync(Category category, string name)
     {
-        category.Rename(name);
+        category.SetName(name);
         _ = _context.Update(category);
         await SaveAsync();
     }

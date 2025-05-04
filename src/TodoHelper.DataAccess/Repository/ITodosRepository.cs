@@ -9,7 +9,7 @@ public interface ITodosRepository
     Task CreateTodoAsync(Todo todo);
     Task DeleteCategoryAsync(Category category);
     Task DeleteTodoAsync(Todo todo);
-    Task RenameCategoryAsync(Category category, string name);
+    Task UpdateCategoryNameAsync(Category category, string name);
     Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId);
     Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate);
     Task UpdateTodoDescriptionAsync(Todo todo, string description);
