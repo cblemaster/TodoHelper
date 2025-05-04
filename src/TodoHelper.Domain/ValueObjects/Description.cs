@@ -14,7 +14,9 @@ public sealed class Description
     public static Result<Description> Create(string value)
     {
         (bool IsValid, string error) = Validate(value);
-        return !IsValid ? Result<Description>.Failure(error) : Result<Description>.Success(new Description(value));
+        return !IsValid
+            ? Result<Description>.Failure(error)
+            : Result<Description>.Success(new Description(value));
     }
 
     // TODO: this is the exact same validation as in Name.cs...

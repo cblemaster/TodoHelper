@@ -14,7 +14,9 @@ public sealed class Name
     public static Result<Name> Create(string value)
     {
         (bool IsValid, string error) = Validate(value);
-        return !IsValid ? Result<Name>.Failure(error) : Result<Name>.Success(new Name(value));
+        return !IsValid
+            ? Result<Name>.Failure(error)
+            : Result<Name>.Success(new Name(value));
     }
 
     private static (bool IsValid, string error) Validate(string value) =>
