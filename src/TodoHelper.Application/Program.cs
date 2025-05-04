@@ -86,9 +86,9 @@ app.MapGet(pattern: "/category/{id:guid}/todo",
     });
 app.MapPut(pattern: "/category/{id:guid}",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
-    (Guid id, RenameCategoryCommand command, ICommandHandler<RenameCategoryCommand, RenameCategoryResponse> handler) =>
+    (Guid id, UpdateCategoryNameCommand command, ICommandHandler<UpdateCategoryNameCommand, UpdateCategoryNameResponse> handler) =>
     {
-        Result<RenameCategoryResponse> response = await handler.HandleAsync(command);
+        Result<UpdateCategoryNameResponse> response = await handler.HandleAsync(command);
         if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
         {
             return TypedResults.NoContent();
@@ -225,9 +225,9 @@ app.MapPut(pattern: "/todo/{id:guid}/category",
     });
 app.MapPut(pattern: "/todo/{id:guid}/completed",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
-    (Guid id, ToggleTodoCompletedCommand command, ICommandHandler<ToggleTodoCompletedCommand, ToggleTodoCompletedResponse> handler) =>
+    (Guid id, UpdateTodoCompleteDateCommand command, ICommandHandler<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse> handler) =>
     {
-        Result<ToggleTodoCompletedResponse> response = await handler.HandleAsync(command);
+        Result<UpdateTodoCompleteDateResponse> response = await handler.HandleAsync(command);
         if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
         {
             return TypedResults.NoContent();
@@ -279,9 +279,9 @@ app.MapPut(pattern: "/todo/{id:guid}/duedate",
     });
 app.MapPut(pattern: "/todo/{id:guid}/importance",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
-    (Guid id, ToggleTodoImportanceCommand command, ICommandHandler<ToggleTodoImportanceCommand, ToggleTodoImportanceResponse> handler) =>
+    (Guid id, UpdateTodoImportanceCommand command, ICommandHandler<UpdateTodoImportanceCommand, UpdateTodoImportanceResponse> handler) =>
     {
-        Result<ToggleTodoImportanceResponse> response = await handler.HandleAsync(command);
+        Result<UpdateTodoImportanceResponse> response = await handler.HandleAsync(command);
         if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
         {
             return TypedResults.NoContent();

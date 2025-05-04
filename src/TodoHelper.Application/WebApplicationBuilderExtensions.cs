@@ -34,9 +34,9 @@ public static class WebApplicationBuilderExtensions
             .AddScoped<ICommandHandler<GetTodosForCategoryCommand, GetTodosForCategoryResponse>, GetTodosForCategoryHandler>()
             .AddScoped<ICommandHandler<GetTodosImportantCommand, GetTodosImportantResponse>, GetTodosImportantHandler>()
             .AddScoped<ICommandHandler<GetTodosOverdueCommand, GetTodosOverdueResponse>, GetTodosOverdueHandler>()
-            .AddScoped<ICommandHandler<RenameCategoryCommand, RenameCategoryResponse>, RenameCategoryHandler>()
-            .AddScoped<ICommandHandler<ToggleTodoCompletedCommand, ToggleTodoCompletedResponse>, ToggleTodoCompletedHandler>()
-            .AddScoped<ICommandHandler<ToggleTodoImportanceCommand, ToggleTodoImportanceResponse>, ToggleTodoImportanceHandler>()
+            .AddScoped<ICommandHandler<UpdateCategoryNameCommand, UpdateCategoryNameResponse>, UpdateCategoryNameHandler>()
+            .AddScoped<ICommandHandler<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse>, UpdateTodoCompleteDateHandler>()
+            .AddScoped<ICommandHandler<UpdateTodoImportanceCommand, UpdateTodoImportanceResponse>, UpdateTodoImportanceHandler>()
             .AddScoped<ICommandHandler<UpdateTodoCategoryCommand, UpdateTodoCategoryResponse>, UpdateTodoCategoryHandler>()
             .AddScoped<ICommandHandler<UpdateTodoDescriptionCommand, UpdateTodoDescriptionResponse>, UpdateTodoDescriptionHandler>()
             .AddScoped<ICommandHandler<UpdateTodoDueDateCommand, UpdateTodoDueDateResponse>, UpdateTodoDueDateHandler>();
