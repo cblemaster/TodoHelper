@@ -15,7 +15,7 @@ public sealed class Todo : Entity<Todo>
     public CreateDate CreateDate { get; }
     public UpdateDate UpdateDate { get; private set; }
     public Importance Importance { get; private set; }
-    public bool IsComplete => CompleteDate.Value is not null;
+    public bool IsComplete => CompleteDate is not null && CompleteDate.Value is not null;
     public bool CanBeUpdated => !IsComplete;
     public bool CanBeDeleted => !Importance.IsImportant;
 

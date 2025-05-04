@@ -19,8 +19,8 @@ public sealed class Name
 
     private static (bool IsValid, string error) Validate(string value) =>
         string.IsNullOrWhiteSpace(value)
-            ? (false, $"{nameof(value)} is required, and cannot be all whitespace characters.")
+            ? (false, $"{nameof(Name)} is required, and cannot be all whitespace characters.")
             : value.Length > MAX_LENGTH
-                ? (false, $"{nameof(value)} must be {MAX_LENGTH} or fewer characters.")
+                ? (false, $"{nameof(Name)} must be {MAX_LENGTH} or fewer characters.")
                 : (true, string.Empty);
 }

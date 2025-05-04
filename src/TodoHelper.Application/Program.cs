@@ -165,7 +165,7 @@ app.MapPut(pattern: "/todo/{id:guid}/category",
                 ? TypedResults.NotFound(response.Error)
                 : TypedResults.InternalServerError("An unknown error occurred when updating the todo.");
     });
-app.MapPut(pattern: "/todo/{id:guid}/completed",
+app.MapPut(pattern: "/todo/{id:guid}/completedate",
     handler: async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoCompleteDateCommand command, ICommandHandler<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse> handler) =>
     {
