@@ -1,16 +1,14 @@
 ﻿
-using TodoHelper.Application.Interfaces;
+using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosImportant;
 
-internal sealed class GetTodosImportantHandler(ITodosRepository repository) : ICommandHandler<GetTodosImportantCommand, GetTodosImportantResponse>
+internal sealed class GetTodosImportantHandler(ITodosRepository repository) : HandlerBase<GetTodosImportantCommand, GetTodosImportantResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public Task<Result<GetTodosImportantResponse>> HandleAsync(GetTodosImportantCommand command, CancellationToken cancellationToken = default)
+    public override Task<Result<GetTodosImportantResponse>> HandleAsync(GetTodosImportantCommand command, CancellationToken cancellationToken = default)
     {
         IOrderedEnumerable<Todo> todos =
             _repository.GetTodos()

@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -6,11 +7,9 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosForCategory;
 
-internal sealed class GetTodosForCategoryHandler(ITodosRepository repository) : ICommandHandler<GetTodosForCategoryCommand, GetTodosForCategoryResponse>
+internal sealed class GetTodosForCategoryHandler(ITodosRepository repository) : HandlerBase<GetTodosForCategoryCommand, GetTodosForCategoryResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public Task<Result<GetTodosForCategoryResponse>> HandleAsync(GetTodosForCategoryCommand command, CancellationToken cancellationToken = default)
+    public override Task<Result<GetTodosForCategoryResponse>> HandleAsync(GetTodosForCategoryCommand command, CancellationToken cancellationToken = default)
     {
         IOrderedEnumerable<Todo> todos =
             _repository.GetTodos()

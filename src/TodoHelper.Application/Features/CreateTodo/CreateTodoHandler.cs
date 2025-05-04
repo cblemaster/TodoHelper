@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -6,11 +7,9 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.CreateTodo;
 
-internal sealed class CreateTodoHandler(ITodosRepository repository) : ICommandHandler<CreateTodoCommand, CreateTodoResponse>
+internal sealed class CreateTodoHandler(ITodosRepository repository) : HandlerBase<CreateTodoCommand, CreateTodoResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public async Task<Result<CreateTodoResponse>> HandleAsync(CreateTodoCommand command, CancellationToken cancellationToken = default)
+    public override async Task<Result<CreateTodoResponse>> HandleAsync(CreateTodoCommand command, CancellationToken cancellationToken = default)
     {
         Result<Todo> todoResult = Todo.CreateNew(command.CategoryId, command.Description, command.DueDate, command.IsImportant);
 

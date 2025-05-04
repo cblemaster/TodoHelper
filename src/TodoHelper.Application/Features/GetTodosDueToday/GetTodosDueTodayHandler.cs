@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -6,11 +7,9 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosDueToday;
 
-internal sealed class GetTodosDueTodayHandler(ITodosRepository repository) : ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse>
+internal sealed class GetTodosDueTodayHandler(ITodosRepository repository) : HandlerBase<GetTodosDueTodayCommand, GetTodosDueTodayResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public Task<Result<GetTodosDueTodayResponse>> HandleAsync(GetTodosDueTodayCommand command, CancellationToken cancellationToken = default)
+    public override Task<Result<GetTodosDueTodayResponse>> HandleAsync(GetTodosDueTodayCommand command, CancellationToken cancellationToken = default)
     {
         IOrderedEnumerable<Todo> todos =
             _repository.GetTodos()

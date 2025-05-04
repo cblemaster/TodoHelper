@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -6,11 +7,9 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.DeleteCategory;
 
-internal sealed class DeleteCategoryHandler(ITodosRepository repository) : ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse>
+internal sealed class DeleteCategoryHandler(ITodosRepository repository) : HandlerBase<DeleteCategoryCommand, DeleteCategoryResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public Task<Result<DeleteCategoryResponse>> HandleAsync(DeleteCategoryCommand command, CancellationToken cancellationToken = default)
+    public override Task<Result<DeleteCategoryResponse>> HandleAsync(DeleteCategoryCommand command, CancellationToken cancellationToken = default)
     {
         if (_repository.GetCategories().Single(c => c.Id.Value == command.CategoryId) is not Category category)
         {

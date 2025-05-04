@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -6,11 +7,9 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.GetTodosOverdue;
 
-internal sealed class GetTodosOverdueHandler(ITodosRepository repository) : ICommandHandler<GetTodosOverdueCommand, GetTodosOverdueResponse>
+internal sealed class GetTodosOverdueHandler(ITodosRepository repository) : HandlerBase<GetTodosOverdueCommand, GetTodosOverdueResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public Task<Result<GetTodosOverdueResponse>> HandleAsync(GetTodosOverdueCommand command, CancellationToken cancellationToken = default)
+    public override Task<Result<GetTodosOverdueResponse>> HandleAsync(GetTodosOverdueCommand command, CancellationToken cancellationToken = default)
     {
         IOrderedEnumerable<Todo> todos =
             _repository.GetTodos()

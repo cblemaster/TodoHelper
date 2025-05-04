@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -6,11 +7,9 @@ using TodoHelper.Domain.Results;
 
 namespace TodoHelper.Application.Features.CreateCategory;
 
-internal sealed class CreateCategoryHandler(ITodosRepository repository) : ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>
+internal sealed class CreateCategoryHandler(ITodosRepository repository) : HandlerBase<CreateCategoryCommand, CreateCategoryResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-
-    public async Task<Result<CreateCategoryResponse>> HandleAsync(CreateCategoryCommand command, CancellationToken cancellationToken = default)
+    public override async Task<Result<CreateCategoryResponse>> HandleAsync(CreateCategoryCommand command, CancellationToken cancellationToken = default)
     {
         if (_repository.CategoryOfSameNameExists(command.Name))
         {

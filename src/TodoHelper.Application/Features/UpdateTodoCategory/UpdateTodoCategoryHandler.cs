@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -7,10 +8,9 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Application.Features.UpdateTodoCategory;
 
-internal sealed class UpdateTodoCategoryHandler(ITodosRepository repository) : ICommandHandler<UpdateTodoCategoryCommand, UpdateTodoCategoryResponse>
+internal sealed class UpdateTodoCategoryHandler(ITodosRepository repository) : HandlerBase<UpdateTodoCategoryCommand, UpdateTodoCategoryResponse>(repository)
 {
-    private readonly ITodosRepository _repository = repository;
-    public Task<Result<UpdateTodoCategoryResponse>> HandleAsync(UpdateTodoCategoryCommand command, CancellationToken cancellationToken = default)
+    public override Task<Result<UpdateTodoCategoryResponse>> HandleAsync(UpdateTodoCategoryCommand command, CancellationToken cancellationToken = default)
     {
         if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
         {
