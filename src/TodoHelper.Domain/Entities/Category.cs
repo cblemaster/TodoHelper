@@ -7,17 +7,20 @@ namespace TodoHelper.Domain.Entities;
 public sealed class Category : Entity<Category>
 {
     public override Identifier<Category> Id { get; }
-    public IEnumerable<Todo> Todos { get; private set; }
+    public IEnumerable<Todo> Todos { get; private set; } = [];
     public Name Name { get; private set; }
+    public override CreateDate CreateDate { get; }
+    public override UpdateDate UpdateDate { get; protected set; }
 
 #pragma warning disable CS8618
     private Category() { }
 #pragma warning restore CS8618
-    private Category(IEnumerable<Todo> todos, Name name)
+    private Category(Name name, CreateDate createDate, UpdateDate updateDate)
     {
         Id = Identifier<Category>.CreateNew();
-        Todos = todos;
         Name = name;
+        CreateDate = createDate;
+        UpdateDate = updateDate;
     }
 
     public void SetName(string name)
@@ -26,6 +29,7 @@ public sealed class Category : Entity<Category>
         if (nameResult.IsSuccess && nameResult.Value is not null)
         {
             Name = nameResult.Value;
+            UpdateDate = UpdateDate.Create();
         }
         else
         {
@@ -40,7 +44,7 @@ public sealed class Category : Entity<Category>
         Result<Name> nameResult = Name.Create(name);
 
         return nameResult.IsSuccess && nameResult.Value is Name newName
-            ? Result<Category>.Success(new([], newName))
+            ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))
             : nameResult.IsFailure && nameResult.Error is string error
                 ? Result<Category>.Failure(error)
                 : Result<Category>.Failure("An unknown error occurred while creating category.");

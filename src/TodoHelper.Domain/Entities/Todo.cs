@@ -13,8 +13,8 @@ public sealed class Todo : Entity<Todo>
     public Description Description { get; private set; }
     public DueDate DueDate { get; private set; }
     public CompleteDate CompleteDate { get; private set; }
-    public CreateDate CreateDate { get; }
-    public UpdateDate UpdateDate { get; private set; }
+    public override CreateDate CreateDate { get; }
+    public override UpdateDate UpdateDate { get; protected set; }
     public Importance Importance { get; private set; }
     public bool IsComplete => CompleteDate is not null && CompleteDate.Value is not null;
     public bool CanBeUpdated => !IsComplete;
@@ -47,7 +47,7 @@ public sealed class Todo : Entity<Todo>
             if (descriptionResult.IsSuccess && descriptionResult.Value is not null)
             {
                 Description = descriptionResult.Value;
-                UpdateDate = UpdateDate.CreateNew();
+                UpdateDate = UpdateDate.Create();
             }
             else
             {
@@ -65,7 +65,7 @@ public sealed class Todo : Entity<Todo>
         if (CanBeUpdated)
         {
             DueDate = DueDate.Create(dueDate);
-            UpdateDate = UpdateDate.CreateNew();
+            UpdateDate = UpdateDate.Create();
         }
         else
         {
@@ -78,7 +78,7 @@ public sealed class Todo : Entity<Todo>
         if (CanBeUpdated)
         {
             Importance = Importance.Create(!Importance.IsImportant);
-            UpdateDate = UpdateDate.CreateNew();
+            UpdateDate = UpdateDate.Create();
         }
         else
         {
@@ -91,7 +91,7 @@ public sealed class Todo : Entity<Todo>
         if (CanBeUpdated)
         {
             CategoryId = categoryId;
-            UpdateDate = UpdateDate.CreateNew();
+            UpdateDate = UpdateDate.Create();
         }
         else
         {
@@ -102,12 +102,12 @@ public sealed class Todo : Entity<Todo>
     public void SetCompleteDate(DateTimeOffset? completeDate)
     {
         CompleteDate = CompleteDate.Create(completeDate);
-        UpdateDate = UpdateDate.CreateNew();
+        UpdateDate = UpdateDate.Create();
     }
     #endregion Methods
 
     #region Factory
-    public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate, bool isImportant)
+    public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
         Result<Description> descriptionResult = Description.Create(description);
 
@@ -118,8 +118,8 @@ public sealed class Todo : Entity<Todo>
                 DueDate.Create(dueDate),
                 CompleteDate.CreateNew(),
                 CreateDate.CreateNew(),
-                UpdateDate.Create(null),
-                Importance.Create(isImportant)
+                UpdateDate.CreateNew(),
+                Importance.CreateNew()
                 ))
             : descriptionResult.IsFailure && descriptionResult.Error is string error
                 ? Result<Todo>.Failure(error)
