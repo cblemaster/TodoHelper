@@ -41,18 +41,11 @@ public sealed class Todo : Entity<Todo>
     #region Methods
     public void SetDescription(string description)
     {
-        if (CanBeUpdated)
+        Result<Description> descriptionResult = Description.Create(description);
+        if (descriptionResult.IsSuccess && descriptionResult.Value is not null)
         {
-            Result<Description> descriptionResult = Description.Create(description);
-            if (descriptionResult.IsSuccess && descriptionResult.Value is not null)
-            {
-                Description = descriptionResult.Value;
-                UpdateDate = UpdateDate.Create();
-            }
-            else
-            {
-                // TODO: ??????
-            }
+            Description = descriptionResult.Value;
+            UpdateDate = UpdateDate.Create();
         }
         else
         {
@@ -62,41 +55,20 @@ public sealed class Todo : Entity<Todo>
 
     public void SetDueDate(DateOnly? dueDate)
     {
-        if (CanBeUpdated)
-        {
-            DueDate = DueDate.Create(dueDate);
-            UpdateDate = UpdateDate.Create();
-        }
-        else
-        {
-            // TODO: ??????
-        }
+        DueDate = DueDate.Create(dueDate);
+        UpdateDate = UpdateDate.Create();
     }
 
     public void SetImportance()
     {
-        if (CanBeUpdated)
-        {
-            Importance = Importance.Create(!Importance.IsImportant);
-            UpdateDate = UpdateDate.Create();
-        }
-        else
-        {
-            // TODO: ??????
-        }
+        Importance = Importance.Create(!Importance.IsImportant);
+        UpdateDate = UpdateDate.Create();
     }
 
     public void SetCategoryId(Identifier<Category> categoryId)
     {
-        if (CanBeUpdated)
-        {
-            CategoryId = categoryId;
-            UpdateDate = UpdateDate.Create();
-        }
-        else
-        {
-            // TODO: ??????
-        }
+        CategoryId = categoryId;
+        UpdateDate = UpdateDate.Create();
     }
 
     public void SetCompleteDate(DateTimeOffset? completeDate)
