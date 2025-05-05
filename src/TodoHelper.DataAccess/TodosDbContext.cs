@@ -51,7 +51,6 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<Todo>().Navigation(e => e.Category).AutoInclude();
 #pragma warning restore IDE0058
     }
 }

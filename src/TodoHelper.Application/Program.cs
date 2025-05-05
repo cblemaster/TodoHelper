@@ -1,28 +1,8 @@
 
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application;
-using TodoHelper.Application.Features.CreateCategory;
-using TodoHelper.Application.Features.CreateTodo;
-using TodoHelper.Application.Features.DeleteCategory;
-using TodoHelper.Application.Features.DeleteTodo;
-using TodoHelper.Application.Features.GetCategories;
-using TodoHelper.Application.Features.GetTodosCompleted;
-using TodoHelper.Application.Features.GetTodosDueToday;
-using TodoHelper.Application.Features.GetTodosForCategory;
-using TodoHelper.Application.Features.GetTodosImportant;
-using TodoHelper.Application.Features.GetTodosOverdue;
-using TodoHelper.Application.Features.UpdateCategoryName;
-using TodoHelper.Application.Features.UpdateTodoCategory;
-using TodoHelper.Application.Features.UpdateTodoCompleteDate;
-using TodoHelper.Application.Features.UpdateTodoDescription;
-using TodoHelper.Application.Features.UpdateTodoDueDate;
-using TodoHelper.Application.Features.UpdateTodoImportance;
-using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain.Entities;
-using TodoHelper.Domain.Results;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
