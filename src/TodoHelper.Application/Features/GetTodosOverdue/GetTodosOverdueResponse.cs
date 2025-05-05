@@ -1,6 +1,6 @@
 ﻿
-using TodoHelper.Domain.Entities;
+using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.GetTodosOverdue;
 
-internal sealed record GetTodosOverdueResponse(IOrderedEnumerable<Todo> OverdueTodos);
+internal sealed record GetTodosOverdueResponse(ICollection<TodoDTO> OverdueTodos);

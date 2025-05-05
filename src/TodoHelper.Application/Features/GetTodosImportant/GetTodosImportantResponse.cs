@@ -1,6 +1,6 @@
 ﻿
-using TodoHelper.Domain.Entities;
+using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.GetTodosImportant;
 
-internal sealed record GetTodosImportantResponse(IOrderedEnumerable<Todo> ImportantTodos);
+internal sealed record GetTodosImportantResponse(ICollection<TodoDTO> ImportantTodos);

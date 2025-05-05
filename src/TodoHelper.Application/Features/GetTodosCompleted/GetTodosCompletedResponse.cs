@@ -1,6 +1,6 @@
 ﻿
-using TodoHelper.Domain.Entities;
+using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.GetTodosCompleted;
 
-internal sealed record GetTodosCompletedResponse(IOrderedEnumerable<Todo> CompleteTodos);
+internal sealed record GetTodosCompletedResponse(ICollection<TodoDTO> CompleteTodos);

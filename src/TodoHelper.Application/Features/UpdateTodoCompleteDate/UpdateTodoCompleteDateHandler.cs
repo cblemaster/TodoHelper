@@ -1,14 +1,10 @@
 ﻿
 using TodoHelper.Application.Features.Common;
-using TodoHelper.Application.Features.ToggleTodoImportance;
-using TodoHelper.Application.Features.UpdateTodoCompleteDate;
-using TodoHelper.Application.Features.UpdateTodoDueDate;
-using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
-namespace TodoHelper.Application.Features.ToggleTodoCompleted;
+namespace TodoHelper.Application.Features.UpdateTodoCompleteDate;
 
 internal sealed class UpdateTodoCompleteDateHandler(ITodosRepository repository) : HandlerBase<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse>(repository)
 {

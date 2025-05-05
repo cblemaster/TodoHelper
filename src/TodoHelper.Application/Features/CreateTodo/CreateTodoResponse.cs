@@ -1,6 +1,6 @@
 ﻿
-using TodoHelper.Domain.Entities;
+using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.CreateTodo;
 
-internal sealed record CreateTodoResponse(Todo Todo);
+internal sealed record CreateTodoResponse(TodoDTO Todo);

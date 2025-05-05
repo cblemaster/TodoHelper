@@ -1,6 +1,6 @@
 ﻿
+using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Features.Common;
-using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
@@ -22,10 +22,19 @@ internal sealed class CreateCategoryHandler(ITodosRepository repository) : Handl
         {
             return Result<CreateCategoryResponse>.Failure(categoryResult.Error);
         }
-        else if (categoryResult.IsSuccess && categoryResult.Value is not null)
+        else if (categoryResult.IsSuccess && categoryResult.Value is Category category)
         {
-            await _repository.CreateCategoryAsync(categoryResult.Value);
-            return Result<CreateCategoryResponse>.Success(new CreateCategoryResponse(categoryResult.Value));
+            await _repository.CreateCategoryAsync(category);
+            return Result<CreateCategoryResponse>.Success
+                (new CreateCategoryResponse
+                    (new CategoryDTO(category.Id.Value,
+                         category.Name.Value,
+                         category.Todos.Count(t => !t.IsComplete),
+                         category.CreateDate.Value,
+                         category.UpdateDate.Value
+                         )
+                    )
+                );
         }
         else
         {

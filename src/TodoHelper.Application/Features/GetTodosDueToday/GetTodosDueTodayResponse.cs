@@ -1,6 +1,6 @@
 ﻿
-using TodoHelper.Domain.Entities;
+using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.GetTodosDueToday;
 
-internal sealed record GetTodosDueTodayResponse(IOrderedEnumerable<Todo> DueTodayTodos);
+internal sealed record GetTodosDueTodayResponse(ICollection<TodoDTO> DueTodayTodos);

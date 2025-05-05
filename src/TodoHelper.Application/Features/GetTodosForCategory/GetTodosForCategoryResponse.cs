@@ -1,6 +1,6 @@
 ﻿
-using TodoHelper.Domain.Entities;
+using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.GetTodosForCategory;
 
-internal sealed record GetTodosForCategoryResponse(IOrderedEnumerable<Todo> TodosForCategory);
+internal sealed record GetTodosForCategoryResponse(ICollection<TodoDTO> TodosForCategory);

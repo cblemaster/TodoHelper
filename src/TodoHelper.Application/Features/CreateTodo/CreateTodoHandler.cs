@@ -1,6 +1,6 @@
 ﻿
+using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Features.Common;
-using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
@@ -11,16 +11,16 @@ internal sealed class CreateTodoHandler(ITodosRepository repository) : HandlerBa
 {
     public override async Task<Result<CreateTodoResponse>> HandleAsync(CreateTodoCommand command, CancellationToken cancellationToken = default)
     {
-        Result<Todo> todoResult = Todo.CreateNew(command.CategoryId, command.Description, command.DueDate, command.IsImportant);
+        Result<Todo> todoResult = Todo.CreateNew(command.CategoryId, command.Description, command.DueDate);
 
         if (todoResult.IsFailure && todoResult.Error is not null)
         {
             return Result<CreateTodoResponse>.Failure(todoResult.Error);
         }
-        else if (todoResult.IsSuccess && todoResult.Value is not null)
+        else if (todoResult.IsSuccess && todoResult.Value is Todo todo)
         {
-            await _repository.CreateTodoAsync(todoResult.Value);
-            return Result<CreateTodoResponse>.Success(new CreateTodoResponse(todoResult.Value));
+            await _repository.CreateTodoAsync(todo);
+            return Result<CreateTodoResponse>.Success(new CreateTodoResponse(new TodoDTO(todo.Id.Value, todo.Category.Name.Value, todo.CategoryId.Value, todo.Description.Value, todo.DueDate.Value, todo.CompleteDate.Value, todo.CreateDate.Value, todo.UpdateDate.Value, todo.Importance.IsImportant)));
         }
         else
         {

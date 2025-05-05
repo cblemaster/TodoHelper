@@ -1,12 +1,10 @@
 ﻿
 using TodoHelper.Application.Features.Common;
-using TodoHelper.Application.Features.UpdateTodoImportance;
-using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
-namespace TodoHelper.Application.Features.ToggleTodoImportance;
+namespace TodoHelper.Application.Features.UpdateTodoImportance;
 
 internal sealed class UpdateTodoImportanceHandler(ITodosRepository repository) : HandlerBase<UpdateTodoImportanceCommand, UpdateTodoImportanceResponse>(repository)
 {

@@ -1,13 +1,10 @@
 ﻿
 using TodoHelper.Application.Features.Common;
-using TodoHelper.Application.Features.DeleteCategory;
-using TodoHelper.Application.Features.UpdateCategoryName;
-using TodoHelper.Application.Interfaces;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
-namespace TodoHelper.Application.Features.RenameCategory;
+namespace TodoHelper.Application.Features.UpdateCategoryName;
 
 internal sealed class UpdateCategoryNameHandler(ITodosRepository repository) : HandlerBase<UpdateCategoryNameCommand, UpdateCategoryNameResponse>(repository)
 {
