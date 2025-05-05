@@ -24,7 +24,7 @@ An application with basic todo management features, including custom categories,
 + Category name must be forty (40) characters or fewer
 + Category name must be unique
 + Category name must not be null, an empty string, nor all-whitespace characters
-+ Complete todos cannot be updated, except to toggle to not complete
++ Complete todos cannot be updated, except to update to not complete
 + Important todos cannot be deleted
 + Todo description must be 255 characters or fewer
 + Todo description must not be null, an empty string, nor all-whitespace characters
