@@ -16,9 +16,6 @@ public interface ITodosRepository
     Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate);
     Task UpdateTodoImportanceAsync(Todo todo);
     bool CategoryOfSameNameExists(string name);
-    Task<Category> GetCategoryByIdAsync(Identifier<Category> categoryId);
     IEnumerable<Category> GetCategories();
-    Task<Todo> GetTodoByIdAsync(Identifier<Todo> todoId);
-    IEnumerable<Todo> GetTodosByCategoryId(Identifier<Category> categoryId);
     IEnumerable<Todo> GetTodos();
 }
