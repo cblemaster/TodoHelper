@@ -10,9 +10,14 @@ internal sealed class UpdateTodoImportanceHandler(ITodosRepository repository) :
 {
     public override Task<Result<UpdateTodoImportanceResponse>> HandleAsync(UpdateTodoImportanceCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Task.FromResult(Result<UpdateTodoImportanceResponse>.Failure($"Todo with id {command.TodoId} not found."));
+            return Task.FromResult(Result<UpdateTodoImportanceResponse>.NotFoundFailure($"Todo with id {command.TodoId} not found."));
+        }
+        // Rule: Complete todos cannot be updated, except to update to not complete
+        else if (!todo.CanBeUpdated)
+        {
+            return Task.FromResult(Result<UpdateTodoImportanceResponse>.DomainRuleFailure($"Completed todos cannot be updated."));
         }
         else
         {

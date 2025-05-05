@@ -10,9 +10,14 @@ public sealed class DeleteTodoHandler(ITodosRepository repository) : HandlerBase
 {
     public override Task<Result<DeleteTodoResponse>> HandleAsync(DeleteTodoCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Task.FromResult(Result<DeleteTodoResponse>.Failure($"Todo with id {command.TodoId} not found."));
+            return Task.FromResult(Result<DeleteTodoResponse>.NotFoundFailure($"Todo with id {command.TodoId} not found."));
+        }
+        // Rule: Important todos cannot be deleted
+        else if (todo.CanBeDeleted)
+        {
+            return Task.FromResult(Result<DeleteTodoResponse>.DomainRuleFailure($"Important todos cannot be deleted."));
         }
         else
         {

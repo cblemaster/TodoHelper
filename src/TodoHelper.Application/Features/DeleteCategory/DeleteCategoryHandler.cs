@@ -10,9 +10,9 @@ internal sealed class DeleteCategoryHandler(ITodosRepository repository) : Handl
 {
     public override Task<Result<DeleteCategoryResponse>> HandleAsync(DeleteCategoryCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.GetCategories().Single(c => c.Id.Value == command.CategoryId) is not Category category)
+        if (_repository.GetCategoryById(command.CategoryId) is not Category category)
         {
-            return Task.FromResult(Result<DeleteCategoryResponse>.Failure($"Category with id {command.CategoryId} not found."));
+            return Task.FromResult(Result<DeleteCategoryResponse>.NotFoundFailure($"Category with id {command.CategoryId} not found."));
         }
         else
         {

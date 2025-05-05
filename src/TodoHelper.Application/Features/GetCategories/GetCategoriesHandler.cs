@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Application.DataTransferObjects;
+using TodoHelper.Application.Extensions;
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
@@ -14,9 +15,9 @@ internal sealed class GetCategoriesHandler(ITodosRepository repository) : Handle
         List<CategoryDTO> dtos = [];
         List<Category> categories = [.. _repository.GetCategories()];
         categories.ForEach(c =>
-            dtos.Add(new CategoryDTO(c.Id.Value, c.Name.Value, c.Todos.Count(t => !t.IsComplete),
-                c.CreateDate.Value, c.UpdateDate.Value)));
-        _ = dtos.OrderBy(command.OrderByPredicate.Compile());
+            dtos.Add(c.MapToDTO()));
+        // Specification: Sorted by name
+        _ = dtos.OrderBy(d => d.Name);
         GetCategoriesResponse response = new(dtos);
         return Task.FromResult(Result<GetCategoriesResponse>.Success(response));
     }

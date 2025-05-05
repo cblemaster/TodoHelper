@@ -10,12 +10,18 @@ internal sealed class UpdateTodoCompleteDateHandler(ITodosRepository repository)
 {
     public override Task<Result<UpdateTodoCompleteDateResponse>> HandleAsync(UpdateTodoCompleteDateCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Task.FromResult(Result<UpdateTodoCompleteDateResponse>.Failure($"Todo with id {command.TodoId} not found."));
+            return Task.FromResult(Result<UpdateTodoCompleteDateResponse>.NotFoundFailure($"Todo with id {command.TodoId} not found."));
         }
         else
         {
+            // Rule: Complete todos cannot be updated, except to update to not complete
+            if (todo.IsComplete)
+            {
+                todo.SetNotComplete();
+            }
+            
             _ = _repository.UpdateTodoCompleteDateAsync(todo, command.CompleteDate);
             return Task.FromResult(Result<UpdateTodoCompleteDateResponse>.Success(new UpdateTodoCompleteDateResponse(true)));
         }

@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Application.Features.Common;
+using TodoHelper.Application.Features.UpdateTodoDueDate;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
@@ -11,9 +12,19 @@ internal sealed class UpdateTodoCategoryHandler(ITodosRepository repository) : H
 {
     public override Task<Result<UpdateTodoCategoryResponse>> HandleAsync(UpdateTodoCategoryCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Task.FromResult(Result<UpdateTodoCategoryResponse>.Failure($"Todo with id {command.TodoId} not found."));
+            return Task.FromResult(Result<UpdateTodoCategoryResponse>.NotFoundFailure($"Todo with id {command.TodoId} not found."));
+        }
+        // Rule: Complete todos cannot be updated, except to update to not complete
+        else if (!todo.CanBeUpdated)
+        {
+            return Task.FromResult(Result<UpdateTodoCategoryResponse>.DomainRuleFailure($"Completed todos cannot be updated."));
+        }
+        // Rule: Todo must have a category
+        else if (todo.CategoryId is null)
+        {
+            return Task.FromResult(Result<UpdateTodoCategoryResponse>.DomainRuleFailure($"Todos must belong to a category."));
         }
         else
         {

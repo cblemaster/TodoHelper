@@ -10,9 +10,14 @@ internal sealed class UpdateTodoDueDateHandler(ITodosRepository repository) : Ha
 {
     public override Task<Result<UpdateTodoDueDateResponse>> HandleAsync(UpdateTodoDueDateCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.GetTodos().Single(t => t.Id.Value == command.TodoId) is not Todo todo)
+        if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Task.FromResult(Result<UpdateTodoDueDateResponse>.Failure($"Todo with id {command.TodoId} not found."));
+            return Task.FromResult(Result<UpdateTodoDueDateResponse>.NotFoundFailure($"Todo with id {command.TodoId} not found."));
+        }
+        // Rule: Complete todos cannot be updated, except to update to not complete
+        else if (!todo.CanBeUpdated)
+        {
+            return Task.FromResult(Result<UpdateTodoDueDateResponse>.DomainRuleFailure($"Completed todos cannot be updated."));
         }
         else
         {

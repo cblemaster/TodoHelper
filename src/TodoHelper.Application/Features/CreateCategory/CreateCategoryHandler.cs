@@ -11,16 +11,18 @@ internal sealed class CreateCategoryHandler(ITodosRepository repository) : Handl
 {
     public override async Task<Result<CreateCategoryResponse>> HandleAsync(CreateCategoryCommand command, CancellationToken cancellationToken = default)
     {
-        if (_repository.CategoryOfSameNameExists(command.Name))
-        {
-            return Result<CreateCategoryResponse>.Failure($"Category with name {command.Name} already exists.");
-        }
-
         Result<Category> categoryResult = Category.CreateNew(command.Name);
-
-        if (categoryResult.IsFailure && categoryResult.Error is not null)
+        
+        // Rule: Category name must not be null, an empty string, nor all whitespace characters
+        // Rule: Category name must be forty(40) characters or fewer
+        if (categoryResult.IsFailure && categoryResult.Error is string error)
         {
-            return Result<CreateCategoryResponse>.Failure(categoryResult.Error);
+            return Result<CreateCategoryResponse>.ValidationFailure(error);
+        }
+        // Rule: Category name must be unique
+        else if (_repository.CategoryOfSameNameExists(command.Name))
+        {
+            return Result<CreateCategoryResponse>.DomainRuleFailure($"Category with name {command.Name} already exists.");
         }
         else if (categoryResult.IsSuccess && categoryResult.Value is Category category)
         {
@@ -28,17 +30,17 @@ internal sealed class CreateCategoryHandler(ITodosRepository repository) : Handl
             return Result<CreateCategoryResponse>.Success
                 (new CreateCategoryResponse
                     (new CategoryDTO(category.Id.Value,
-                         category.Name.Value,
-                         category.Todos.Count(t => !t.IsComplete),
-                         category.CreateDate.Value,
-                         category.UpdateDate.Value
+                                     category.Name.Value,
+                                     category.Todos.Count(t => !t.IsComplete),
+                                     category.CreateDate.Value,
+                                     category.UpdateDate.Value
                          )
                     )
                 );
         }
         else
         {
-            return Result<CreateCategoryResponse>.Failure("An unknown error occurred when creating the category.");
+            return Result<CreateCategoryResponse>.UnknownFailure("An unknown error occurred when creating the category.");
         }
     }
 }
