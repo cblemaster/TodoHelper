@@ -23,21 +23,24 @@ public sealed class Category : Entity<Category>
         UpdateDate = updateDate;
     }
 
-    public void SetName(string name)
+    public Result<Category> SetName(string name)
     {
         Result<Name> nameResult = Name.Create(name);
-        if (nameResult.IsSuccess && nameResult.Value is not null)
+        if (nameResult.IsSuccess && nameResult.Value is Name newName)
         {
-            Name = nameResult.Value;
+            Name = newName;
             UpdateDate = UpdateDate.Create();
+            return Result<Category>.Success(this);
+        }
+        else if (nameResult.IsFailure && nameResult.Error is string error)
+        {
+            return Result<Category>.ValidationFailure(error);
         }
         else
         {
-            // TODO: ??????
+            return Result<Category>.UnknownFailure("An unknown error occurred when creating the category.");
         }
     }
-
-    public void SetTodos(IEnumerable<Todo> todos) => Todos = todos;
 
     public static Result<Category> CreateNew(string name)
     {
@@ -46,7 +49,7 @@ public sealed class Category : Entity<Category>
         return nameResult.IsSuccess && nameResult.Value is Name newName
             ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))
             : nameResult.IsFailure && nameResult.Error is string error
-                ? Result<Category>.Failure(error)
-                : Result<Category>.Failure("An unknown error occurred while creating category.");
+                ? Result<Category>.ValidationFailure(error)
+                : Result<Category>.ValidationFailure("An unknown error occurred while creating category.");
     }
 }

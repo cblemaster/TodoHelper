@@ -39,17 +39,22 @@ public sealed class Todo : Entity<Todo>
     #endregion Constructors
 
     #region Methods
-    public void SetDescription(string description)
+    public Result<Todo> SetDescription(string description)
     {
         Result<Description> descriptionResult = Description.Create(description);
-        if (descriptionResult.IsSuccess && descriptionResult.Value is not null)
+        if (descriptionResult.IsSuccess && descriptionResult.Value is Description newDescription)
         {
-            Description = descriptionResult.Value;
+            Description = newDescription;
             UpdateDate = UpdateDate.Create();
+            return Result<Todo>.Success(this);
+        }
+        else if (descriptionResult.IsFailure && descriptionResult.Error is string error)
+        {
+            return Result<Todo>.ValidationFailure(error);
         }
         else
         {
-            // TODO: ??????
+            return Result<Todo>.UnknownFailure("An unknown error occurred when creating the todo.");
         }
     }
 
@@ -76,6 +81,12 @@ public sealed class Todo : Entity<Todo>
         CompleteDate = CompleteDate.Create(completeDate);
         UpdateDate = UpdateDate.Create();
     }
+
+    public void SetNotComplete()
+    {
+        CompleteDate = CompleteDate.Create(null);
+        UpdateDate = UpdateDate.Create();
+    }
     #endregion Methods
 
     #region Factory
@@ -94,8 +105,8 @@ public sealed class Todo : Entity<Todo>
                 Importance.CreateNew()
                 ))
             : descriptionResult.IsFailure && descriptionResult.Error is string error
-                ? Result<Todo>.Failure(error)
-                : Result<Todo>.Failure("An unknown error occurred while creating todo.");
+                ? Result<Todo>.ValidationFailure(error)
+                : Result<Todo>.ValidationFailure("An unknown error occurred while creating todo.");
     }
     #endregion Factory
 }
