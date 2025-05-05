@@ -13,7 +13,9 @@ internal sealed class GetTodosCompletedHandler(ITodosRepository repository) : Ha
     {
         List<TodoDTO> dtos = [];
         List<Todo> todos = [.. _repository.GetTodos().Where(t => t.CompleteDate.Value is not null)];
-        todos.ForEach(t => dtos.Add(new TodoDTO(t.Id.Value, t.Category.Name.Value, t.CategoryId.Value, t.Description.Value, t.DueDate.Value, t.CompleteDate.Value, t.CreateDate.Value, t.UpdateDate.Value, t.Importance.IsImportant)));
+        todos.ForEach(t =>
+            dtos.Add(new TodoDTO(t.Id.Value, t.Category.Name.Value, t.CategoryId.Value, t.Description.Value, t.DueDate.Value,
+                t.CompleteDate.Value, t.CreateDate.Value, t.UpdateDate.Value, t.Importance.IsImportant)));
         _ = dtos.OrderBy(command.FirstOrderByPredicate.Compile()).ThenBy(command.SecondOrderByPredicate.Compile());
         GetTodosCompletedResponse response = new(dtos);
         return Task.FromResult(Result<GetTodosCompletedResponse>.Success(response));

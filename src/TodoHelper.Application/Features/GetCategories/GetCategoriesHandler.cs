@@ -13,7 +13,9 @@ internal sealed class GetCategoriesHandler(ITodosRepository repository) : Handle
     {
         List<CategoryDTO> dtos = [];
         List<Category> categories = [.. _repository.GetCategories()];
-        categories.ForEach(c => dtos.Add(new CategoryDTO(c.Id.Value, c.Name.Value, c.Todos.Count(t => !t.IsComplete), c.CreateDate.Value, c.UpdateDate.Value)));
+        categories.ForEach(c =>
+            dtos.Add(new CategoryDTO(c.Id.Value, c.Name.Value, c.Todos.Count(t => !t.IsComplete),
+                c.CreateDate.Value, c.UpdateDate.Value)));
         _ = dtos.OrderBy(command.OrderByPredicate.Compile());
         GetCategoriesResponse response = new(dtos);
         return Task.FromResult(Result<GetCategoriesResponse>.Success(response));
