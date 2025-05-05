@@ -15,7 +15,7 @@ public sealed class Name
     {
         (bool IsValid, string error) = Validate(value);
         return !IsValid
-            ? Result<Name>.Failure(error)
+            ? Result<Name>.ValidationFailure(error)
             : Result<Name>.Success(new Name(value));
     }
 

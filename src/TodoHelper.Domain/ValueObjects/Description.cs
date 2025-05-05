@@ -15,7 +15,7 @@ public sealed class Description
     {
         (bool IsValid, string error) = Validate(value);
         return !IsValid
-            ? Result<Description>.Failure(error)
+            ? Result<Description>.ValidationFailure(error)
             : Result<Description>.Success(new Description(value));
     }
 
