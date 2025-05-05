@@ -16,6 +16,8 @@ public sealed class Result<T>
     }
 
     public static Result<T> Success(T value) => new(true, value, null);
-
-    public static Result<T> Failure(string error) => new(false, default, error);
+    public static Result<T> ValidationFailure(string error) => new(false, default, error);
+    public static Result<T> DomainRuleFailure(string error) => new(false, default, error);
+    public static Result<T> NotFoundFailure(string error) => new(false, default, error);
+    public static Result<T> UnknownFailure(string error) => new(false, default, error);
 }
