@@ -20,15 +20,13 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
         await SaveAsync();
     }
 
-    public async Task UpdateCategoryNameAsync(Category category, string name)
+    public async Task UpdateCategory(Category category)
     {
-        category.SetName(name);
         _ = _context.Update(category);
         await SaveAsync();
     }
-    public async Task UpdateTodoDescriptionAsync(Todo todo, string description)
+    public async Task UpdateTodoAsync(Todo todo)
     {
-        todo.SetDescription(description);
         _ = _context.Update(todo);
         await SaveAsync();
     }
@@ -70,6 +68,8 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
 
     public IEnumerable<Category> GetCategories() => _context.Categories.Include(c => c.Todos);
     public IEnumerable<Todo> GetTodos() => _context.Todos.Include(t => t.Category);
+    public Todo? GetTodoById(Guid id) => _context.Todos.Include(t => t.Category).Single(t => t.Id.Value == id);
+    public Category? GetCategoryById(Guid id) => _context.Categories.Include(c => c.Todos).Single(c => c.Id.Value == id);
 
     private async Task SaveAsync() => await _context.SaveChangesAsync();
 
