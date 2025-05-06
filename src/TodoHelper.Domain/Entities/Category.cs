@@ -48,6 +48,6 @@ public sealed class Category : Entity<Category>
             ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))
             : nameResult.IsFailure && nameResult.Error is string error
                 ? Result<Category>.ValidationFailure(error)
-                : Result<Category>.ValidationFailure(DomainErrors.UnknownErrorMessage("creating category"));
+                : Result<Category>.UnknownFailure(DomainErrors.UnknownErrorMessage("creating category"));
     }
 }

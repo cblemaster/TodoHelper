@@ -104,7 +104,7 @@ public sealed class Todo : Entity<Todo>
                 ))
             : descriptionResult.IsFailure && descriptionResult.Error is string error
                 ? Result<Todo>.ValidationFailure(error)
-                : Result<Todo>.ValidationFailure(DomainErrors.UnknownErrorMessage("creating todo"));
+                : Result<Todo>.UnknownFailure(DomainErrors.UnknownErrorMessage("creating todo"));
     }
     #endregion Factory
 }

@@ -19,10 +19,10 @@ public sealed class Name
             : Result<Name>.Success(new Name(value));
 
         static (bool IsValid, string error) Validate(string value) =>
-        string.IsNullOrWhiteSpace(value)
-            ? (false, DomainValidationErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Name)))
-            : value.Length > Name.MAX_LENGTH
-                ? (false, DomainValidationErrors.MaxLengthExceededErrorMessage(nameof(Name), Name.MAX_LENGTH))
-                : (true, string.Empty);
+            string.IsNullOrWhiteSpace(value)
+                ? (false, DomainValidationErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Name)))
+                : value.Length > Name.MAX_LENGTH
+                    ? (false, DomainValidationErrors.MaxLengthExceededErrorMessage(nameof(Name), Name.MAX_LENGTH))
+                    : (true, string.Empty);
     }
 }

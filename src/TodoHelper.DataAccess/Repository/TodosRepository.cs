@@ -69,5 +69,8 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
 
     private async Task SaveAsync() => await _context.SaveChangesAsync();
 
+    // This method does not really belong here;
+    //   ideally I would inject the repository (or even the db context) into a validator
+    // The tradeoff is that we get to have very simple validation
     public bool CategoryOfSameNameExists(string name) => _context.Categories.Select(c => c.Name.Value).ToList().Contains(name);
 }
