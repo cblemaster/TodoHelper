@@ -5,8 +5,6 @@ namespace TodoHelper.Domain.ValueObjects;
 
 public sealed class Description
 {
-    public const int MAX_LENGTH = 255;
-
     public string Value { get; }
 
     private Description(string value) => Value = value;
@@ -17,13 +15,13 @@ public sealed class Description
         return !IsValid
             ? Result<Description>.ValidationFailure(error)
             : Result<Description>.Success(new Description(value));
-    }
 
-    // TODO: this is the exact same validation as in Name.cs...
-    private static (bool IsValid, string error) Validate(string value) =>
-        string.IsNullOrWhiteSpace(value)
-            ? (false, $"{nameof(Description)} is required, and cannot be all whitespace characters.")
-            : value.Length > MAX_LENGTH
-                ? (false, $"{nameof(Description)} must be {MAX_LENGTH} or fewer characters.")
-                : (true, string.Empty);
+        // TODO: this is the exact same validation as in Name.cs...
+        static (bool IsValid, string error) Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? (false, DomainErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Description)))
+                : value.Length > DomainErrors.TODO_DESCRIPTION_MAX_LENGTH
+                    ? (false, DomainErrors.MaxLengthExceededErrorMessage(nameof(Description), DomainErrors.TODO_DESCRIPTION_MAX_LENGTH))
+                    : (true, string.Empty);
+    }
 }

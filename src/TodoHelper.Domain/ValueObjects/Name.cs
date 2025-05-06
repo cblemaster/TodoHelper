@@ -5,8 +5,6 @@ namespace TodoHelper.Domain.ValueObjects;
 
 public sealed class Name
 {
-    public const int MAX_LENGTH = 40;
-
     public string Value { get; }
 
     private Name(string value) => Value = value;
@@ -17,12 +15,12 @@ public sealed class Name
         return !IsValid
             ? Result<Name>.ValidationFailure(error)
             : Result<Name>.Success(new Name(value));
-    }
 
-    private static (bool IsValid, string error) Validate(string value) =>
+        static (bool IsValid, string error) Validate(string value) =>
         string.IsNullOrWhiteSpace(value)
-            ? (false, $"{nameof(Name)} is required, and cannot be all whitespace characters.")
-            : value.Length > MAX_LENGTH
-                ? (false, $"{nameof(Name)} must be {MAX_LENGTH} or fewer characters.")
+            ? (false, DomainErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Name)))
+            : value.Length > DomainErrors.CATEGORY_NAME_MAX_LENGTH
+                ? (false, DomainErrors.MaxLengthExceededErrorMessage(nameof(Name), DomainErrors.CATEGORY_NAME_MAX_LENGTH))
                 : (true, string.Empty);
+    }
 }
