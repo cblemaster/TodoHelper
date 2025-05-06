@@ -13,11 +13,11 @@ internal sealed class GetTodosCompletedHandler(ITodosRepository repository) : Ha
     public override Task<Result<GetTodosCompletedResponse>> HandleAsync(GetTodosCompletedCommand command, CancellationToken cancellationToken = default)
     {
         List<TodoDTO> dtos = [];
-        List<Todo> todos = [.. _repository.GetTodos().Where(t => t.CompleteDate.Value is not null)];
+        List<Todo> todos = [.. _repository.GetTodos().Where(command.WherePredicate())];
         todos.ForEach(t => dtos.Add(t.MapToDTO()));
 
-        // Specification: Sorted by due date descending, then by description
-        _ = dtos.OrderByDescending(d => d.DueDate).ThenBy(d => d.Description);
+        // Specification: Sort by due date descending, then by description
+        _ = dtos.OrderByDescending(command.SortByDueDatePredicate()).ThenBy(command.SortByDescriptionPredicate());
         GetTodosCompletedResponse response = new(dtos);
         return Task.FromResult(Result<GetTodosCompletedResponse>.Success(response));
     }

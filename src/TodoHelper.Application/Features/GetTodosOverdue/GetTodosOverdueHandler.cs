@@ -13,11 +13,11 @@ internal sealed class GetTodosOverdueHandler(ITodosRepository repository) : Hand
     public override Task<Result<GetTodosOverdueResponse>> HandleAsync(GetTodosOverdueCommand command, CancellationToken cancellationToken = default)
     {
         List<TodoDTO> dtos = [];
-        List<Todo> todos = [.. _repository.GetTodos().Where(t => t.DueDate.Value is not null && t.DueDate.Value < DateOnly.FromDateTime(DateTime.Today))];
+        List<Todo> todos = [.. _repository.GetTodos().Where(command.WherePredicate())];
         todos.ForEach(t => dtos.Add(t.MapToDTO()));
 
         // Specification: Sorted by due date descending, then by description 
-        _ = dtos.OrderByDescending(d => d.DueDate).ThenBy(d => d.Description);
+        _ = dtos.OrderByDescending(command.SortByDueDatePredicate()).ThenBy(command.SortByDescriptionPredicate());
         GetTodosOverdueResponse response = new(dtos);
         return Task.FromResult(Result<GetTodosOverdueResponse>.Success(response));
     }
