@@ -1,4 +1,5 @@
-﻿namespace TodoHelper.Domain.Specifications;
+﻿
+namespace TodoHelper.Domain.Specifications;
 
 public static class DataConstants
 {

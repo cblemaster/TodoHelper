@@ -4,7 +4,7 @@ using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Specifications;
 using TodoHelper.Domain.ValueObjects;
 
-namespace TodoHelper.DataAccess;
+namespace TodoHelper.DataAccess.Extensions;
 
 internal static class ModelBuilderExtensions
 {

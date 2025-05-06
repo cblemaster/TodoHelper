@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application.Extensions;
-using TodoHelper.DataAccess;
+using TodoHelper.DataAccess.Context;
 using TodoHelper.DataAccess.Repository;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
