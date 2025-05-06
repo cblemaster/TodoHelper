@@ -53,6 +53,26 @@ app.MapPost(pattern: "/category",
             return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("creating category"));
         }
     });
+app.MapPost(pattern: "/todo",
+    handler: async Task<Results<BadRequest<string>, Created<TodoDTO>, InternalServerError<string>>> (CreateTodoCommand command,
+    ICommandHandler<CreateTodoCommand, CreateTodoResponse> handler) =>
+    {
+        Result<CreateTodoResponse> response = await handler.HandleAsync(command);
+
+        if (response.IsFailure && response.Error is string error)
+        {
+            return TypedResults.BadRequest(error);
+        }
+        else if (response.IsSuccess && response.Value is not null && response.Value.Todo is TodoDTO todo)
+        {
+            return TypedResults.Created("", todo);     // TODO: fix the resource uri
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("creating todo"));
+        }
+    });
+
 app.MapGet(pattern: "/category",
     handler: async Task<Results<Ok<ICollection<CategoryDTO>>, InternalServerError<string>>>
     (ICommandHandler<GetCategoriesCommand, GetCategoriesResponse> handler) =>
@@ -72,66 +92,6 @@ app.MapGet(pattern: "/category/{id:guid}/todo",
         return response.IsSuccess && response.Value is not null && response.Value.TodosForCategory is ICollection<TodoDTO> todos
             ? TypedResults.Ok(todos)
             : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting todos"));
-    });
-app.MapPut(pattern: "/category/{id:guid}",
-    handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
-    (Guid id, UpdateCategoryNameCommand command, ICommandHandler<UpdateCategoryNameCommand, UpdateCategoryNameResponse> handler) =>
-    {
-        Result<UpdateCategoryNameResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is string error)
-        {
-            // TODO: this check is brittle...
-            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
-        }
-    });
-app.MapDelete(pattern: "/category/{id:guid}",
-    handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
-    (Guid id, ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse> handler) =>
-    {
-        DeleteCategoryCommand command = new(id);
-
-        Result<DeleteCategoryResponse> response = await handler.HandleAsync(command);
-        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
-        {
-            return TypedResults.NoContent();
-        }
-        else if (response.IsFailure && response.Error is string error)
-        {
-            // TODO: this check is brittle...
-            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
-        }
-        else
-        {
-            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("deleting category"));
-        }
-    });
-
-app.MapPost(pattern: "/todo",
-    handler: async Task<Results<BadRequest<string>, Created<TodoDTO>, InternalServerError<string>>> (CreateTodoCommand command,
-    ICommandHandler<CreateTodoCommand, CreateTodoResponse> handler) =>
-    {
-        Result<CreateTodoResponse> response = await handler.HandleAsync(command);
-
-        if (response.IsFailure && response.Error is string error)
-        {
-            return TypedResults.BadRequest(error);
-        }
-        else if (response.IsSuccess && response.Value is not null && response.Value.Todo is TodoDTO todo)
-        {
-            return TypedResults.Created("", todo);     // TODO: fix the resource uri
-        }
-        else
-        {
-            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("creating todo"));
-        }
     });
 app.MapGet(pattern: "/todo/complete",
     handler: async Task<Results<Ok<ICollection<TodoDTO>>, InternalServerError<string>>>
@@ -173,60 +133,142 @@ app.MapGet(pattern: "/todo/overdue",
             ? TypedResults.Ok(todos)
             : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting todos"));
     });
+
+app.MapPut(pattern: "/category/{id:guid}",
+    handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
+    (Guid id, UpdateCategoryNameCommand command, ICommandHandler<UpdateCategoryNameCommand, UpdateCategoryNameResponse> handler) =>
+    {
+        Result<UpdateCategoryNameResponse> response = await handler.HandleAsync(command);
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
+        }
+    });
 app.MapPut(pattern: "/todo/{id:guid}/category",
     handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoCategoryCommand command, ICommandHandler<UpdateTodoCategoryCommand, UpdateTodoCategoryResponse> handler) =>
     {
         Result<UpdateTodoCategoryResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
-            ? TypedResults.NoContent()
-            : response.IsFailure && response.Error is string error
-                ? TypedResults.NotFound(error)
-                : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating todo"));
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
+        }
     });
 app.MapPut(pattern: "/todo/{id:guid}/completedate",
     handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoCompleteDateCommand command, ICommandHandler<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse> handler) =>
     {
         Result<UpdateTodoCompleteDateResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
-            ? TypedResults.NoContent()
-            : response.IsFailure && response.Error is string error
-                ? TypedResults.NotFound(error)
-                : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating todo"));
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
+        }
     });
 app.MapPut(pattern: "/todo/{id:guid}/description",
     handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoDescriptionCommand command, ICommandHandler<UpdateTodoDescriptionCommand, UpdateTodoDescriptionResponse> handler) =>
     {
         Result<UpdateTodoDescriptionResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
-            ? TypedResults.NoContent()
-            : response.IsFailure && response.Error is string error
-                ? TypedResults.NotFound(error)
-                : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating todo"));
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
+        }
     });
 app.MapPut(pattern: "/todo/{id:guid}/duedate",
     handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoDueDateCommand command, ICommandHandler<UpdateTodoDueDateCommand, UpdateTodoDueDateResponse> handler) =>
     {
         Result<UpdateTodoDueDateResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
-            ? TypedResults.NoContent()
-            : response.IsFailure && response.Error is string error
-                ? TypedResults.NotFound(error)
-                : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating todo"));
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
+        }
     });
 app.MapPut(pattern: "/todo/{id:guid}/importance",
     handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
     (Guid id, UpdateTodoImportanceCommand command, ICommandHandler<UpdateTodoImportanceCommand, UpdateTodoImportanceResponse> handler) =>
     {
         Result<UpdateTodoImportanceResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.IsSuccess
-            ? TypedResults.NoContent()
-            : response.IsFailure && response.Error is string error
-                ? TypedResults.NotFound(error)
-                : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating todo"));
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("updating category"));
+        }
+    });
+
+app.MapDelete(pattern: "/category/{id:guid}",
+    handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
+    (Guid id, ICommandHandler<DeleteCategoryCommand, DeleteCategoryResponse> handler) =>
+    {
+        DeleteCategoryCommand command = new(id);
+
+        Result<DeleteCategoryResponse> response = await handler.HandleAsync(command);
+        if (response.IsSuccess && response.Value is not null && response.Value.IsSuccess)
+        {
+            return TypedResults.NoContent();
+        }
+        else if (response.IsFailure && response.Error is string error)
+        {
+            // TODO: this check is brittle...
+            return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
+        }
+        else
+        {
+            return TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("deleting category"));
+        }
     });
 app.MapDelete(pattern: "/todo/{id:guid}",
     handler: async Task<Results<NoContent, NotFound<string>, BadRequest<string>, InternalServerError<string>>>
@@ -239,7 +281,7 @@ app.MapDelete(pattern: "/todo/{id:guid}",
         {
             return TypedResults.NoContent();
         }
-        else if (response.IsFailure && response.Error is not null && response.Error is string error)
+        else if (response.IsFailure && response.Error is string error)
         {
             // TODO: this check is brittle...
             return error.Contains("not found") ? TypedResults.NotFound(error) : TypedResults.BadRequest(error);
