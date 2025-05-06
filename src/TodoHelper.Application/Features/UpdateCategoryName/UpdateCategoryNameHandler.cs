@@ -13,7 +13,7 @@ internal sealed class UpdateCategoryNameHandler(ITodosRepository repository) : H
     {
         if (_repository.GetCategoryById(command.CategoryId) is not Category category)
         {
-            return Result<UpdateCategoryNameResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Category), command.CategoryId));
+            return Result<UpdateCategoryNameResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Category), command.CategoryId));
         }
 
         Result<Category> categoryResult = category.SetName(command.Name);

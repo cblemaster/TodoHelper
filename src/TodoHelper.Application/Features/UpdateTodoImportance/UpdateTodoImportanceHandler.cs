@@ -13,7 +13,7 @@ internal sealed class UpdateTodoImportanceHandler(ITodosRepository repository) :
     {
         if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Result<UpdateTodoImportanceResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
+            return Result<UpdateTodoImportanceResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
         // Rule: Complete todos cannot be updated, except to update to not complete
         else if (!todo.CanBeUpdated)

@@ -1,7 +1,6 @@
 ﻿
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
@@ -13,7 +12,7 @@ internal sealed class DeleteCategoryHandler(ITodosRepository repository) : Handl
     {
         if (_repository.GetCategoryById(command.CategoryId) is not Category category)
         {
-            return Result<DeleteCategoryResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Category), command.CategoryId));
+            return Result<DeleteCategoryResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Category), command.CategoryId));
         }
         else
         {

@@ -13,7 +13,7 @@ internal sealed class UpdateTodoDescriptionHandler(ITodosRepository repository) 
     {
         if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Result<UpdateTodoDescriptionResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
+            return Result<UpdateTodoDescriptionResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
 
         Result<Todo> todoResult = todo.SetDescription(command.Description);

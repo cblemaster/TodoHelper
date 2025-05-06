@@ -1,7 +1,6 @@
 ﻿
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
@@ -13,7 +12,7 @@ internal sealed class UpdateTodoCompleteDateHandler(ITodosRepository repository)
     {
         if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Result<UpdateTodoCompleteDateResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
+            return Result<UpdateTodoCompleteDateResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
         else
         {

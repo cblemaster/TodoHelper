@@ -13,7 +13,7 @@ public sealed class DeleteTodoHandler(ITodosRepository repository) : HandlerBase
     {
         if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Result<DeleteTodoResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
+            return Result<DeleteTodoResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
         // Rule: Important todos cannot be deleted
         else if (todo.CanBeDeleted)

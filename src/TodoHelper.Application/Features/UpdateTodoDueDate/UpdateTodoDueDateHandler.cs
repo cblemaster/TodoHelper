@@ -13,7 +13,7 @@ internal sealed class UpdateTodoDueDateHandler(ITodosRepository repository) : Ha
     {
         if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Result<UpdateTodoDueDateResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
+            return Result<UpdateTodoDueDateResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
         // Rule: Complete todos cannot be updated, except to update to not complete
         else if (!todo.CanBeUpdated)
