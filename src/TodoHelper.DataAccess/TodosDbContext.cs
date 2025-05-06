@@ -25,6 +25,7 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
             entity.Property(e => e.CreateDate).HasConversion(c => c.Value, c => CreateDate.Create(c));
             entity.Property(e => e.UpdateDate).HasConversion(u => u.Value, u => UpdateDate.Create(u));
             entity.Property(e => e.UpdateDate).IsRequired(DataConstants.IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
+            entity.Navigation(e => e.Todos).AutoInclude();
         });
 
         modelBuilder.Entity<Todo>(entity =>
@@ -51,6 +52,7 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
                 .WithMany(t => t.Todos)
                 .HasForeignKey(t => t.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
+            entity.Navigation(e => e.Category).AutoInclude();
         });
 
 #pragma warning restore IDE0058

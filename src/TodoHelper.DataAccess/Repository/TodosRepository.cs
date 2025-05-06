@@ -63,10 +63,10 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
         await SaveAsync();
     }
 
-    public IEnumerable<Category> GetCategories() => _context.Categories.Include(c => c.Todos);
-    public IEnumerable<Todo> GetTodos() => _context.Todos.Include(t => t.Category);
-    public Todo? GetTodoById(Guid id) => _context.Todos.Include(t => t.Category).Single(t => t.Id.Value == id);
-    public Category? GetCategoryById(Guid id) => _context.Categories.Include(c => c.Todos).Single(c => c.Id.Value == id);
+    public IEnumerable<Category> GetCategories() => _context.Categories;
+    public IEnumerable<Todo> GetTodos() => _context.Todos;
+    public Todo? GetTodoById(Guid id) => _context.Todos.Single(t => t.Id.Value == id);
+    public Category? GetCategoryById(Guid id) => _context.Categories.Single(c => c.Id.Value == id);
 
     private async Task SaveAsync() => await _context.SaveChangesAsync();
 
