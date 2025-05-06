@@ -6,7 +6,7 @@ namespace TodoHelper.Application.Extensions;
 
 internal static class CategoryExtensions
 {
-    internal static CategoryDTO MapToDTO(this Category category) =>
-        new(category.Id.Value, category.Name.Value, category.Todos.Count(t => !t.IsComplete),
-            category.CreateDate.Value, category.UpdateDate.Value);
+    internal static CategoryDTO MapToDTO(this Category entity) =>
+        new(entity.Id.Value, entity.Name.Value, entity.Todos.Count(t => !t.IsComplete),
+            entity.CreateDate.Value, entity.UpdateDate.Value);
 }
