@@ -1,4 +1,4 @@
 ﻿
 namespace TodoHelper.Application.Features.UpdateTodoDescription;
 
-public sealed record UpdateTodoDescriptionResponse(bool IsSuccess);
+internal sealed record UpdateTodoDescriptionResponse(bool IsSuccess);

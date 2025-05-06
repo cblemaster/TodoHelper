@@ -1,4 +1,4 @@
 ﻿
 namespace TodoHelper.Application.Features.DeleteTodo;
 
-public sealed record DeleteTodoResponse(bool IsSuccess);
+internal sealed record DeleteTodoResponse(bool IsSuccess);

@@ -8,7 +8,7 @@ using TodoHelper.Domain.Specifications;
 
 namespace TodoHelper.Application.Features.DeleteTodo;
 
-public sealed class DeleteTodoHandler(ITodosRepository repository) : HandlerBase<DeleteTodoCommand, DeleteTodoResponse>(repository)
+internal sealed class DeleteTodoHandler(ITodosRepository repository) : HandlerBase<DeleteTodoCommand, DeleteTodoResponse>(repository)
 {
     public async override Task<Result<DeleteTodoResponse>> HandleAsync(DeleteTodoCommand command, CancellationToken cancellationToken = default)
     {
