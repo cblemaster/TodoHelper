@@ -1,12 +1,14 @@
 ﻿
+using TodoHelper.Domain.ValueObjects;
+
 namespace TodoHelper.Domain.Extensions;
 
 internal static class StringExtensions
 {
-    internal static (bool IsValid, string ValidationError) ValidateAttribute(this string s, string attributeName, int maxLength) =>
+    internal static (bool IsValid, string ValidationError) ValidateDescriptor(this string s, string attributeName, int maxLength) =>
         string.IsNullOrWhiteSpace(s)
-            ? (false, DomainValidationErrors.IsNullEmptyOrWhitespaceErrorMessage(attributeName))
+            ? (false, Descriptor.IsNullEmptyOrWhitespaceErrorMessage(attributeName))
             : s.Length > maxLength
-                ? (false, DomainValidationErrors.MaxLengthExceededErrorMessage(attributeName, maxLength))
+                ? (false, Descriptor.MaxLengthExceededErrorMessage(attributeName, maxLength))
                 : (true, string.Empty);
 }

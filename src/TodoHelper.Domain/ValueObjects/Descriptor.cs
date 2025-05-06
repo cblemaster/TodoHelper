@@ -12,9 +12,14 @@ public sealed class Descriptor
 
     public static Result<Descriptor> Create(string value, string attributeName, int maxLength)
     {
-        (bool IsValid, string Error) = value.ValidateAttribute(attributeName, maxLength);
+        (bool IsValid, string Error) = value.ValidateDescriptor(attributeName, maxLength);
         return IsValid
             ? Result<Descriptor>.Success(new Descriptor(value))
             : Result<Descriptor>.ValidationFailure(Error);
     }
+
+    internal static string MaxLengthExceededErrorMessage(string attributeName, int maxLength) =>
+        $"{attributeName} must be {maxLength} characters or fewer.";
+    internal static string IsNullEmptyOrWhitespaceErrorMessage(string attributeName) =>
+        $"{attributeName} is required and cannot consist of exclusively whitespace characters.";
 }
