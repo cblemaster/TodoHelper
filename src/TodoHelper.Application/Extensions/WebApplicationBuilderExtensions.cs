@@ -19,9 +19,9 @@ using TodoHelper.Application.Interfaces;
 
 namespace TodoHelper.Application.Extensions;
 
-public static class WebApplicationBuilderExtensions
+internal static class WebApplicationBuilderExtensions
 {
-    public static WebApplicationBuilder RegisterHandlers(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder RegisterHandlers(this WebApplicationBuilder builder)
     {
         _ = builder.Services
             .AddScoped<ICommandHandler<CreateCategoryCommand, CreateCategoryResponse>, CreateCategoryHandler>()
