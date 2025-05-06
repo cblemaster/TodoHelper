@@ -7,9 +7,6 @@ namespace TodoHelper.DataAccess;
 
 public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : DbContext(options)
 {
-    private const bool IS_UNICODE = false;
-    private const bool IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY = false;
-
     internal DbSet<Category> Categories { get; set; }
     internal DbSet<Todo> Todos { get; set; }
 
@@ -21,12 +18,12 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
             entity.ToTable(nameof(Category));
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasConversion(i => i.Value, i => Identifier<Category>.Create(i));
-            entity.Property(e => e.Name).HasConversion(n => n.Value, n => Name.Create(n).Value!);
-            entity.Property(e => e.Name).HasMaxLength(Name.MAX_LENGTH).IsUnicode(IS_UNICODE);
+            entity.Property(e => e.Name).HasConversion(n => n.Value, n => Descriptor.Create(n, nameof(Category.Name), DataConstants.CATEGORY_NAME_MAX_LENGTH).Value!);
+            entity.Property(e => e.Name).HasMaxLength(DataConstants.CATEGORY_NAME_MAX_LENGTH).IsUnicode(DataConstants.IS_UNICODE);
             entity.HasIndex(e => e.Name).IsUnique();
             entity.Property(e => e.CreateDate).HasConversion(c => c.Value, c => CreateDate.Create(c));
             entity.Property(e => e.UpdateDate).HasConversion(u => u.Value, u => UpdateDate.Create(u));
-            entity.Property(e => e.UpdateDate).IsRequired(IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
+            entity.Property(e => e.UpdateDate).IsRequired(DataConstants.IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
         });
 
         modelBuilder.Entity<Todo>(entity =>
@@ -35,15 +32,15 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasConversion(i => i.Value, i => Identifier<Todo>.Create(i));
             entity.Property(e => e.CategoryId).HasConversion(c => c.Value, c => Identifier<Category>.Create(c));
-            entity.Property(e => e.Description).HasConversion(d => d.Value, d => Description.Create(d).Value!);
-            entity.Property(e => e.Description).HasMaxLength(Description.MAX_LENGTH).IsUnicode(IS_UNICODE);
+            entity.Property(e => e.Description).HasConversion(d => d.Value, d => Descriptor.Create(d, nameof(Todo.Description), 255).Value!);
+            entity.Property(e => e.Description).HasMaxLength(DataConstants.CATEGORY_NAME_MAX_LENGTH).IsUnicode(DataConstants.IS_UNICODE);
             entity.Property(e => e.DueDate).HasConversion(d => d.Value, d => DueDate.Create(d));
-            entity.Property(e => e.DueDate).IsRequired(IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
+            entity.Property(e => e.DueDate).IsRequired(DataConstants.IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
             entity.Property(e => e.CompleteDate).HasConversion(c => c.Value, c => CompleteDate.Create(c));
-            entity.Property(e => e.CompleteDate).IsRequired(IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
+            entity.Property(e => e.CompleteDate).IsRequired(DataConstants.IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
             entity.Property(e => e.CreateDate).HasConversion(c => c.Value, c => CreateDate.Create(c));
             entity.Property(e => e.UpdateDate).HasConversion(u => u.Value, u => UpdateDate.Create(u));
-            entity.Property(e => e.UpdateDate).IsRequired(IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
+            entity.Property(e => e.UpdateDate).IsRequired(DataConstants.IS_REQUIRED_VALUE_FOR_NULLABLE_PROPERTY);
             entity.Property(e => e.Importance).HasConversion(i => i.IsImportant, i => Importance.Create(i)).HasColumnName("IsImportant");
             entity.Ignore(e => e.IsComplete);
             entity.Ignore(e => e.CanBeUpdated);
