@@ -9,14 +9,20 @@ namespace TodoHelper.Application.Features.GetTodosCompleted;
 
 internal static class GetTodosCompletedEndpoint
 {
-    internal static RouteHandlerBuilder MapGetTodosCompletedEndpoint(this WebApplication app) => app.MapGet(pattern: "/todo/complete",
-    handler: async Task<Results<Ok<ICollection<TodoDTO>>, InternalServerError<string>>>
-    (ICommandHandler<GetTodosCompletedCommand, GetTodosCompletedResponse> handler) =>
+    internal static WebApplication MapGetTodosCompletedEndpoint(this WebApplication app)
     {
-        GetTodosCompletedCommand command = new();
-        Result<GetTodosCompletedResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.CompleteTodos is ICollection<TodoDTO> todos
-            ? TypedResults.Ok(todos)
-            : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting todos"));
-    });
+        app.MapGet(
+            pattern: "/todo/complete",
+            handler: async Task<Results<Ok<ICollection<TodoDTO>>, InternalServerError<string>>>
+                (ICommandHandler<GetTodosCompletedCommand, GetTodosCompletedResponse> handler) =>
+                    {
+                        GetTodosCompletedCommand command = new();
+                        Result<GetTodosCompletedResponse> response = await handler.HandleAsync(command);
+                        return response.IsSuccess && response.Value is not null && response.Value.CompleteTodos is ICollection<TodoDTO> todos
+                            ? TypedResults.Ok(todos)
+                            : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting todos"));
+                    }
+                );
+        return app;
+    }
 }

@@ -24,22 +24,22 @@ internal static class WebApplicationExtensions
     {
 #pragma warning disable IDE0058
         app.MapGet("/", () => "Welcome!");
-        app.MapCreateCategoryEndpoint();
-        app.MapCreateTodoEndpoint();
-        app.MapDeleteCategoryEndpoint();
-        app.MapDeleteTodoEndpoint();
-        app.MapGetCategoriesEndpoint();
-        app.MapGetTodosCompletedEndpoint();
-        app.MapGetTodosDueTodayEndpoint();
-        app.MapGetTodosForCategoryEndpoint();
-        app.MapGetTodosImportantEndpoint();
-        app.MapGetTodosOverdueEndpoint();
-        app.MapUpdateCategoryNameEndpoint();
-        app.MapUpdateTodoCategoryEndpoint();
-        app.MapUpdateTodoCompleteDateEndpoint();
-        app.MapUpdateTodoDescriptionEndpoint();
-        app.MapUpdateTodoDueDateEndpoint();
-        app.MapUpdateTodoImportanceEndpoint();
+        app.MapCreateCategoryEndpoint()
+            .MapCreateTodoEndpoint()
+            .MapDeleteCategoryEndpoint()
+            .MapDeleteTodoEndpoint()
+            .MapGetCategoriesEndpoint()
+            .MapGetTodosCompletedEndpoint()
+            .MapGetTodosDueTodayEndpoint()
+            .MapGetTodosForCategoryEndpoint()
+            .MapGetTodosImportantEndpoint()
+            .MapGetTodosOverdueEndpoint()
+            .MapUpdateCategoryNameEndpoint()
+            .MapUpdateTodoCategoryEndpoint()
+            .MapUpdateTodoCompleteDateEndpoint()
+            .MapUpdateTodoDescriptionEndpoint()
+            .MapUpdateTodoDueDateEndpoint()
+            .MapUpdateTodoImportanceEndpoint();
 #pragma warning restore IDE0058
         return app;
     }

@@ -9,14 +9,20 @@ namespace TodoHelper.Application.Features.GetCategories;
 
 internal static class GetCategoriesEndpoint
 {
-    internal static RouteHandlerBuilder MapGetCategoriesEndpoint(this WebApplication app) => app.MapGet(pattern: "/category",
-    handler: async Task<Results<Ok<ICollection<CategoryDTO>>, InternalServerError<string>>>
-    (ICommandHandler<GetCategoriesCommand, GetCategoriesResponse> handler) =>
+    internal static WebApplication MapGetCategoriesEndpoint(this WebApplication app)
     {
-        GetCategoriesCommand command = new();
-        Result<GetCategoriesResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.Categories is ICollection<CategoryDTO> categories
-            ? TypedResults.Ok(categories)
-            : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting categories"));
-    });
+        app.MapGet(
+            pattern: "/category",
+            handler: async Task<Results<Ok<ICollection<CategoryDTO>>, InternalServerError<string>>>
+                (ICommandHandler<GetCategoriesCommand, GetCategoriesResponse> handler) =>
+                {
+                    GetCategoriesCommand command = new();
+                    Result<GetCategoriesResponse> response = await handler.HandleAsync(command);
+                    return response.IsSuccess && response.Value is not null && response.Value.Categories is ICollection<CategoryDTO> categories
+                        ? TypedResults.Ok(categories)
+                        : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting categories"));
+                }
+            );
+        return app;
+    }
 }

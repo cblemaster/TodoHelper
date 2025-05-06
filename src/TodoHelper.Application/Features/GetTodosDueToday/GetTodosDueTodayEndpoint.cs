@@ -9,14 +9,20 @@ namespace TodoHelper.Application.Features.GetTodosDueToday;
 
 internal static class GetTodosDueTodayEndpoint
 {
-    internal static RouteHandlerBuilder MapGetTodosDueTodayEndpoint(this WebApplication app) => app.MapGet(pattern: "/todo/duetoday",
-    handler: async Task<Results<Ok<ICollection<TodoDTO>>, InternalServerError<string>>>
-    (ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse> handler) =>
+    internal static WebApplication MapGetTodosDueTodayEndpoint(this WebApplication app)
     {
-        GetTodosDueTodayCommand command = new();
-        Result<GetTodosDueTodayResponse> response = await handler.HandleAsync(command);
-        return response.IsSuccess && response.Value is not null && response.Value.DueTodayTodos is ICollection<TodoDTO> todos
-            ? TypedResults.Ok(todos)
-            : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting todos"));
-    });
+        app.MapGet(
+            pattern: "/todo/duetoday",
+            handler: async Task<Results<Ok<ICollection<TodoDTO>>, InternalServerError<string>>>
+                (ICommandHandler<GetTodosDueTodayCommand, GetTodosDueTodayResponse> handler) =>
+                {
+                    GetTodosDueTodayCommand command = new();
+                    Result<GetTodosDueTodayResponse> response = await handler.HandleAsync(command);
+                    return response.IsSuccess && response.Value is not null && response.Value.DueTodayTodos is ICollection<TodoDTO> todos
+                        ? TypedResults.Ok(todos)
+                        : TypedResults.InternalServerError(ApplicationErrors.UnknownErrorMessage("getting todos"));
+                }
+            );
+        return app;
+    }
 }
