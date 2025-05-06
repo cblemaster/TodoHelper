@@ -8,14 +8,14 @@ public sealed class Category : Entity<Category>
 {
     public override Identifier<Category> Id { get; }
     public IEnumerable<Todo> Todos { get; private set; } = [];
-    public Name Name { get; private set; }
+    public Descriptor Name { get; private set; }
     public override CreateDate CreateDate { get; }
     public override UpdateDate UpdateDate { get; protected set; }
 
 #pragma warning disable CS8618
     private Category() { }
 #pragma warning restore CS8618
-    private Category(Name name, CreateDate createDate, UpdateDate updateDate)
+    private Category(Descriptor name, CreateDate createDate, UpdateDate updateDate)
     {
         Id = Identifier<Category>.CreateNew();
         Name = name;
@@ -25,8 +25,8 @@ public sealed class Category : Entity<Category>
 
     public Result<Category> SetName(string name)
     {
-        Result<Name> nameResult = Name.Create(name);
-        if (nameResult.IsSuccess && nameResult.Value is Name newName)
+        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), 40);
+        if (nameResult.IsSuccess && nameResult.Value is Descriptor newName)
         {
             Name = newName;
             UpdateDate = UpdateDate.Create();
@@ -42,9 +42,9 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateNew(string name)
     {
-        Result<Name> nameResult = Name.Create(name);
+        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), 40);
 
-        return nameResult.IsSuccess && nameResult.Value is Name newName
+        return nameResult.IsSuccess && nameResult.Value is Descriptor newName
             ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))
             : nameResult.IsFailure && nameResult.Error is string error
                 ? Result<Category>.ValidationFailure(error)

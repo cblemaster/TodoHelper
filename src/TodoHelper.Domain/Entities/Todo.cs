@@ -10,7 +10,7 @@ public sealed class Todo : Entity<Todo>
     public override Identifier<Todo> Id { get; }
     public Category Category { get; private set; } = default!;
     public Identifier<Category> CategoryId { get; private set; }
-    public Description Description { get; private set; }
+    public Descriptor Description { get; private set; }
     public DueDate DueDate { get; private set; }
     public CompleteDate CompleteDate { get; private set; }
     public override CreateDate CreateDate { get; }
@@ -25,7 +25,7 @@ public sealed class Todo : Entity<Todo>
 #pragma warning disable CS8618
     private Todo() { }
 #pragma warning restore CS8618
-    private Todo(Identifier<Category> categoryId, Description description, DueDate dueDate, CompleteDate completeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
+    private Todo(Identifier<Category> categoryId, Descriptor description, DueDate dueDate, CompleteDate completeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
     {
         Id = Identifier<Todo>.CreateNew();
         CategoryId = categoryId;
@@ -41,8 +41,8 @@ public sealed class Todo : Entity<Todo>
     #region Methods
     public Result<Todo> SetDescription(string description)
     {
-        Result<Description> descriptionResult = Description.Create(description);
-        if (descriptionResult.IsSuccess && descriptionResult.Value is Description newDescription)
+        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), 255);
+        if (descriptionResult.IsSuccess && descriptionResult.Value is Descriptor newDescription)
         {
             Description = newDescription;
             UpdateDate = UpdateDate.Create();
@@ -90,9 +90,9 @@ public sealed class Todo : Entity<Todo>
     #region Factory
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
-        Result<Description> descriptionResult = Description.Create(description);
+        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), 255);
 
-        return descriptionResult.IsSuccess && descriptionResult.Value is Description newDescription
+        return descriptionResult.IsSuccess && descriptionResult.Value is Descriptor newDescription
             ? Result<Todo>.Success(new(
                 Identifier<Category>.Create(categoryId),
                 newDescription,
