@@ -1,5 +1,4 @@
-﻿
-using TodoHelper.Application.Features.CreateCategory;
+﻿using TodoHelper.Application.Features.CreateCategory;
 using TodoHelper.Application.Features.CreateTodo;
 using TodoHelper.Application.Features.DeleteCategory;
 using TodoHelper.Application.Features.DeleteTodo;
@@ -17,7 +16,7 @@ using TodoHelper.Application.Features.UpdateTodoDueDate;
 using TodoHelper.Application.Features.UpdateTodoImportance;
 using TodoHelper.Application.Interfaces;
 
-namespace TodoHelper.Application;
+namespace TodoHelper.Application.Extensions;
 
 public static class WebApplicationBuilderExtensions
 {
