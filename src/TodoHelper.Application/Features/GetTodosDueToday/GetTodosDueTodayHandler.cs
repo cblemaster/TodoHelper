@@ -14,8 +14,8 @@ internal sealed class GetTodosDueTodayHandler(ITodosRepository repository) : Han
     {
         List<TodoDTO> dtos = [];
         List<Todo> todos = [.. _repository.GetTodos().Where(t => t.DueDate.Value is not null && t.DueDate.Value == DateOnly.FromDateTime(DateTime.Today))];
-        todos.ForEach(t =>
-            dtos.Add(t.MapToDTO()));
+        todos.ForEach(t => dtos.Add(t.MapToDTO()));
+
         // Specification: Sorted by description
         _ = dtos.OrderBy(d => d.Description);
         GetTodosDueTodayResponse response = new(dtos);

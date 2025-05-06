@@ -14,8 +14,8 @@ internal sealed class GetTodosOverdueHandler(ITodosRepository repository) : Hand
     {
         List<TodoDTO> dtos = [];
         List<Todo> todos = [.. _repository.GetTodos().Where(t => t.DueDate.Value is not null && t.DueDate.Value < DateOnly.FromDateTime(DateTime.Today))];
-        todos.ForEach(t =>
-            dtos.Add(t.MapToDTO()));
+        todos.ForEach(t => dtos.Add(t.MapToDTO()));
+
         // Specification: Sorted by due date descending, then by description 
         _ = dtos.OrderByDescending(d => d.DueDate).ThenBy(d => d.Description);
         GetTodosOverdueResponse response = new(dtos);

@@ -14,8 +14,8 @@ internal sealed class GetTodosCompletedHandler(ITodosRepository repository) : Ha
     {
         List<TodoDTO> dtos = [];
         List<Todo> todos = [.. _repository.GetTodos().Where(t => t.CompleteDate.Value is not null)];
-        todos.ForEach(t =>
-            dtos.Add(t.MapToDTO()));
+        todos.ForEach(t => dtos.Add(t.MapToDTO()));
+
         // Specification: Sorted by due date descending, then by description
         _ = dtos.OrderByDescending(d => d.DueDate).ThenBy(d => d.Description);
         GetTodosCompletedResponse response = new(dtos);

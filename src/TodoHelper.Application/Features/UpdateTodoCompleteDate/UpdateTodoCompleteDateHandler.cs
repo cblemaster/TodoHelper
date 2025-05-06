@@ -1,6 +1,7 @@
 ﻿
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
+using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
@@ -8,11 +9,11 @@ namespace TodoHelper.Application.Features.UpdateTodoCompleteDate;
 
 internal sealed class UpdateTodoCompleteDateHandler(ITodosRepository repository) : HandlerBase<UpdateTodoCompleteDateCommand, UpdateTodoCompleteDateResponse>(repository)
 {
-    public override Task<Result<UpdateTodoCompleteDateResponse>> HandleAsync(UpdateTodoCompleteDateCommand command, CancellationToken cancellationToken = default)
+    public async override Task<Result<UpdateTodoCompleteDateResponse>> HandleAsync(UpdateTodoCompleteDateCommand command, CancellationToken cancellationToken = default)
     {
         if (_repository.GetTodoById(command.TodoId) is not Todo todo)
         {
-            return Task.FromResult(Result<UpdateTodoCompleteDateResponse>.NotFoundFailure($"Todo with id {command.TodoId} not found."));
+            return Result<UpdateTodoCompleteDateResponse>.NotFoundFailure(DomainErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
         else
         {
@@ -20,10 +21,14 @@ internal sealed class UpdateTodoCompleteDateHandler(ITodosRepository repository)
             if (todo.IsComplete)
             {
                 todo.SetNotComplete();
+                await _repository.UpdateTodoAsync(todo);
             }
-            
-            _ = _repository.UpdateTodoCompleteDateAsync(todo, command.CompleteDate);
-            return Task.FromResult(Result<UpdateTodoCompleteDateResponse>.Success(new UpdateTodoCompleteDateResponse(true)));
+            else
+            {
+                await _repository.UpdateTodoCompleteDateAsync(todo, command.CompleteDate);
+            }
+
+            return Result<UpdateTodoCompleteDateResponse>.Success(new UpdateTodoCompleteDateResponse(true));
         }
     }
 }

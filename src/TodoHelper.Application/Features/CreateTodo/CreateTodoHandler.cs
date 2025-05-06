@@ -2,6 +2,7 @@
 using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
+using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 
@@ -14,7 +15,7 @@ internal sealed class CreateTodoHandler(ITodosRepository repository) : HandlerBa
         // Rule: Todo must have a category (enforced by type system)
 
         Result<Todo> todoResult = Todo.CreateNew(command.CategoryId, command.Description, command.DueDate);
-        
+
         // Rule: Todo description must not be null, an empty string, nor all-whitespace characters
         // Rule: Todo description must be 255 characters or fewer
         if (todoResult.IsFailure && todoResult.Error is string error)
@@ -41,7 +42,7 @@ internal sealed class CreateTodoHandler(ITodosRepository repository) : HandlerBa
         }
         else
         {
-            return Result<CreateTodoResponse>.UnknownFailure("An unknown error occurred when creating the todo.");
+            return Result<CreateTodoResponse>.UnknownFailure(DomainErrors.UnknownErrorMessage("creating todo"));
         }
     }
 }

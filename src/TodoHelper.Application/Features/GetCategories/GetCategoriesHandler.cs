@@ -14,8 +14,8 @@ internal sealed class GetCategoriesHandler(ITodosRepository repository) : Handle
     {
         List<CategoryDTO> dtos = [];
         List<Category> categories = [.. _repository.GetCategories()];
-        categories.ForEach(c =>
-            dtos.Add(c.MapToDTO()));
+        categories.ForEach(c => dtos.Add(c.MapToDTO()));
+
         // Specification: Sorted by name
         _ = dtos.OrderBy(d => d.Name);
         GetCategoriesResponse response = new(dtos);
