@@ -41,7 +41,7 @@ public sealed class Todo : Entity<Todo>
     #region Methods
     public Result<Todo> SetDescription(string description)
     {
-        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), 255);
+        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), DataConstants.TODO_DESCRIPTION_MAX_LENGTH);
         if (descriptionResult.IsSuccess && descriptionResult.Value is Descriptor newDescription)
         {
             Description = newDescription;
@@ -90,7 +90,7 @@ public sealed class Todo : Entity<Todo>
     #region Factory
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
-        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), 255);
+        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), DataConstants.TODO_DESCRIPTION_MAX_LENGTH);
 
         return descriptionResult.IsSuccess && descriptionResult.Value is Descriptor newDescription
             ? Result<Todo>.Success(new(

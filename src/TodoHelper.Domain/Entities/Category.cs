@@ -25,7 +25,7 @@ public sealed class Category : Entity<Category>
 
     public Result<Category> SetName(string name)
     {
-        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), 40);
+        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), DataConstants.CATEGORY_NAME_MAX_LENGTH);
         if (nameResult.IsSuccess && nameResult.Value is Descriptor newName)
         {
             Name = newName;
@@ -42,7 +42,7 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateNew(string name)
     {
-        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), 40);
+        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), DataConstants.CATEGORY_NAME_MAX_LENGTH);
 
         return nameResult.IsSuccess && nameResult.Value is Descriptor newName
             ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))

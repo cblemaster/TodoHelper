@@ -1,5 +1,5 @@
 ﻿
-namespace TodoHelper.DataAccess;
+namespace TodoHelper.Domain;
 
 public static class DataConstants
 {
