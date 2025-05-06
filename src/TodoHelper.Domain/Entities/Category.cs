@@ -32,13 +32,11 @@ public sealed class Category : Entity<Category>
             UpdateDate = UpdateDate.Create();
             return Result<Category>.Success(this);
         }
-        else if (nameResult.IsFailure && nameResult.Error is string error)
-        {
-            return Result<Category>.ValidationFailure(error);
-        }
         else
         {
-            return Result<Category>.UnknownFailure("An unknown error occurred when creating the category.");
+            return nameResult.IsFailure && nameResult.Error is string error
+                ? Result<Category>.ValidationFailure(error)
+                : Result<Category>.UnknownFailure(DomainErrors.UnknownErrorMessage("updating the category"));
         }
     }
 
@@ -50,6 +48,6 @@ public sealed class Category : Entity<Category>
             ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))
             : nameResult.IsFailure && nameResult.Error is string error
                 ? Result<Category>.ValidationFailure(error)
-                : Result<Category>.ValidationFailure("An unknown error occurred while creating category.");
+                : Result<Category>.ValidationFailure(DomainErrors.UnknownErrorMessage("creating category"));
     }
 }

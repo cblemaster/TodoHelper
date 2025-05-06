@@ -48,13 +48,11 @@ public sealed class Todo : Entity<Todo>
             UpdateDate = UpdateDate.Create();
             return Result<Todo>.Success(this);
         }
-        else if (descriptionResult.IsFailure && descriptionResult.Error is string error)
-        {
-            return Result<Todo>.ValidationFailure(error);
-        }
         else
         {
-            return Result<Todo>.UnknownFailure("An unknown error occurred when creating the todo.");
+            return descriptionResult.IsFailure && descriptionResult.Error is string error
+                ? Result<Todo>.ValidationFailure(error)
+                : Result<Todo>.UnknownFailure(DomainErrors.UnknownErrorMessage("updating the todo"));
         }
     }
 
@@ -106,7 +104,7 @@ public sealed class Todo : Entity<Todo>
                 ))
             : descriptionResult.IsFailure && descriptionResult.Error is string error
                 ? Result<Todo>.ValidationFailure(error)
-                : Result<Todo>.ValidationFailure("An unknown error occurred while creating todo.");
+                : Result<Todo>.ValidationFailure(DomainErrors.UnknownErrorMessage("creating todo"));
     }
     #endregion Factory
 }
