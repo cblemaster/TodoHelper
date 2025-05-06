@@ -5,6 +5,7 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess.Repository;
 
+// this is pretty much a useless abstraction, and I'm ok with that
 public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
 {
     private readonly TodosDbContext _context = context;

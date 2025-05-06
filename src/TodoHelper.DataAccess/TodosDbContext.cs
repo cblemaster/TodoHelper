@@ -33,7 +33,7 @@ public sealed class TodosDbContext(DbContextOptions<TodosDbContext> options) : D
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasConversion(i => i.Value, i => Identifier<Todo>.Create(i));
             entity.Property(e => e.CategoryId).HasConversion(c => c.Value, c => Identifier<Category>.Create(c));
-            entity.Property(e => e.Description).HasConversion(d => d.Value, d => Descriptor.Create(d, nameof(Todo.Description), 
+            entity.Property(e => e.Description).HasConversion(d => d.Value, d => Descriptor.Create(d, nameof(Todo.Description),
                 DataConstants.TODO_DESCRIPTION_MAX_LENGTH).Value!);
             entity.Property(e => e.Description).HasMaxLength(DataConstants.TODO_DESCRIPTION_MAX_LENGTH).IsUnicode(DataConstants.IS_UNICODE);
             entity.Property(e => e.DueDate).HasConversion(d => d.Value, d => DueDate.Create(d));
