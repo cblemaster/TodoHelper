@@ -1,6 +1,6 @@
 ﻿
 using TodoHelper.Application.DataTransferObjects;
-using TodoHelper.Application.Features.Common;
+using TodoHelper.Application.Features.Common.Specifications;
 using TodoHelper.Application.Interfaces;
 using TodoHelper.Domain.Entities;
 

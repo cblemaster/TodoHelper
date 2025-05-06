@@ -1,5 +1,4 @@
-﻿
-namespace TodoHelper.Application;
+﻿namespace TodoHelper.Application.Features.Common.Specifications;
 
 internal sealed class ApplicationErrors
 {

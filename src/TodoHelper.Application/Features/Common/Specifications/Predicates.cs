@@ -1,7 +1,6 @@
-﻿
-using TodoHelper.Application.DataTransferObjects;
+﻿using TodoHelper.Application.DataTransferObjects;
 
-namespace TodoHelper.Application.Features.Common;
+namespace TodoHelper.Application.Features.Common.Specifications;
 
 internal class Predicates
 {
