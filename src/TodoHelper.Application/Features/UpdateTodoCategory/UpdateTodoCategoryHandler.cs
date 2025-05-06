@@ -2,9 +2,9 @@
 using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Features.Common.Specifications;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
+using TodoHelper.Domain.Specifications;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Application.Features.UpdateTodoCategory;

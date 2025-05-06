@@ -2,9 +2,9 @@
 using TodoHelper.Application.Features.Common;
 using TodoHelper.Application.Features.Common.Specifications;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
+using TodoHelper.Domain.Specifications;
 
 namespace TodoHelper.Application.Features.DeleteTodo;
 

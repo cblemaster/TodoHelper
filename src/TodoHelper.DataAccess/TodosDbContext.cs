@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using TodoHelper.Domain;
 using TodoHelper.Domain.Entities;
+using TodoHelper.Domain.Specifications;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess;

@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Domain.Results;
+using TodoHelper.Domain.Specifications;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
