@@ -5,6 +5,8 @@ namespace TodoHelper.Domain.ValueObjects;
 
 public sealed class Name
 {
+    public const int MAX_LENGTH = 40;
+
     public string Value { get; }
 
     private Name(string value) => Value = value;
@@ -18,9 +20,9 @@ public sealed class Name
 
         static (bool IsValid, string error) Validate(string value) =>
         string.IsNullOrWhiteSpace(value)
-            ? (false, DomainErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Name)))
-            : value.Length > DomainErrors.CATEGORY_NAME_MAX_LENGTH
-                ? (false, DomainErrors.MaxLengthExceededErrorMessage(nameof(Name), DomainErrors.CATEGORY_NAME_MAX_LENGTH))
+            ? (false, DomainValidationErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Name)))
+            : value.Length > Name.MAX_LENGTH
+                ? (false, DomainValidationErrors.MaxLengthExceededErrorMessage(nameof(Name), Name.MAX_LENGTH))
                 : (true, string.Empty);
     }
 }

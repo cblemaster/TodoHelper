@@ -5,6 +5,8 @@ namespace TodoHelper.Domain.ValueObjects;
 
 public sealed class Description
 {
+    public const int MAX_LENGTH = 255;
+
     public string Value { get; }
 
     private Description(string value) => Value = value;
@@ -19,9 +21,9 @@ public sealed class Description
         // TODO: this is the exact same validation as in Name.cs...
         static (bool IsValid, string error) Validate(string value) =>
             string.IsNullOrWhiteSpace(value)
-                ? (false, DomainErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Description)))
-                : value.Length > DomainErrors.TODO_DESCRIPTION_MAX_LENGTH
-                    ? (false, DomainErrors.MaxLengthExceededErrorMessage(nameof(Description), DomainErrors.TODO_DESCRIPTION_MAX_LENGTH))
+                ? (false, DomainValidationErrors.IsNullEmptyOrWhitespaceErrorMessage(nameof(Description)))
+                : value.Length > Description.MAX_LENGTH
+                    ? (false, DomainValidationErrors.MaxLengthExceededErrorMessage(nameof(Description), Description.MAX_LENGTH))
                     : (true, string.Empty);
     }
 }
