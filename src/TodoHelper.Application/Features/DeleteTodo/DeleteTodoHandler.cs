@@ -16,7 +16,7 @@ internal sealed class DeleteTodoHandler(ITodosRepository repository) : HandlerBa
         {
             return Result<DeleteTodoResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
-        // Rule: Important todos cannot be deleted
+        // RULE: Important todos cannot be deleted
         else if (todo.CanBeDeleted)
         {
             return Result<DeleteTodoResponse>.DomainRuleFailure(DomainErrors.CannotDeleteImportantTodosErrorMessage());

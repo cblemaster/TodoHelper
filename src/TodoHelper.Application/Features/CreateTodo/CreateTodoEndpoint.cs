@@ -21,7 +21,7 @@ internal static class CreateTodoEndpoint
         }
         else if (response.IsSuccess && response.Value is not null && response.Value.Todo is TodoDTO todo)
         {
-            return TypedResults.Created("", todo);     // TODO: fix the resource uri
+            return TypedResults.Created("No uri for this resource.", todo);
         }
         else
         {

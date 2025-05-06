@@ -16,7 +16,7 @@ internal sealed class UpdateTodoImportanceHandler(ITodosRepository repository) :
         {
             return Result<UpdateTodoImportanceResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
-        // Rule: Complete todos cannot be updated, except to update to not complete
+        // RULE: Complete todos cannot be updated, except to update to not complete
         else if (!todo.CanBeUpdated)
         {
             return Result<UpdateTodoImportanceResponse>.DomainRuleFailure(DomainErrors.CannotUpdateCompletedTodosErrorMessage());

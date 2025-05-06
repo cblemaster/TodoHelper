@@ -19,13 +19,13 @@ internal sealed class UpdateTodoDescriptionHandler(ITodosRepository repository) 
 
         Result<Todo> todoResult = todo.SetDescription(command.Description);
 
-        // Rule: Todo description must not be null, an empty string, nor all-whitespace characters
-        // Rule: Todo description must be 255 characters or fewer
+        // RULE: Todo description must not be null, an empty string, nor all-whitespace characters
+        // RULE: Todo description must be 255 characters or fewer
         if (todoResult.IsFailure && todoResult.Error is string error)
         {
             return Result<UpdateTodoDescriptionResponse>.ValidationFailure(error);
         }
-        // Rule: Complete todos cannot be updated, except to update to not complete
+        // RULE: Complete todos cannot be updated, except to update to not complete
         else if (!todo.CanBeUpdated)
         {
             return Result<UpdateTodoDescriptionResponse>.DomainRuleFailure(DomainErrors.CannotUpdateCompletedTodosErrorMessage());

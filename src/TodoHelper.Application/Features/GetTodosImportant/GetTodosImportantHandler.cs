@@ -16,7 +16,7 @@ internal sealed class GetTodosImportantHandler(ITodosRepository repository) : Ha
         List<Todo> todos = [.. _repository.GetTodos().Where(command.WherePredicate())];
         todos.ForEach(t => dtos.Add(t.MapToDTO()));
 
-        // Specification: Sorted by due date descending, then by description
+        // SPECIFICATION: Sorted by due date descending, then by description
         _ = dtos.OrderByDescending(command.SortByDueDatePredicate()).ThenBy(command.SortByDescriptionPredicate());
         GetTodosImportantResponse response = new(dtos);
         return Task.FromResult(Result<GetTodosImportantResponse>.Success(response));

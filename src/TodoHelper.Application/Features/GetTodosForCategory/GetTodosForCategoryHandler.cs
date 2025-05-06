@@ -16,7 +16,7 @@ internal sealed class GetTodosForCategoryHandler(ITodosRepository repository) : 
         List<Todo> todos = [.. _repository.GetTodos().Where(command.WherePredicate(command.CategoryId))];
         todos.ForEach(t => dtos.Add(t.MapToDTO()));
 
-        // Specification: Sorted by is complete descending, then by due date descending, then by description
+        // SPECIFICATION: Sorted by is complete descending, then by due date descending, then by description
         _ = dtos.OrderByDescending(command.SortByDueDatePredicate()).ThenBy(command.SortByDescriptionPredicate());
         GetTodosForCategoryResponse response = new(dtos);
         return Task.FromResult(Result<GetTodosForCategoryResponse>.Success(response));

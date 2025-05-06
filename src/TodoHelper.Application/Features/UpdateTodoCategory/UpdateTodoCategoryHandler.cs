@@ -17,12 +17,12 @@ internal sealed class UpdateTodoCategoryHandler(ITodosRepository repository) : H
         {
             return Result<UpdateTodoCategoryResponse>.NotFoundFailure(ApplicationErrors.NotFoundErrorMessage(nameof(Todo), command.TodoId));
         }
-        // Rule: Complete todos cannot be updated, except to update to not complete
+        // RULE: Complete todos cannot be updated, except to update to not complete
         else if (!todo.CanBeUpdated)
         {
             return Result<UpdateTodoCategoryResponse>.DomainRuleFailure(DomainErrors.CannotUpdateCompletedTodosErrorMessage());
         }
-        // Rule: Todo must have a category
+        // RULE: Todo must have a category
         else if (todo.CategoryId is null)
         {
             return Result<UpdateTodoCategoryResponse>.DomainRuleFailure(DomainErrors.TodoCategoryIsNullErrorMessage());

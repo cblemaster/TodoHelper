@@ -17,7 +17,7 @@ internal sealed class UpdateTodoCompleteDateHandler(ITodosRepository repository)
         }
         else
         {
-            // Rule: Complete todos cannot be updated, except to update to not complete
+            // RULE: Complete todos cannot be updated, except to update to not complete
             if (todo.IsComplete)
             {
                 todo.SetNotComplete();

@@ -4,7 +4,8 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess.Repository;
 
-// this is pretty much a useless abstraction, and I'm ok with that
+// NOTE: For a project of this size and complexity, a repository abstraction is overkill
+// ...extending the db context would work just as well with less complexity
 public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
 {
     private readonly TodosDbContext _context = context;
@@ -69,8 +70,8 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
 
     private async Task SaveAsync() => await _context.SaveChangesAsync();
 
-    // This method does not really belong here;
-    //   ideally I would inject the repository (or even the db context) into a validator
-    // The tradeoff is that we get to have very simple validation
+    // NOTE: This method does not really belong here
+    // ...ideally I would inject the repository (or even the db context) into a validator
+    // ...the tradeoff is that we get to have very simple validation
     public bool CategoryOfSameNameExists(string name) => _context.Categories.Select(c => c.Name.Value).ToList().Contains(name);
 }

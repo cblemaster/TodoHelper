@@ -21,7 +21,7 @@ internal static class CreateCategoryEndpoint
         }
         else if (response.IsSuccess && response.Value is not null && response.Value.Category is CategoryDTO category)
         {
-            return TypedResults.Created("", category);     // TODO: fix the resource uri
+            return TypedResults.Created("No uri for this resource.", category);
         }
         else
         {

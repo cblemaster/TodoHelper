@@ -16,7 +16,7 @@ internal sealed class GetTodosDueTodayHandler(ITodosRepository repository) : Han
         List<Todo> todos = [.. _repository.GetTodos().Where(command.WherePredicate())];
         todos.ForEach(t => dtos.Add(t.MapToDTO()));
 
-        // Specification: Sorted by description
+        // SPECIFICATION: Sorted by description
         _ = dtos.OrderBy(command.SortByDescriptionPredicate());
         GetTodosDueTodayResponse response = new(dtos);
         return Task.FromResult(Result<GetTodosDueTodayResponse>.Success(response));

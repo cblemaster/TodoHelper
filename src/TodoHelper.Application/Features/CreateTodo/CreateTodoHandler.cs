@@ -12,12 +12,12 @@ internal sealed class CreateTodoHandler(ITodosRepository repository) : HandlerBa
 {
     public override async Task<Result<CreateTodoResponse>> HandleAsync(CreateTodoCommand command, CancellationToken cancellationToken = default)
     {
-        // Rule: Todo must have a category (enforced by type system)
+        // RULE: Todo must have a category (enforced by type system)
 
         Result<Todo> todoResult = Todo.CreateNew(command.CategoryId, command.Description, command.DueDate);
 
-        // Rule: Todo description must not be null, an empty string, nor all-whitespace characters
-        // Rule: Todo description must be 255 characters or fewer
+        // RULE: Todo description must not be null, an empty string, nor all-whitespace characters
+        // RULE: Todo description must be 255 characters or fewer
         if (todoResult.IsFailure && todoResult.Error is string error)
         {
             return Result<CreateTodoResponse>.ValidationFailure(error);
