@@ -20,7 +20,7 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
         await SaveAsync();
     }
 
-    public async Task UpdateCategory(Category category)
+    public async Task UpdateCategoryAsync(Category category)
     {
         _ = _context.Update(category);
         await SaveAsync();
@@ -33,26 +33,22 @@ public sealed class TodosRepository(TodosDbContext context) : ITodosRepository
     public async Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId)
     {
         todo.SetCategoryId(categoryId);
-        _ = _context.Update(todo);
-        await SaveAsync();
+        await UpdateTodoAsync(todo);
     }
     public async Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate)
     {
         todo.SetDueDate(dueDate);
-        _ = _context.Update(todo);
-        await SaveAsync();
+        await UpdateTodoAsync(todo);
     }
     public async Task UpdateTodoImportanceAsync(Todo todo)
     {
         todo.SetImportance();
-        _ = _context.Update(todo);
-        await SaveAsync();
+        await UpdateTodoAsync(todo);
     }
     public async Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate)
     {
         todo.SetCompleteDate(completeDate);
-        _ = _context.Update(todo);
-        await SaveAsync();
+        await UpdateTodoAsync(todo);
     }
 
     public async Task DeleteCategoryAsync(Category category)
