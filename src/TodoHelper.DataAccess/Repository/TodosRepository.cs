@@ -1,5 +1,4 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 
