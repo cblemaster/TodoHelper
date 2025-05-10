@@ -1,6 +1,6 @@
 ﻿
+using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Results;
-using TodoHelper.Domain.Specifications;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
@@ -9,103 +9,74 @@ public sealed class Todo : Entity<Todo>
 {
     #region Properties
     public override Identifier<Todo> Id { get; }
-    public Category Category { get; private set; } = default!;
-    public Identifier<Category> CategoryId { get; private set; }
-    public Descriptor Description { get; private set; }
-    public DueDate DueDate { get; private set; }
-    public CompleteDate CompleteDate { get; private set; }
-    public override CreateDate CreateDate { get; }
-    public override UpdateDate UpdateDate { get; protected set; }
-    public Importance Importance { get; private set; }
-    public bool IsComplete => CompleteDate is not null && CompleteDate.Value is not null;
-    public bool CanBeUpdated => !IsComplete;
-    public bool CanBeDeleted => !Importance.IsImportant;
+    public Category Category { get; } = default!;
+    public Identifier<Category> CategoryId { get; }
+    public Descriptor Description { get; }
+    public DueDate? DueDate { get; }
+    public CompleteDate? CompleteDate { get; }
+    public Importance Importance { get; }    
     #endregion Properties
 
     #region Constructors
 #pragma warning disable CS8618
     private Todo() { }
 #pragma warning restore CS8618
-    private Todo(Identifier<Category> categoryId, Descriptor description, DueDate dueDate, CompleteDate completeDate, CreateDate createDate, UpdateDate updateDate, Importance importance)
+    private Todo(Identifier<Todo> id, Identifier<Category> categoryId, Descriptor description, DueDate? dueDate, CompleteDate? completeDate, Importance importance)
     {
-        Id = Identifier<Todo>.CreateNew();
+        Id = id;
         CategoryId = categoryId;
         Description = description;
         DueDate = dueDate;
         CompleteDate = completeDate;
-        CreateDate = createDate;
-        UpdateDate = updateDate;
         Importance = importance;
     }
     #endregion Constructors
 
-    #region Methods
-    public Result<Todo> SetDescription(string description)
-    {
-        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), DataConstants.TODO_DESCRIPTION_MAX_LENGTH);
-        if (descriptionResult.IsSuccess && descriptionResult.Value is Descriptor newDescription)
-        {
-            Description = newDescription;
-            UpdateDate = UpdateDate.Create();
-            return Result<Todo>.Success(this);
-        }
-        else
-        {
-            return descriptionResult.IsFailure && descriptionResult.Error is string error
-                ? Result<Todo>.ValidationFailure(error)
-                : Result<Todo>.UnknownFailure(DomainErrors.UnknownErrorMessage("updating the todo"));
-        }
-    }
-
-    public void SetDueDate(DateOnly? dueDate)
-    {
-        DueDate = DueDate.Create(dueDate);
-        UpdateDate = UpdateDate.Create();
-    }
-
-    public void SetImportance()
-    {
-        Importance = Importance.Create(!Importance.IsImportant);
-        UpdateDate = UpdateDate.Create();
-    }
-
-    public void SetCategoryId(Identifier<Category> categoryId)
-    {
-        CategoryId = categoryId;
-        UpdateDate = UpdateDate.Create();
-    }
-
-    public void SetCompleteDate(DateTimeOffset? completeDate)
-    {
-        CompleteDate = CompleteDate.Create(completeDate);
-        UpdateDate = UpdateDate.Create();
-    }
-
-    public void SetNotComplete()
-    {
-        CompleteDate = CompleteDate.Create(null);
-        UpdateDate = UpdateDate.Create();
-    }
-    #endregion Methods
-
     #region Factory
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
-        Result<Descriptor> descriptionResult = Descriptor.Create(description, nameof(Description), DataConstants.TODO_DESCRIPTION_MAX_LENGTH);
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            return Result<Todo>.ValidationFailure("Todo description is required and cannot consist of exclusively whitespace characters.");
+        }
+        else if (description.Length > 40)
+        {
+            return Result<Todo>.ValidationFailure("Todo description cannot exceed 40 characters.");
+        }
+        else
+        {
+            Identifier<Todo> id = Identifier<Todo>.CreateNew();
+            Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
+            Descriptor descriptionValue = new(description);
+            DueDate? dueDateValue = new(dueDate);
+            CompleteDate? completeDateValue = null;
+            Importance importanceValue = new(false);
+            Todo todo = new(id, categoryIdValue, descriptionValue, dueDateValue, completeDateValue, importanceValue);
+            return Result<Todo>.Success(todo);
+        }
+    }
 
-        return descriptionResult.IsSuccess && descriptionResult.Value is Descriptor newDescription
-            ? Result<Todo>.Success(new(
-                Identifier<Category>.Create(categoryId),
-                newDescription,
-                DueDate.Create(dueDate),
-                CompleteDate.CreateNew(),
-                CreateDate.CreateNew(),
-                UpdateDate.CreateNew(),
-                Importance.CreateNew()
-                ))
-            : descriptionResult.IsFailure && descriptionResult.Error is string error
-                ? Result<Todo>.ValidationFailure(error)
-                : Result<Todo>.UnknownFailure(DomainErrors.UnknownErrorMessage("creating todo"));
+    public static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            return Result<Todo>.ValidationFailure("Todo description is required and cannot consist of exclusively whitespace characters.");
+        }
+        else if (description.Length > 40)
+        {
+            return Result<Todo>.ValidationFailure("Todo description cannot exceed 40 characters.");
+        }
+        else
+        {
+            Identifier<Todo> idValue = Identifier<Todo>.Create(id);
+            Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
+            Descriptor descriptionValue = new(description);
+            DueDate? dueDateValue = new(dueDate);
+            CompleteDate? completeDateValue = new(completeDate);
+            Importance importanceValue = new(isImportant);
+            Todo todo = new(idValue, categoryIdValue, descriptionValue, dueDateValue, completeDateValue, importanceValue);
+            return Result<Todo>.Success(todo);
+        }
     }
     #endregion Factory
 }

@@ -1,6 +1,6 @@
 ﻿
+using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Results;
-using TodoHelper.Domain.Specifications;
 using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Entities;
@@ -8,47 +8,54 @@ namespace TodoHelper.Domain.Entities;
 public sealed class Category : Entity<Category>
 {
     public override Identifier<Category> Id { get; }
-    public IEnumerable<Todo> Todos { get; private set; } = [];
-    public Descriptor Name { get; private set; }
-    public override CreateDate CreateDate { get; }
-    public override UpdateDate UpdateDate { get; protected set; }
+    public IEnumerable<Todo> Todos { get; }
+    public Descriptor Name { get; }
 
 #pragma warning disable CS8618
     private Category() { }
 #pragma warning restore CS8618
-    private Category(Descriptor name, CreateDate createDate, UpdateDate updateDate)
+    private Category(Identifier<Category> id, Descriptor name, IEnumerable<Todo> todos)
     {
-        Id = Identifier<Category>.CreateNew();
+        Id = id;
         Name = name;
-        CreateDate = createDate;
-        UpdateDate = updateDate;
-    }
-
-    public Result<Category> SetName(string name)
-    {
-        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), DataConstants.CATEGORY_NAME_MAX_LENGTH);
-        if (nameResult.IsSuccess && nameResult.Value is Descriptor newName)
-        {
-            Name = newName;
-            UpdateDate = UpdateDate.Create();
-            return Result<Category>.Success(this);
-        }
-        else
-        {
-            return nameResult.IsFailure && nameResult.Error is string error
-                ? Result<Category>.ValidationFailure(error)
-                : Result<Category>.UnknownFailure(DomainErrors.UnknownErrorMessage("updating the category"));
-        }
+        Todos = todos;
     }
 
     public static Result<Category> CreateNew(string name)
     {
-        Result<Descriptor> nameResult = Descriptor.Create(name, nameof(Name), DataConstants.CATEGORY_NAME_MAX_LENGTH);
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result<Category>.ValidationFailure("Category name is required and cannot consist of exclusively whitespace characters.");
+        }
+        else if (name.Length > 40)
+        {
+            return Result<Category>.ValidationFailure("Category name cannot exceed 40 characters.");
+        }
+        else
+        {
+            Identifier<Category> id = Identifier<Category>.CreateNew();
+            Descriptor nameDescriptor = new(name);
+            Category category = new(id, nameDescriptor, []);
+            return Result<Category>.Success(category);
+        }
+    }
 
-        return nameResult.IsSuccess && nameResult.Value is Descriptor newName
-            ? Result<Category>.Success(new(newName, CreateDate.CreateNew(), UpdateDate.CreateNew()))
-            : nameResult.IsFailure && nameResult.Error is string error
-                ? Result<Category>.ValidationFailure(error)
-                : Result<Category>.UnknownFailure(DomainErrors.UnknownErrorMessage("creating category"));
+    public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result<Category>.ValidationFailure("Category name is required and cannot consist of exclusively whitespace characters.");
+        }
+        else if (name.Length > 40)
+        {
+            return Result<Category>.ValidationFailure("Category name cannot exceed 40 characters.");
+        }
+        else
+        {
+            Identifier<Category> idValue = Identifier<Category>.Create(id);
+            Descriptor nameValue = new(name);
+            Category category = new(idValue, nameValue, todos);
+            return Result<Category>.Success(category);
+        }
     }
 }
