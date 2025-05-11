@@ -1,23 +1,13 @@
 ﻿
-using TodoHelper.Domain.Entities;
-using TodoHelper.Domain.ValueObjects;
+using TodoHelper.Domain.BaseClasses;
 
 namespace TodoHelper.DataAccess.Repository;
-public interface ITodosRepository
+
+public interface ITodosRepository<T> where T : Entity<T>
 {
-    Task CreateCategoryAsync(Category category);
-    Task CreateTodoAsync(Todo todo);
-    Task DeleteCategoryAsync(Category category);
-    Task DeleteTodoAsync(Todo todo);
-    Task UpdateCategoryAsync(Category category);
-    Task UpdateTodoCategoryAsync(Todo todo, Identifier<Category> categoryId);
-    Task UpdateTodoCompleteDateAsync(Todo todo, DateTimeOffset? completeDate);
-    Task UpdateTodoAsync(Todo todo);
-    Task UpdateTodoDueDateAsync(Todo todo, DateOnly? dueDate);
-    Task UpdateTodoImportanceAsync(Todo todo);
-    bool CategoryOfSameNameExists(string name);
-    IEnumerable<Category> GetCategories();
-    IEnumerable<Todo> GetTodos();
-    Todo? GetTodoById(Guid id);
-    Category? GetCategoryById(Guid id);
+    Task Create(T entity, CancellationToken cancellationToken = default);
+    Task<T?> GetById(Guid id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<T>> GetAll(CancellationToken cancellationToken = default);
+    Task Update(T entity, CancellationToken cancellationToken = default);
+    Task Delete(T entity, CancellationToken cancellationToken = default);
 }
