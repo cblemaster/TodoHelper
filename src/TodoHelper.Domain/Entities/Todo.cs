@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Domain.BaseClasses;
+using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
 
@@ -14,7 +15,7 @@ public sealed class Todo : Entity<Todo>
     public Descriptor Description { get; }
     public DueDate? DueDate { get; }
     public CompleteDate? CompleteDate { get; }
-    public Importance Importance { get; }    
+    public Importance Importance { get; }
     #endregion Properties
 
     #region Constructors
@@ -37,11 +38,11 @@ public sealed class Todo : Entity<Todo>
     {
         if (string.IsNullOrWhiteSpace(description))
         {
-            return Result<Todo>.ValidationFailure("Todo description is required and cannot consist of exclusively whitespace characters.");
+            return Result<Todo>.Failure(TodoErrors.DescriptionValueNotValid());
         }
         else if (description.Length > 40)
         {
-            return Result<Todo>.ValidationFailure("Todo description cannot exceed 40 characters.");
+            return Result<Todo>.Failure(TodoErrors.DescriptionLengthNotValid(255));
         }
         else
         {
@@ -60,11 +61,11 @@ public sealed class Todo : Entity<Todo>
     {
         if (string.IsNullOrWhiteSpace(description))
         {
-            return Result<Todo>.ValidationFailure("Todo description is required and cannot consist of exclusively whitespace characters.");
+            return Result<Todo>.Failure(TodoErrors.DescriptionValueNotValid());
         }
         else if (description.Length > 40)
         {
-            return Result<Todo>.ValidationFailure("Todo description cannot exceed 40 characters.");
+            return Result<Todo>.Failure(TodoErrors.DescriptionLengthNotValid(255));
         }
         else
         {

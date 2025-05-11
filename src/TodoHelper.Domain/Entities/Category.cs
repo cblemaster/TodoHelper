@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Domain.BaseClasses;
+using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
 
@@ -25,11 +26,11 @@ public sealed class Category : Entity<Category>
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            return Result<Category>.ValidationFailure("Category name is required and cannot consist of exclusively whitespace characters.");
+            return Result<Category>.Failure(CategoryErrors.NameValueNotValid());
         }
         else if (name.Length > 40)
         {
-            return Result<Category>.ValidationFailure("Category name cannot exceed 40 characters.");
+            return Result<Category>.Failure(CategoryErrors.NameLengthNotValid(40));
         }
         else
         {
@@ -44,11 +45,11 @@ public sealed class Category : Entity<Category>
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            return Result<Category>.ValidationFailure("Category name is required and cannot consist of exclusively whitespace characters.");
+            return Result<Category>.Failure(CategoryErrors.NameValueNotValid());
         }
         else if (name.Length > 40)
         {
-            return Result<Category>.ValidationFailure("Category name cannot exceed 40 characters.");
+            return Result<Category>.Failure(CategoryErrors.NameLengthNotValid(40));
         }
         else
         {
