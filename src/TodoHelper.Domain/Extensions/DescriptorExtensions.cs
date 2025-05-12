@@ -15,11 +15,11 @@ internal static class DescriptorExtensions
 
         if (string.IsNullOrEmpty(attribute))
         {
-            attribute = "<field name>"; // TODO: return failure result
+            return Result<Descriptor>.Failure(DescriptorErrors.AttributeNameNotValid());
         }
         if (maxLength < 1)
         {
-            maxLength = 1; // TODO: return failure result
+            return Result<Descriptor>.Failure(DescriptorErrors.MaxLengthNotValid());
         }
 
         string validationError = string.Empty;
