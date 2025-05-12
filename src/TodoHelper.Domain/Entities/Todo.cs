@@ -37,7 +37,7 @@ public sealed class Todo : Entity<Todo>
     #region Factory
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
-        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");
+        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");   // TODO: magic numbers and strings
         Result<Descriptor> result = descriptionDescriptor.Validate();
 
         if (result.IsFailure)
@@ -58,7 +58,7 @@ public sealed class Todo : Entity<Todo>
 
     public static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
     {
-        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");
+        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");   // TODO: magic numbers and strings
         Result<Descriptor> result = descriptionDescriptor.Validate();
 
         if (result.IsFailure)

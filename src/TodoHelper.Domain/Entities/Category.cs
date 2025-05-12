@@ -26,7 +26,7 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateNew(string name)
     {
-        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");
+        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");   // TODO: magic numbers and strings
         Result<Descriptor> result = nameDescriptor.Validate();
 
         if (result.IsFailure)
@@ -43,7 +43,7 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
     {
-        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");
+        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");   // TODO: magic numbers and strings
         Result<Descriptor> result = nameDescriptor.Validate();
 
         if (result.IsFailure)

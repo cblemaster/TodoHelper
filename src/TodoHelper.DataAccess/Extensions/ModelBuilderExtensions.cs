@@ -6,6 +6,7 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.DataAccess.Extensions;
 
+// TODO: magic numbers and bools
 internal static class ModelBuilderExtensions
 {
     internal static ModelBuilder ConfigureCategoryEntity(this ModelBuilder builder) =>
