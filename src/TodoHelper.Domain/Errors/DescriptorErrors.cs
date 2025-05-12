@@ -1,7 +1,7 @@
 ﻿
 namespace TodoHelper.Domain.Errors;
 
-internal static class DescriptorErrors
+public static class DescriptorErrors
 {
-    internal static Error NotValid(string error) => new(error);
+    public static Error NotValid(string error) => new(error);
 }
