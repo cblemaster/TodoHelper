@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Immutable;
 using TodoHelper.Domain.BaseClasses;
+using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
@@ -26,7 +27,7 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateNew(string name)
     {
-        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");   // TODO: magic numbers and strings
+        Descriptor nameDescriptor = new(Value: name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
         Result<Descriptor> result = nameDescriptor.Validate();
 
         if (result.IsFailure)
@@ -43,7 +44,7 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
     {
-        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");   // TODO: magic numbers and strings
+        Descriptor nameDescriptor = new(Value: name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
         Result<Descriptor> result = nameDescriptor.Validate();
 
         if (result.IsFailure)

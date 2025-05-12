@@ -1,5 +1,6 @@
 ﻿
 using TodoHelper.Domain.BaseClasses;
+using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
@@ -37,7 +38,7 @@ public sealed class Todo : Entity<Todo>
     #region Factory
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
-        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");   // TODO: magic numbers and strings
+        Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
         Result<Descriptor> result = descriptionDescriptor.Validate();
 
         if (result.IsFailure)
@@ -58,7 +59,7 @@ public sealed class Todo : Entity<Todo>
 
     public static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
     {
-        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");   // TODO: magic numbers and strings
+        Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
         Result<Descriptor> result = descriptionDescriptor.Validate();
 
         if (result.IsFailure)
