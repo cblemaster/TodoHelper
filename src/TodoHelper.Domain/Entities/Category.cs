@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Immutable;
 using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Extensions;
@@ -10,7 +11,7 @@ namespace TodoHelper.Domain.Entities;
 public sealed class Category : Entity<Category>
 {
     public override Identifier<Category> Id { get; }
-    public IEnumerable<Todo> Todos { get; }
+    public ImmutableList<Todo> Todos { get; }
     public Descriptor Name { get; }
 
 #pragma warning disable CS8618
@@ -20,7 +21,7 @@ public sealed class Category : Entity<Category>
     {
         Id = id;
         Name = name;
-        Todos = todos;
+        Todos = todos.ToImmutableList<Todo>();
     }
 
     public static Result<Category> CreateNew(string name)
