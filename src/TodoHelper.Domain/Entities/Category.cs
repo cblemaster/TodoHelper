@@ -1,6 +1,7 @@
 ﻿
 using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Errors;
+using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
 
@@ -24,18 +25,16 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateNew(string name)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");
+        Result<Descriptor> result = nameDescriptor.Validate();
+
+        if (result.IsFailure)
         {
-            return Result<Category>.Failure(CategoryErrors.NameValueNotValid());
-        }
-        else if (name.Length > 40)
-        {
-            return Result<Category>.Failure(CategoryErrors.NameLengthNotValid(40));
+            return Result<Category>.Failure(DescriptorErrors.NotValid(result.Error.Description));
         }
         else
         {
             Identifier<Category> id = Identifier<Category>.CreateNew();
-            Descriptor nameDescriptor = new(name);
             Category category = new(id, nameDescriptor, []);
             return Result<Category>.Success(category);
         }
@@ -43,19 +42,17 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        Descriptor nameDescriptor = new(Value: name, MaxLength: 40, "Category name");
+        Result<Descriptor> result = nameDescriptor.Validate();
+
+        if (result.IsFailure)
         {
-            return Result<Category>.Failure(CategoryErrors.NameValueNotValid());
-        }
-        else if (name.Length > 40)
-        {
-            return Result<Category>.Failure(CategoryErrors.NameLengthNotValid(40));
+            return Result<Category>.Failure(DescriptorErrors.NotValid(result.Error.Description));
         }
         else
         {
             Identifier<Category> idValue = Identifier<Category>.Create(id);
-            Descriptor nameValue = new(name);
-            Category category = new(idValue, nameValue, todos);
+            Category category = new(idValue, nameDescriptor, todos);
             return Result<Category>.Success(category);
         }
     }

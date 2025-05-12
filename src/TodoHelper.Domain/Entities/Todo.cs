@@ -1,6 +1,8 @@
 ﻿
+using System.Xml.Linq;
 using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Errors;
+using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
 
@@ -36,46 +38,42 @@ public sealed class Todo : Entity<Todo>
     #region Factory
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
     {
-        if (string.IsNullOrWhiteSpace(description))
+        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");
+        Result<Descriptor> result = descriptionDescriptor.Validate();
+
+        if (result.IsFailure)
         {
-            return Result<Todo>.Failure(TodoErrors.DescriptionValueNotValid());
-        }
-        else if (description.Length > 40)
-        {
-            return Result<Todo>.Failure(TodoErrors.DescriptionLengthNotValid(255));
+            return Result<Todo>.Failure(DescriptorErrors.NotValid(result.Error.Description));
         }
         else
         {
             Identifier<Todo> id = Identifier<Todo>.CreateNew();
             Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
-            Descriptor descriptionValue = new(description);
             DueDate? dueDateValue = new(dueDate);
             CompleteDate? completeDateValue = null;
             Importance importanceValue = new(false);
-            Todo todo = new(id, categoryIdValue, descriptionValue, dueDateValue, completeDateValue, importanceValue);
+            Todo todo = new(id, categoryIdValue, descriptionDescriptor, dueDateValue, completeDateValue, importanceValue);
             return Result<Todo>.Success(todo);
         }
     }
 
     public static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
     {
-        if (string.IsNullOrWhiteSpace(description))
+        Descriptor descriptionDescriptor = new(Value: description, MaxLength: 255, "Todo description");
+        Result<Descriptor> result = descriptionDescriptor.Validate();
+
+        if (result.IsFailure)
         {
-            return Result<Todo>.Failure(TodoErrors.DescriptionValueNotValid());
-        }
-        else if (description.Length > 40)
-        {
-            return Result<Todo>.Failure(TodoErrors.DescriptionLengthNotValid(255));
+            return Result<Todo>.Failure(DescriptorErrors.NotValid(result.Error.Description));
         }
         else
         {
             Identifier<Todo> idValue = Identifier<Todo>.Create(id);
             Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
-            Descriptor descriptionValue = new(description);
             DueDate? dueDateValue = new(dueDate);
             CompleteDate? completeDateValue = new(completeDate);
             Importance importanceValue = new(isImportant);
-            Todo todo = new(idValue, categoryIdValue, descriptionValue, dueDateValue, completeDateValue, importanceValue);
+            Todo todo = new(idValue, categoryIdValue, descriptionDescriptor, dueDateValue, completeDateValue, importanceValue);
             return Result<Todo>.Success(todo);
         }
     }
