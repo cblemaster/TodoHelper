@@ -22,7 +22,7 @@ public sealed class Category : Entity<Category>
     {
         Id = id;
         Name = name;
-        Todos = todos.ToImmutableList<Todo>();
+        Todos = [.. todos];
     }
 
     public static Result<Category> CreateNew(string name)

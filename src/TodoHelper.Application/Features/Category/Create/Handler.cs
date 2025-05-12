@@ -13,7 +13,8 @@ namespace TodoHelper.Application.Features.Category.Create;
 
 internal class Handler(ITodosRepository<_Category> repository) : ICommandHandler<Command, Response>
 {
-    ITodosRepository<_Category> _repository = repository;
+    private readonly ITodosRepository<_Category> _repository = repository;
+
     public async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         Descriptor nameDescriptor = new(command.Name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
