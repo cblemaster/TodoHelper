@@ -21,7 +21,7 @@ internal static class DescriptorExtensions
         {
             maxLength = 1;
         }
-                
+
         string validationError = string.Empty;
         if (string.IsNullOrWhiteSpace(descriptor.Value))
         {

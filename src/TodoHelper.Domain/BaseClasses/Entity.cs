@@ -1,4 +1,5 @@
-﻿namespace TodoHelper.Domain.BaseClasses;
+﻿
+namespace TodoHelper.Domain.BaseClasses;
 
 public abstract class Entity<T>
 {
