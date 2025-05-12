@@ -9,25 +9,25 @@ public sealed class TodosRepository<T>(TodosDbContext context) : ITodosRepositor
 {
     private readonly TodosDbContext _context = context;
 
-    public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(T entity)
     {
         _ = _context.Set<T>().Add(entity);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        _ = await _context.SaveChangesAsync();
     }
 
-    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) => await _context.Set<T>().FindAsync([id], cancellationToken: cancellationToken);
+    public async Task<T?> GetByIdAsync(Guid id) => await _context.Set<T>().FindAsync(id);
 
-    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) => await _context.Set<T>().ToListAsync(cancellationToken);
+    public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
 
-    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(T entity)
     {
         _ = _context.Set<T>().Update(entity);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        _ = await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(T entity)
     {
         _ = _context.Set<T>().Remove(entity);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        _ = await _context.SaveChangesAsync();
     }
 }
