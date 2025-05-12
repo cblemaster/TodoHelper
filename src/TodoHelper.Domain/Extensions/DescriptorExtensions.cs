@@ -5,9 +5,9 @@ using TodoHelper.Domain.ValueObjects;
 
 namespace TodoHelper.Domain.Extensions;
 
-internal static class DescriptorExtensions
+public static class DescriptorExtensions
 {
-    internal static Result<Descriptor> Validate(this Descriptor descriptor)
+    public static Result<Descriptor> Validate(this Descriptor descriptor)
     {
         string descriptorValue = descriptor.Value;
         string attribute = descriptor.AttributeName;
