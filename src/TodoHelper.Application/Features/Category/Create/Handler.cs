@@ -1,6 +1,6 @@
 ﻿
 using TodoHelper.Application.Extensions;
-using TodoHelper.Application.Interfaces;
+using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
@@ -11,11 +11,9 @@ using _Category = TodoHelper.Domain.Entities.Category;
 
 namespace TodoHelper.Application.Features.Category.Create;
 
-internal class Handler(ITodosRepository<_Category> repository) : ICommandHandler<Command, Response>
+internal class Handler(ITodosRepository<_Category> repository) : HandlerBase<Command, Response>(repository)
 {
-    private readonly ITodosRepository<_Category> _repository = repository;
-
-    public async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         Descriptor nameDescriptor = new(command.Name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
         Result<Descriptor> descriptorResult = nameDescriptor.Validate();
