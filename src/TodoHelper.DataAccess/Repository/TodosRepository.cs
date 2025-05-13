@@ -15,7 +15,7 @@ public sealed class TodosRepository<T>(TodosDbContext context) : ITodosRepositor
         _ = await _context.SaveChangesAsync();
     }
 
-    public async Task<T?> GetByIdAsync(Guid id) => await _context.Set<T>().FindAsync(id);
+    public async Task<T?> GetByIdAsync(Guid id) => await _context.Set<T>().FindAsync(Identifier<T>.Create(id));
 
     public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
 
