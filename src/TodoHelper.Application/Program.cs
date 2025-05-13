@@ -7,8 +7,8 @@ using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
-using Create = TodoHelper.Application.Features.Category.Create;
-using GetAll = TodoHelper.Application.Features.Category.GetAll;
+using CreateCategory = TodoHelper.Application.Features.Category.Create;
+using GetCategories = TodoHelper.Application.Features.Category.GetAll;
 using GetCategory = TodoHelper.Application.Features.Category.Get;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -18,8 +18,8 @@ builder.Services.AddDbContext<TodosDbContext>(options => options.UseSqlServer(co
 
 builder.Services.AddScoped<ITodosRepository<Category>, TodosRepository<Category>>();
 builder.Services.AddScoped<ITodosRepository<Todo>, TodosRepository<Todo>>();
-builder.Services.AddScoped<Create.Handler>();
-builder.Services.AddScoped<GetAll.Handler>();
+builder.Services.AddScoped<CreateCategory.Handler>();
+builder.Services.AddScoped<GetCategories.Handler>();
 builder.Services.AddScoped<GetCategory.Handler>();
 
 WebApplication app = builder.Build();
@@ -28,24 +28,24 @@ app.MapGet("/", () => "Welcome!");
 
 app.MapPost(pattern: "/category",
     handler: async Task<Results<BadRequest<string>, Created<CategoryDTO>, InternalServerError<string>>>
-    (ITodosRepository<Category> repository, Create.Command command, Create.Handler handler) =>
+    (ITodosRepository<Category> repository, CreateCategory.Command command, CreateCategory.Handler handler) =>
     {
-        Result<Create.Response> result = await handler.HandleAsync(command);
+        Result<CreateCategory.Response> result = await handler.HandleAsync(command);
         return result.IsFailure && result.Error is Error error
             ? TypedResults.BadRequest(error.Description)
-            : result.IsSuccess && result.Value is not null and Create.Response response
+            : result.IsSuccess && result.Value is not null and CreateCategory.Response response
                 ? TypedResults.Created("no uri for this resource", response.Category)
                 : TypedResults.InternalServerError(Error.Unknown.Description);
     });
 app.MapGet(pattern: "/category",
     handler: async Task<Results<InternalServerError<string>, Ok<IEnumerable<CategoryDTO>>>>
-    (ITodosRepository<Category> repository, GetAll.Handler handler) =>
+    (ITodosRepository<Category> repository, GetCategories.Handler handler) =>
     {
-        GetAll.Command command = new();
-        Result<GetAll.Response> result = await handler.HandleAsync(command);
+        GetCategories.Command command = new();
+        Result<GetCategories.Response> result = await handler.HandleAsync(command);
         return result.IsFailure && result.Error is Error error
             ? TypedResults.InternalServerError(error.Description)
-            : result.IsSuccess && result.Value is not null and GetAll.Response response
+            : result.IsSuccess && result.Value is not null and GetCategories.Response response
                 ? TypedResults.Ok(response.Categories)
                 : TypedResults.InternalServerError(Error.Unknown.Description);
     });
