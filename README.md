@@ -31,8 +31,5 @@ An application with basic todo management features, including custom categories,
 + Todos must have a category
 ### Improvement opportunities
 + Implement a proper specifications pattern
-+ Reduce code duplication in handlers and endpoints
-+ Implement fluent validation, see if rules can be modeled with fv
-+ Implement additional result types (validation result, found result, domain rule result, etc.)
 + Implement logging
 + Add tests (what kinds?)
