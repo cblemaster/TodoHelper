@@ -25,11 +25,11 @@ public static class DescriptorExtensions
         string validationError = string.Empty;
         if (string.IsNullOrWhiteSpace(descriptor.Value))
         {
-            validationError += $"\n{attribute} is required and cannot consist exclusively of whitespace characters.";
+            validationError = $"{attribute} is required and cannot consist exclusively of whitespace characters.";
         }
-        if (descriptorValue.Length > maxLength)
+        else if (descriptorValue.Length > maxLength)
         {
-            validationError += $"\n{attribute} must be {maxLength} characters or fewer.";
+            validationError = $"{attribute} must be {maxLength} characters or fewer.";
         }
 
         return validationError != string.Empty
