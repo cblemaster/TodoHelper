@@ -12,14 +12,14 @@ internal class Handler(ITodosRepository<_Category> repository) : HandlerBase<Com
 {
     public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
-        _Category? dto = await _repository.GetByIdAsync(command.Id);
-        if (dto is null)
+        _Category? entity = await _repository.GetByIdAsync(command.Id);
+        if (entity is null)
         {
             return Result<Response>.Failure(Error.NotFound);
         }
         else
         {
-            Response response = new(dto.MapToDTO());
+            Response response = new(entity.MapToDTO());
             return Result<Response>.Success(response);
         }
     }
