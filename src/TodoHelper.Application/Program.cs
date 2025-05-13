@@ -9,6 +9,7 @@ using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using Create = TodoHelper.Application.Features.Category.Create;
 using GetAll = TodoHelper.Application.Features.Category.GetAll;
+using GetCategory = TodoHelper.Application.Features.Category.Get;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<ITodosRepository<Category>, TodosRepository<Category>
 builder.Services.AddScoped<ITodosRepository<Todo>, TodosRepository<Todo>>();
 builder.Services.AddScoped<Create.Handler>();
 builder.Services.AddScoped<GetAll.Handler>();
+builder.Services.AddScoped<GetCategory.Handler>();
 
 WebApplication app = builder.Build();
 
@@ -45,6 +47,18 @@ app.MapGet(pattern: "/category",
             ? TypedResults.InternalServerError(error.Description)
             : result.IsSuccess && result.Value is not null and GetAll.Response response
                 ? TypedResults.Ok(response.Categories)
+                : TypedResults.InternalServerError(Error.Unknown.Description);
+    });
+app.MapGet(pattern: "/category/{id:guid}",
+    handler: async Task<Results<InternalServerError<string>, NotFound<string>, Ok<CategoryDTO>>>
+    (ITodosRepository<Category> repository, GetCategory.Handler handler, Guid id) =>
+    {
+        GetCategory.Command command = new(id);
+        Result<GetCategory.Response> result = await handler.HandleAsync(command);
+        return result.IsFailure && result.Error is Error error
+            ? TypedResults.NotFound(error.Description)
+            : result.IsSuccess && result.Value is not null and GetCategory.Response response
+                ? TypedResults.Ok(response.Category)
                 : TypedResults.InternalServerError(Error.Unknown.Description);
     });
 
