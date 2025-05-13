@@ -10,6 +10,7 @@ using TodoHelper.Domain.Results;
 using CreateCategory = TodoHelper.Application.Features.Category.Create;
 using GetCategories = TodoHelper.Application.Features.Category.GetAll;
 using GetCategory = TodoHelper.Application.Features.Category.Get;
+using DeleteCategory = TodoHelper.Application.Features.Category.Delete;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<ITodosRepository<Todo>, TodosRepository<Todo>>();
 builder.Services.AddScoped<CreateCategory.Handler>();
 builder.Services.AddScoped<GetCategories.Handler>();
 builder.Services.AddScoped<GetCategory.Handler>();
+builder.Services.AddScoped<DeleteCategory.Handler>();
 
 WebApplication app = builder.Build();
 
@@ -59,6 +61,18 @@ app.MapGet(pattern: "/category/{id:guid}",
             ? TypedResults.NotFound(error.Description)
             : result.IsSuccess && result.Value is not null and GetCategory.Response response
                 ? TypedResults.Ok(response.Category)
+                : TypedResults.InternalServerError(Error.Unknown.Description);
+    });
+app.MapDelete(pattern: "/category/{id:guid}",
+    handler: async Task<Results<InternalServerError<string>, NotFound<string>, NoContent>>
+    (ITodosRepository<Category> repository, DeleteCategory.Handler handler, Guid id) =>
+    {
+        DeleteCategory.Command command = new(id);
+        Result<DeleteCategory.Response> result = await handler.HandleAsync(command);
+        return result.IsFailure && result.Error is Error error
+            ? TypedResults.NotFound(error.Description)
+            : result.IsSuccess && result.Value is not null and DeleteCategory.Response response
+                ? TypedResults.NoContent()
                 : TypedResults.InternalServerError(Error.Unknown.Description);
     });
 
