@@ -25,39 +25,27 @@ WebApplication app = builder.Build();
 app.MapGet("/", () => "Welcome!");
 
 app.MapPost(pattern: "/category",
-    handler: async Task<Results<BadRequest<string>, Created<CategoryDTO>, InternalServerError<string>>>  (ITodosRepository<Category> repository, Create.Command command, Create.Handler handler) =>
+    handler: async Task<Results<BadRequest<string>, Created<CategoryDTO>, InternalServerError<string>>>
+    (ITodosRepository<Category> repository, Create.Command command, Create.Handler handler) =>
     {
         Result<Create.Response> result = await handler.HandleAsync(command);
-        if (result.IsFailure && result.Error is Error error)
-        {
-            return TypedResults.BadRequest(error.Description);
-        }
-        else if (result.IsSuccess && result.Value is not null and Create.Response response)
-        {
-            return TypedResults.Created("no uri for this resource", result.Value.Category);
-        }
-        else
-        {
-            return TypedResults.InternalServerError(Error.Unknown.Description);
-        }
+        return result.IsFailure && result.Error is Error error
+            ? TypedResults.BadRequest(error.Description)
+            : result.IsSuccess && result.Value is not null and Create.Response response
+                ? TypedResults.Created("no uri for this resource", response.Category)
+                : TypedResults.InternalServerError(Error.Unknown.Description);
     });
 app.MapGet(pattern: "/category",
-    handler: async Task<Results<InternalServerError<string>, Ok<IEnumerable<CategoryDTO>>>>  (ITodosRepository<Category> repository, GetAll.Handler handler) =>
+    handler: async Task<Results<InternalServerError<string>, Ok<IEnumerable<CategoryDTO>>>>
+    (ITodosRepository<Category> repository, GetAll.Handler handler) =>
     {
         GetAll.Command command = new();
         Result<GetAll.Response> result = await handler.HandleAsync(command);
-        if (result.IsFailure && result.Error is Error error)
-        {
-            return TypedResults.InternalServerError(error.Description);
-        }
-        else if (result.IsSuccess && result.Value is not null and GetAll.Response response)
-        {
-            return TypedResults.Ok(response.Categories);
-        }
-        else
-        {
-            return TypedResults.InternalServerError(Error.Unknown.Description);
-        }
+        return result.IsFailure && result.Error is Error error
+            ? TypedResults.InternalServerError(error.Description)
+            : result.IsSuccess && result.Value is not null and GetAll.Response response
+                ? TypedResults.Ok(response.Categories)
+                : TypedResults.InternalServerError(Error.Unknown.Description);
     });
 
 app.Run();
