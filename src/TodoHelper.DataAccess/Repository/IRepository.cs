@@ -3,7 +3,7 @@ using TodoHelper.Domain.BaseClasses;
 
 namespace TodoHelper.DataAccess.Repository;
 
-public interface ITodosRepository<T> where T : Entity<T>
+public interface IRepository<T> where T : Entity<T>
 {
     Task CreateAsync(T entity);
     Task<T?> GetByIdAsync(Guid id);

@@ -5,7 +5,7 @@ using TodoHelper.Domain.BaseClasses;
 
 namespace TodoHelper.DataAccess.Repository;
 
-public sealed class TodosRepository<T>(TodosDbContext context) : ITodosRepository<T> where T : Entity<T>
+public sealed class Repository<T>(TodosDbContext context) : IRepository<T> where T : Entity<T>
 {
     private readonly TodosDbContext _context = context;
 
