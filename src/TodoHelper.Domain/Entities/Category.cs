@@ -24,38 +24,29 @@ public sealed class Category : Entity<Category>
         Name = name;
         Todos = [.. todos];
     }
-
-    public static Result<Category> CreateNew(string name)
-    {
-        Descriptor nameDescriptor = new(Value: name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
-        Result<Descriptor> result = nameDescriptor.Validate();
-
-        if (result.IsFailure)
-        {
-            return Result<Category>.Failure(DescriptorErrors.NotValid(result.Error.Description));
-        }
-        else
-        {
-            Identifier<Category> id = Identifier<Category>.CreateNew();
-            Category category = new(id, nameDescriptor, []);
-            return Result<Category>.Success(category);
-        }
-    }
-
+    
     public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
     {
         Descriptor nameDescriptor = new(Value: name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
         Result<Descriptor> result = nameDescriptor.Validate();
 
-        if (result.IsFailure)
+        if (result.IsFailure && result.Error is Error error)
         {
-            return Result<Category>.Failure(DescriptorErrors.NotValid(result.Error.Description));
+            return Result<Category>.Failure(Error.NotValid(error.Description));
+        }
+        else if (result.IsSuccess && result.Value is Descriptor descriptor)
+        {
+            Identifier<Category> idValue = Identifier<Category>.Create(id);
+            Category category = new(idValue, descriptor, todos);
+            return Result<Category>.Success(category);
         }
         else
         {
-            Identifier<Category> idValue = Identifier<Category>.Create(id);
-            Category category = new(idValue, nameDescriptor, todos);
-            return Result<Category>.Success(category);
+            return Result<Category>.Failure(Error.Unknown);
         }
     }
+
+    public static Result<Category> CreateNew(string name) => Create(Guid.NewGuid(), name, []);
+    
+    public Result<Category> Update(string name) => Create(Id.Value, name, Todos);
 }

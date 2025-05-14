@@ -1,6 +1,6 @@
 ﻿namespace TodoHelper.Domain.BaseClasses;
 
-public class Identifier<T>
+public sealed class Identifier<T>
 {
     public Guid Value { get; }
 

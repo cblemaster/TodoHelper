@@ -1,9 +1,12 @@
 ﻿
 namespace TodoHelper.Domain.Errors;
 
-public sealed record Error(string Description)
+public sealed record Error(ErrorCode ErrorCode, string Description)
 {
-    public static readonly Error None = new(string.Empty);
-    public static readonly Error Unknown = new("An unknown error occurred.");
-    public static readonly Error NotFound = new("The requested resource cannot be found.");
+    public static readonly Error None = new(ErrorCode.None, string.Empty);
+    public static readonly Error Unknown = new(ErrorCode.Unknown, "An unknown error occurred.");
+    public static Error NotFound(string resource) => new(ErrorCode.NotFound, $"The requested {resource} cannot be found.");
+    public static Error NotValid(string description) => new(ErrorCode.NotValid, description);
+    public static Error StringValueNotValid(string attribute) => new(ErrorCode.NotValid, $"{attribute} is required and cannot consist of exclusively whitespace characters.");
+    public static Error StringLengthNotValid(string attribute, int maxLength) => new(ErrorCode.NotValid, $"{attribute} must be {maxLength} characters or fewer.");
 }

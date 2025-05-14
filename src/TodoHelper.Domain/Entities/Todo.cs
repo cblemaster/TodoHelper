@@ -36,46 +36,32 @@ public sealed class Todo : Entity<Todo>
     #endregion Constructors
 
     #region Factory
-    public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate)
-    {
-        Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
-        Result<Descriptor> result = descriptionDescriptor.Validate();
-
-        if (result.IsFailure)
-        {
-            return Result<Todo>.Failure(DescriptorErrors.NotValid(result.Error.Description));
-        }
-        else
-        {
-            Identifier<Todo> id = Identifier<Todo>.CreateNew();
-            Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
-            DueDate? dueDateValue = new(dueDate);
-            CompleteDate? completeDateValue = null;
-            Importance importanceValue = new(false);
-            Todo todo = new(id, categoryIdValue, descriptionDescriptor, dueDateValue, completeDateValue, importanceValue);
-            return Result<Todo>.Success(todo);
-        }
-    }
-
     public static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
     {
         Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
         Result<Descriptor> result = descriptionDescriptor.Validate();
 
-        if (result.IsFailure)
+        if (result.IsFailure && result.Error is Error error)
         {
-            return Result<Todo>.Failure(DescriptorErrors.NotValid(result.Error.Description));
+            return Result<Todo>.Failure(Error.NotValid(error.Description));
         }
-        else
+        else if (result.IsSuccess && result.Value is Descriptor descriptor)
         {
             Identifier<Todo> idValue = Identifier<Todo>.Create(id);
             Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
             DueDate? dueDateValue = new(dueDate);
             CompleteDate? completeDateValue = new(completeDate);
             Importance importanceValue = new(isImportant);
-            Todo todo = new(idValue, categoryIdValue, descriptionDescriptor, dueDateValue, completeDateValue, importanceValue);
+            Todo todo = new(idValue, categoryIdValue, descriptor, dueDateValue, completeDateValue, importanceValue);
             return Result<Todo>.Success(todo);
         }
+        else
+        {
+            return Result<Todo>.Failure(Error.Unknown);
+        }
     }
+
+    public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate) =>
+        Create(Guid.NewGuid(), categoryId, description, dueDate, null, false);
     #endregion Factory
 }

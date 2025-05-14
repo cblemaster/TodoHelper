@@ -15,25 +15,23 @@ public static class DescriptorExtensions
 
         if (string.IsNullOrEmpty(attribute))
         {
-            return Result<Descriptor>.Failure(DescriptorErrors.AttributeNameNotValid());
+            return Result<Descriptor>.Failure(Error.StringValueNotValid(attribute));
         }
         if (maxLength < 1)
         {
-            return Result<Descriptor>.Failure(DescriptorErrors.MaxLengthNotValid());
+            return Result<Descriptor>.Failure(Error.NotValid("Max length must be one (1) or more."));
         }
 
         string validationError = string.Empty;
-        if (string.IsNullOrWhiteSpace(descriptor.Value))
-        {
-            validationError = $"{attribute} is required and cannot consist exclusively of whitespace characters.";
-        }
-        else if (descriptorValue.Length > maxLength)
-        {
-            validationError = $"{attribute} must be {maxLength} characters or fewer.";
-        }
-
-        return validationError != string.Empty
-            ? Result<Descriptor>.Failure(DescriptorErrors.NotValid(validationError))
-            : Result<Descriptor>.Success(descriptor);
+        
+        return string.IsNullOrWhiteSpace(descriptor.Value)
+            ? Result<Descriptor>.Failure(Error.StringValueNotValid(attribute))
+            : descriptorValue.Length > maxLength
+                
+                ? Result<Descriptor>.Failure(Error.StringLengthNotValid(attribute, maxLength))
+                : validationError != string.Empty
+                    
+                    ? Result<Descriptor>.Failure(Error.NotValid(validationError))
+                    : Result<Descriptor>.Success(descriptor);
     }
 }
