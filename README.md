@@ -2,7 +2,8 @@
 ### About
 An application with basic todo management features, including custom categories, important flags, and optional due dates
 ### Built with
-.NET 9, C#13
++ .NET 9, C#13
++ EF Core 9.x.x
 ### Features
 + See categories, sorted by name
 + Create a category
