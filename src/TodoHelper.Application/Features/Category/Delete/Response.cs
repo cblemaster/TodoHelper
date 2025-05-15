@@ -1,4 +1,4 @@
 ﻿
 namespace TodoHelper.Application.Features.Category.Delete;
 
-internal record Response();
+internal sealed record Response();

@@ -3,4 +3,4 @@ using TodoHelper.Application.DataTransferObjects;
 
 namespace TodoHelper.Application.Features.Category.Create;
 
-internal record Response(CategoryDTO Category);
+internal sealed record Response(CategoryDTO Category);
