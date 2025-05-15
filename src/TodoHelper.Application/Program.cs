@@ -2,20 +2,21 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application.DataTransferObjects;
+using TodoHelper.Application.Extensions;
 using TodoHelper.DataAccess.Context;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using CreateCategory = TodoHelper.Application.Features.Category.Create;
+using CreateTodo = TodoHelper.Application.Features.Todo.Create;
+using DeleteCategory = TodoHelper.Application.Features.Category.Delete;
+using DeleteTodo = TodoHelper.Application.Features.Todo.Delete;
 using GetCategories = TodoHelper.Application.Features.Category.GetAll;
 using GetCategory = TodoHelper.Application.Features.Category.Get;
-using DeleteCategory = TodoHelper.Application.Features.Category.Delete;
-using UpdateCategory = TodoHelper.Application.Features.Category.Update;
-using CreateTodo = TodoHelper.Application.Features.Todo.Create;
-using GetTodos = TodoHelper.Application.Features.Todo.GetAll;
 using GetTodo = TodoHelper.Application.Features.Todo.Get;
-using DeleteTodo = TodoHelper.Application.Features.Todo.Delete;
+using GetTodos = TodoHelper.Application.Features.Todo.GetAll;
+using UpdateCategory = TodoHelper.Application.Features.Category.Update;
 using UpdateTodo = TodoHelper.Application.Features.Todo.Update;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -23,19 +24,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 string conn = builder.Configuration.GetConnectionString("todo-helper-conn") ?? "Error getting connection string.";
 builder.Services.AddDbContext<TodosDbContext>(options => options.UseSqlServer(conn));
 
-builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
-builder.Services.AddScoped<IRepository<Todo>, Repository<Todo>>();
-builder.Services.AddScoped<CreateCategory.Handler>();
-builder.Services.AddScoped<GetCategories.Handler>();
-builder.Services.AddScoped<GetCategory.Handler>();
-builder.Services.AddScoped<UpdateCategory.Handler>();
-builder.Services.AddScoped<DeleteCategory.Handler>();
-
-builder.Services.AddScoped<CreateTodo.Handler>();
-builder.Services.AddScoped<GetTodos.Handler>();
-builder.Services.AddScoped<GetTodo.Handler>();
-builder.Services.AddScoped<UpdateTodo.Handler>();
-builder.Services.AddScoped<DeleteTodo.Handler>();
+builder.RegisterServices();
 
 WebApplication app = builder.Build();
 
