@@ -9,10 +9,11 @@ public sealed class Repository<T>(TodosDbContext context) : IRepository<T> where
 {
     private readonly TodosDbContext _context = context;
 
-    public async Task CreateAsync(T entity)
+    public async Task<T> CreateAsync(T entity)
     {
         _ = _context.Set<T>().Add(entity);
         _ = await _context.SaveChangesAsync();
+        return entity;
     }
 
     public async Task<T?> GetByIdAsync(Guid id) => await _context.Set<T>().FindAsync(Identifier<T>.Create(id));
