@@ -32,8 +32,5 @@ public sealed class Repository<T>(TodosDbContext context) : IRepository<T> where
         _ = await _context.SaveChangesAsync();
     }
 
-    public void DisposeEntity(T entity)
-    {
-        _context.Entry(entity).State = EntityState.Detached;
-    }
+    public void DisposeEntity(T entity) => _context.Entry(entity).State = EntityState.Detached;
 }
