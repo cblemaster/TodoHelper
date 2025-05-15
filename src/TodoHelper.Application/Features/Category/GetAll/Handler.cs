@@ -8,7 +8,7 @@ using _Category = TodoHelper.Domain.Entities.Category;
 
 namespace TodoHelper.Application.Features.Category.GetAll;
 
-internal class Handler(ITodosRepository<_Category> repository) : HandlerBase<Command, Response>(repository)
+internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
     public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {

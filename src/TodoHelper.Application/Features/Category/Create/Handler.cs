@@ -11,31 +11,21 @@ using _Category = TodoHelper.Domain.Entities.Category;
 
 namespace TodoHelper.Application.Features.Category.Create;
 
-internal class Handler(ITodosRepository<_Category> repository) : HandlerBase<Command, Response>(repository)
+internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
     public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
-        Descriptor nameDescriptor = new(command.Name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
-        Result<Descriptor> descriptorResult = nameDescriptor.Validate();
-
-        if (descriptorResult.IsFailure)
-        {
-            return Result<Response>.Failure(DescriptorErrors.NotValid(descriptorResult.Error.Description));
-        }
-        if ((await _repository.GetAllAsync()).Select(c => c.Name.Value).ToHashSet().Contains(command.Name))
-        {
-            return Result<Response>.Failure(DescriptorErrors.NotValid($"A category named {command.Name} already exists."));
-        }
-
         Result<_Category> result = _Category.CreateNew(command.Name);
-        if (result.IsFailure)
+
+        if (result.IsFailure && result.Error is Error error)
         {
-            return Result<Response>.Failure(DescriptorErrors.NotValid(result.Error.Description));
+            return Result<Response>.Failure(Error.NotValid(error.Description));
         }
-        else if (result.IsSuccess && result.Value is not null and _Category category)
+        else if (result.IsSuccess && result.Value is _Category category)
         {
-            await _repository.CreateAsync(category);
-            return Result<Response>.Success(new Response(category.MapToDTO()));
+            category = await _repository.CreateAsync(category);
+            Response response = new(category.MapToDTO());
+            return Result<Response>.Success(response);
         }
         else
         {
