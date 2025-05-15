@@ -63,5 +63,7 @@ public sealed class Todo : Entity<Todo>
 
     public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate) =>
         Create(Guid.NewGuid(), categoryId, description, dueDate, null, false);
+
+    public Result<Todo> Update(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant) => Create(id, categoryId, description, dueDate, completeDate, isImportant);
     #endregion Factory
 }
