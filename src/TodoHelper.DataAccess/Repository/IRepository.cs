@@ -10,4 +10,5 @@ public interface IRepository<T> where T : Entity<T>
     Task<IEnumerable<T>> GetAllAsync();
     Task UpdateAsync(T entity);
     Task DeleteAsync(T entity);
+    void DisposeEntity(T entity);
 }

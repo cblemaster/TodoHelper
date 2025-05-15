@@ -23,6 +23,8 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
         {
             Result<_Category> result = entity.Update(command.Name);
 
+            _repository.DisposeEntity(entity);
+
             if (result.IsFailure && result.Error is Error error)
             {
                 return Result<Response>.Failure(Error.NotValid(error.Description));

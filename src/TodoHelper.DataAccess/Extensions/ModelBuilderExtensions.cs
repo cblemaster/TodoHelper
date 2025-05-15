@@ -28,6 +28,8 @@ internal static class ModelBuilderExtensions
                 .IsUnicode(IsUnicodeDefaultValue);
             entity.HasIndex(e => e.Name)
                 .IsUnique();
+            entity.Navigation(e => e.Todos)
+                .AutoInclude();
 #pragma warning restore IDE0058
         });
     internal static ModelBuilder ConfigureTodoEntity(this ModelBuilder builder) =>

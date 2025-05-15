@@ -12,8 +12,8 @@ namespace TodoHelper.Domain.Entities;
 public sealed class Category : Entity<Category>
 {
     public override Identifier<Category> Id { get; }
-    public ImmutableList<Todo> Todos { get; }
     public Descriptor Name { get; }
+    public IEnumerable<Todo> Todos { get; }
 
 #pragma warning disable CS8618
     private Category() { }

@@ -83,8 +83,9 @@ app.MapPut(pattern: "/category/{id:guid}",
     });
 app.MapDelete(pattern: "/category/{id:guid}",
     handler: async Task<Results<InternalServerError<string>, NotFound<string>, NoContent>>
-    (IRepository<Category> repository, DeleteCategory.Command command, DeleteCategory.Handler handler, Guid id) =>
+    (IRepository<Category> repository, DeleteCategory.Handler handler, Guid id) =>
     {
+        DeleteCategory.Command command = new(id);
         Result<DeleteCategory.Response> result = await handler.HandleAsync(command);
         return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
             ? TypedResults.NotFound(error.Description)
