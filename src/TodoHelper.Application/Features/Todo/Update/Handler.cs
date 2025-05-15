@@ -19,7 +19,8 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
         }
         else
         {
-            Result<_Todo> result = entity.Update(command.Id, command.CategoryId, command.Description, command.DueDate, command.CompleteDate, command.IsImportant);
+            Result<_Todo> result = entity.Update(command.Id, command.CategoryId,
+                command.Description, command.DueDate, command.CompleteDate, command.IsImportant);
 
             _repository.DisposeEntity(entity);
 
