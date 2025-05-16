@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
-using UpdateCategory = TodoHelper.Application.Features.Category.Update;
 using _Category = TodoHelper.Domain.Entities.Category;
+using UpdateCategory = TodoHelper.Application.Features.Category.Update;
 
 namespace TodoHelper.Application.Features.Category.Update;
 
 internal static class EndpointExtension
 {
-    internal static WebApplication MapCategoryUpdate(this WebApplication app)
+    internal static WebApplication MapUpdateCategory(this WebApplication app)
     {
         _ = app.MapPut
             (

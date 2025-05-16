@@ -1,16 +1,16 @@
 ﻿
 using Microsoft.AspNetCore.Http.HttpResults;
 using TodoHelper.DataAccess.Repository;
-using DeleteCategory = TodoHelper.Application.Features.Category.Delete;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using _Category = TodoHelper.Domain.Entities.Category;
+using DeleteCategory = TodoHelper.Application.Features.Category.Delete;
 
 namespace TodoHelper.Application.Features.Category.Delete;
 
 internal static class EndpointExtension
 {
-    internal static WebApplication DeleteCategory(this WebApplication app)
+    internal static WebApplication MapDeleteCategory(this WebApplication app)
     {
         _ = app.MapDelete
             (

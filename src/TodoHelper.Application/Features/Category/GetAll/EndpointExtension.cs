@@ -11,7 +11,7 @@ namespace TodoHelper.Application.Features.Category.GetAll;
 
 internal static class EndpointExtension
 {
-    internal static WebApplication MapCategoryGetAll(this WebApplication app)
+    internal static WebApplication MapGetAllCategory(this WebApplication app)
     {
         _ = app.MapGet
             (
