@@ -36,7 +36,7 @@ public sealed class Todo : Entity<Todo>
     #endregion Constructors
 
     #region Factory
-    public static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
+    private static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
     {
         Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
         Result<Descriptor> result = descriptionDescriptor.Validate();
