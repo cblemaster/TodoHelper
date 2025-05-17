@@ -3,7 +3,6 @@ using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Extensions;
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Results;
 using _Todo = TodoHelper.Domain.Entities.Todo;
 namespace TodoHelper.Application.Features.Todo.GetAll;

@@ -13,7 +13,7 @@ internal static class EndpointExtension
 {
     internal static WebApplication MapCreateCategory(this WebApplication app)
     {
-        _= app.MapPost
+        _ = app.MapPost
             (
                 pattern: "/category",
                 handler: async Task<Results<BadRequest<string>, Created<CategoryDTO>,

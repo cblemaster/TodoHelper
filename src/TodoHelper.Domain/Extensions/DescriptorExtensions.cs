@@ -23,14 +23,14 @@ public static class DescriptorExtensions
         }
 
         string validationError = string.Empty;
-        
+
         return string.IsNullOrWhiteSpace(descriptor.Value)
             ? Result<Descriptor>.Failure(Error.StringValueNotValid(attribute))
             : descriptorValue.Length > maxLength
-                
+
                 ? Result<Descriptor>.Failure(Error.StringLengthNotValid(attribute, maxLength))
                 : validationError != string.Empty
-                    
+
                     ? Result<Descriptor>.Failure(Error.NotValid(validationError))
                     : Result<Descriptor>.Success(descriptor);
     }

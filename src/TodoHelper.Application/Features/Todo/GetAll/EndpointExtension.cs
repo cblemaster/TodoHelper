@@ -4,8 +4,8 @@ using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
-using GetTodos = TodoHelper.Application.Features.Todo.GetAll;
 using _Todo = TodoHelper.Domain.Entities.Todo;
+using GetTodos = TodoHelper.Application.Features.Todo.GetAll;
 
 namespace TodoHelper.Application.Features.Todo.GetAll;
 

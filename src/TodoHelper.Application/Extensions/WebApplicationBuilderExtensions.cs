@@ -31,7 +31,6 @@ internal static class WebApplicationBuilderExtensions
             .AddScoped<GetTodo.Handler>()
             .AddScoped<UpdateTodo.Handler>()
             .AddScoped<DeleteTodo.Handler>();
-
         return builder;
     }
 }

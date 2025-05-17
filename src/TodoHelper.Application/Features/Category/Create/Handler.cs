@@ -2,11 +2,8 @@
 using TodoHelper.Application.Extensions;
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
-using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
-using TodoHelper.Domain.ValueObjects;
 using _Category = TodoHelper.Domain.Entities.Category;
 
 namespace TodoHelper.Application.Features.Category.Create;
