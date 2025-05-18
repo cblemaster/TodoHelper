@@ -7,10 +7,11 @@ namespace TodoHelper.Domain.ValueObjects.Extensions;
 
 public static class DescriptorExtensions
 {
-    public static Result<Descriptor> MapToValidationResult(this Descriptor descriptor)
+    public static Result<Descriptor> ValidateDescriptor(this Descriptor descriptor)
     {
         string descriptorValue = descriptor.Value;
 
+        // TODO: inform user that defaults are applied...
         string attribute =
             descriptor
             .AttributeName
@@ -19,7 +20,7 @@ public static class DescriptorExtensions
         uint maxLength = descriptor.MaxLength == 0 ? 1 : descriptor.MaxLength;
 
         return !descriptorValue.IsValueValid()
-            ? Result<Descriptor>.Failure(Error.StringValueNotValid(descriptorValue))
+            ? Result<Descriptor>.Failure(Error.StringValueNotValid(attribute))
             
             : descriptorValue.IsLengthValid(maxLength)
                 ? Result<Descriptor>.Failure(Error.StringLengthNotValid(attribute, maxLength))
