@@ -7,7 +7,7 @@ namespace TodoHelper.Domain.ValueObjects.Extensions;
 
 internal static class DescriptorExtensions
 {
-    internal static Result<Descriptor> ValidateDescriptor(this Descriptor descriptor)
+    internal static Result<Descriptor> GetValidDescriptorOrValidationError(this Descriptor descriptor)
     {
         string descriptorValue = descriptor.Value;
 
