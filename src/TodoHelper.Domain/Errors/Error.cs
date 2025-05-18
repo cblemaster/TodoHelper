@@ -8,5 +8,5 @@ public sealed record Error(ErrorCode ErrorCode, string Description)
     public static Error NotFound(string resource) => new(ErrorCode.NotFound, $"The requested {resource} cannot be found.");
     public static Error NotValid(string description) => new(ErrorCode.NotValid, description);
     public static Error StringValueNotValid(string attribute) => new(ErrorCode.NotValid, $"{attribute} is required and cannot consist of exclusively whitespace characters.");
-    public static Error StringLengthNotValid(string attribute, int maxLength) => new(ErrorCode.NotValid, $"{attribute} must be {maxLength} characters or fewer.");
+    public static Error StringLengthNotValid(string attribute, uint maxLength) => new(ErrorCode.NotValid, $"{attribute} must be {maxLength} characters or fewer.");
 }

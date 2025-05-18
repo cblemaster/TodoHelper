@@ -1,4 +1,4 @@
 ﻿
 namespace TodoHelper.Domain.ValueObjects;
 
-public record struct Descriptor(string Value, int MaxLength, string AttributeName);
+public record struct Descriptor(string Value, uint MaxLength, string AttributeName, bool IsUnique);

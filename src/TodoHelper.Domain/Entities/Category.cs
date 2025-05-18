@@ -1,9 +1,9 @@
 ﻿using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
-using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
+using TodoHelper.Domain.ValueObjects.Extensions;
 
 namespace TodoHelper.Domain.Entities;
 
@@ -26,7 +26,7 @@ public sealed class Category : Entity<Category>
     public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
     {
         Descriptor nameDescriptor = new(Value: name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
-        Result<Descriptor> result = nameDescriptor.Validate();
+        Result<Descriptor> result = nameDescriptor.MapToValidationResult();
 
         if (result.IsFailure && result.Error is Error error)
         {

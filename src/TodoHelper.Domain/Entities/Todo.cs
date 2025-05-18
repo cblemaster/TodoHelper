@@ -2,9 +2,9 @@
 using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
-using TodoHelper.Domain.Extensions;
 using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects;
+using TodoHelper.Domain.ValueObjects.Extensions;
 
 namespace TodoHelper.Domain.Entities;
 
@@ -39,7 +39,7 @@ public sealed class Todo : Entity<Todo>
     private static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
     {
         Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
-        Result<Descriptor> result = descriptionDescriptor.Validate();
+        Result<Descriptor> result = descriptionDescriptor.MapToValidationResult();
 
         if (result.IsFailure && result.Error is Error error)
         {
