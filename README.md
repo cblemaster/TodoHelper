@@ -31,6 +31,7 @@ An application with basic todo management features, including custom categories,
 + Todo description must not be null, an empty string, nor all-whitespace characters
 + Todos must have a category
 ### Improvement opportunities
++ Tackle TODO comments
 + Automated testing (what kinds?)
 + Error logging
 + Add features: recurring todos, sub-todos, reminders
