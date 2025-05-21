@@ -15,8 +15,8 @@ public sealed class Todo : Entity<Todo>
     public Category Category { get; } = default!;
     public Identifier<Category> CategoryId { get; }
     public Descriptor Description { get; }
-    public DueDate DueDate { get; }
-    public CompleteDate CompleteDate { get; }
+    public DueDate? DueDate { get; }
+    public CompleteDate? CompleteDate { get; }
     public Importance Importance { get; }
     #endregion Properties
 
@@ -26,7 +26,7 @@ public sealed class Todo : Entity<Todo>
 #pragma warning restore CS8618
 
     private Todo(Identifier<Todo> id, Identifier<Category> categoryId, Descriptor description,
-        DueDate dueDate, CompleteDate completeDate, Importance importance)
+        DueDate? dueDate, CompleteDate? completeDate, Importance importance)
     {
         Id = id;
         CategoryId = categoryId;
@@ -37,7 +37,7 @@ public sealed class Todo : Entity<Todo>
     }
 
     private Todo(Identifier<Todo> id, Category category, Identifier<Category> categoryId,
-        Descriptor description, DueDate dueDate, CompleteDate completeDate,
+        Descriptor description, DueDate? dueDate, CompleteDate? completeDate,
         Importance importance)
         : this(id, categoryId, description, dueDate, completeDate, importance) => Category = category;
 
@@ -46,8 +46,8 @@ public sealed class Todo : Entity<Todo>
     #region Factory
 
     private static Result<Todo> Create(Identifier<Todo> id, Category category,
-        Identifier<Category> categoryId, string description, DueDate dueDate,
-        CompleteDate completeDate, Importance importance)
+        Identifier<Category> categoryId, string description, DueDate? dueDate,
+        CompleteDate? completeDate, Importance importance)
     {
         Descriptor descriptionDescriptor = new(Value: description,
             DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
@@ -73,7 +73,7 @@ public sealed class Todo : Entity<Todo>
     private static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,
         string description, DateOnly? dueDate) =>
             Create(Identifier<Todo>.CreateNew(), category, categoryId, description,
-                new DueDate(dueDate), new CompleteDate(null), new Importance(false));
+                new DueDate(dueDate), completeDate: null, importance: new(false));
 
     private static Result<Todo> CreateWithNew(Identifier<Todo> id, Category category,
         Identifier<Category> categoryId, string description, DateOnly? dueDate,

@@ -49,11 +49,9 @@ internal static class ModelBuilderExtensions
                 .HasMaxLength(DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH)
                 .IsUnicode(DataDefinitions.IS_UNICODE_DEFAULT_VALUE);
             entity.Property(e => e.DueDate)
-                .HasConversion(d => d.Value, d => new DueDate(d!.Value))
-                .IsRequired(false);
+                .HasConversion(d => d.MapToNullableDateOnly(), d => new DueDate(d!.Value));
             entity.Property(e => e.CompleteDate)
-                .HasConversion(c => c.Value, c => new CompleteDate(c!.Value))
-                .IsRequired(false);
+                .HasConversion(c => c.MapToNullableDateTimeOffset(), c => new CompleteDate(c!.Value));
             entity.Property(e => e.Importance)
                 .HasConversion(i => i.IsImportant, i => new Importance(i))
                 .HasColumnName("IsImportant");
