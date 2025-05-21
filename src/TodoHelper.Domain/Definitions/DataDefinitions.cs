@@ -11,4 +11,6 @@ public static class DataDefinitions
 
     public const bool IS_CATEGORY_NAME_UNIQUE = true;
     public const bool IS_TODO_DESCRIPTION_UNIQUE = false;
+
+    public const bool IS_UNICODE_DEFAULT_VALUE = false;
 }
