@@ -1,4 +1,5 @@
-﻿using TodoHelper.Domain.BaseClasses;
+﻿
+using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
@@ -11,31 +12,35 @@ public sealed class Category : Entity<Category>
 {
     public override Identifier<Category> Id { get; }
     public Descriptor Name { get; }
-    public IEnumerable<Todo> Todos { get; }
+    public IEnumerable<Todo> Todos { get; }     // TODO: use private, immutable collection
 
 #pragma warning disable CS8618
     private Category() { }
 #pragma warning restore CS8618
+
     private Category(Identifier<Category> id, Descriptor name, IEnumerable<Todo> todos)
     {
         Id = id;
         Name = name;
-        Todos = [.. todos];
+        Todos = todos;
     }
 
-    public static Result<Category> Create(Guid id, string name, IEnumerable<Todo> todos)
+    public static Result<Category> Create(Identifier<Category> id, string name, IEnumerable<Todo> todos)
     {
-        Descriptor nameDescriptor = new(Value: name, DataDefinitions.CATEGORY_NAME_MAX_LENGTH, DataDefinitions.CATEGORY_NAME_ATTRIBUTE);
-        Result<Descriptor> result = nameDescriptor.MapToValidationResult();
+        Descriptor nameDescriptor = new(Value: name,
+            DataDefinitions.CATEGORY_NAME_MAX_LENGTH,
+            DataDefinitions.CATEGORY_NAME_ATTRIBUTE,
+            DataDefinitions.IS_CATEGORY_NAME_UNIQUE);
 
-        if (result.IsFailure && result.Error is Error error)
+        Result<Descriptor> descriptorResult = nameDescriptor.GetValidDescriptorOrValidationError();
+
+        if (descriptorResult.IsFailure && descriptorResult.Error is Error error)
         {
             return Result<Category>.Failure(Error.NotValid(error.Description));
         }
-        else if (result.IsSuccess && result.Value is Descriptor descriptor)
+        else if (descriptorResult.IsSuccess && descriptorResult.Payload is Descriptor descriptor)
         {
-            Identifier<Category> idValue = Identifier<Category>.Create(id);
-            Category category = new(idValue, descriptor, todos);
+            Category category = new(id, descriptor, todos);
             return Result<Category>.Success(category);
         }
         else
@@ -44,7 +49,9 @@ public sealed class Category : Entity<Category>
         }
     }
 
-    public static Result<Category> CreateNew(string name) => Create(Guid.NewGuid(), name, []);
+    public static Result<Category> CreateNew(string name) =>
+        Create(Identifier<Category>.CreateNew(), name, []);
 
-    public Result<Category> Update(string name) => Create(Id.Value, name, Todos);
+    public static Result<Category> CreateWithNewName(Identifier<Category> id, string name, IEnumerable<Todo> todos) =>
+        Create(id, name, todos);
 }

@@ -24,7 +24,9 @@ public sealed class Todo : Entity<Todo>
 #pragma warning disable CS8618
     private Todo() { }
 #pragma warning restore CS8618
-    private Todo(Identifier<Todo> id, Identifier<Category> categoryId, Descriptor description, DueDate? dueDate, CompleteDate? completeDate, Importance importance)
+
+    private Todo(Identifier<Todo> id, Identifier<Category> categoryId, Descriptor description,
+        DueDate? dueDate, CompleteDate? completeDate, Importance importance)
     {
         Id = id;
         CategoryId = categoryId;
@@ -33,26 +35,33 @@ public sealed class Todo : Entity<Todo>
         CompleteDate = completeDate;
         Importance = importance;
     }
+
+    private Todo(Identifier<Todo> id, Category category, Identifier<Category> categoryId,
+        Descriptor description, DueDate? dueDate, CompleteDate? completeDate,
+        Importance importance)
+        : this(id, categoryId, description, dueDate, completeDate, importance) => Category = category;
+
     #endregion Constructors
 
     #region Factory
-    private static Result<Todo> Create(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant)
+
+    private static Result<Todo> Create(Identifier<Todo> id, Category category,
+        Identifier<Category> categoryId, string description, DueDate? dueDate,
+        CompleteDate? completeDate, Importance importance)
     {
-        Descriptor descriptionDescriptor = new(Value: description, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH, DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE);
-        Result<Descriptor> result = descriptionDescriptor.MapToValidationResult();
+        Descriptor descriptionDescriptor = new(Value: description,
+            DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
+            DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE,
+            DataDefinitions.IS_TODO_DESCRIPTION_UNIQUE);
+        Result<Descriptor> result = descriptionDescriptor.GetValidDescriptorOrValidationError();
 
         if (result.IsFailure && result.Error is Error error)
         {
             return Result<Todo>.Failure(Error.NotValid(error.Description));
         }
-        else if (result.IsSuccess && result.Value is Descriptor descriptor)
+        else if (result.IsSuccess && result.Payload is Descriptor descriptor)
         {
-            Identifier<Todo> idValue = Identifier<Todo>.Create(id);
-            Identifier<Category> categoryIdValue = Identifier<Category>.Create(categoryId);
-            DueDate? dueDateValue = new(dueDate);
-            CompleteDate? completeDateValue = new(completeDate);
-            Importance importanceValue = new(isImportant);
-            Todo todo = new(idValue, categoryIdValue, descriptor, dueDateValue, completeDateValue, importanceValue);
+            Todo todo = new(id, category, categoryId, descriptor, dueDate, completeDate, importance);
             return Result<Todo>.Success(todo);
         }
         else
@@ -61,9 +70,16 @@ public sealed class Todo : Entity<Todo>
         }
     }
 
-    public static Result<Todo> CreateNew(Guid categoryId, string description, DateOnly? dueDate) =>
-        Create(Guid.NewGuid(), categoryId, description, dueDate, null, false);
+    private static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,
+        string description, DateOnly? dueDate) =>
+            Create(Identifier<Todo>.CreateNew(), category, categoryId, description,
+                new DueDate(dueDate), completeDate: null, importance: new(false));
 
-    public Result<Todo> Update(Guid id, Guid categoryId, string description, DateOnly? dueDate, DateTimeOffset? completeDate, bool isImportant) => Create(id, categoryId, description, dueDate, completeDate, isImportant);
+    private static Result<Todo> CreateWithNew(Identifier<Todo> id, Category category,
+        Identifier<Category> categoryId, string description, DateOnly? dueDate,
+        DateTimeOffset? completeDate, bool isImportant) =>
+            Create(id, category, categoryId, description, new DueDate(dueDate),
+                new CompleteDate(completeDate), new Importance(isImportant));
+
     #endregion Factory
 }
