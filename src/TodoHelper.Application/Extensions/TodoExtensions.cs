@@ -8,5 +8,5 @@ internal static class TodoExtensions
 {
     internal static TodoDTO MapToDTO(this Todo todo) =>
         new(todo.Id.Value, todo.Category.Name.Value, todo.CategoryId.Value, todo.Description.Value,
-            todo.DueDate.Value, todo.CompleteDate.Value, todo.Importance.IsImportant);
+            todo.DueDate.ToNullableDateOnly(), todo.CompleteDate.ToNullableDateTimeOffset(), todo.Importance.IsImportant);
 }

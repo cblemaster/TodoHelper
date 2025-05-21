@@ -1,7 +1,6 @@
 ﻿
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
-using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using _Todo = TodoHelper.Domain.Entities.Todo;
@@ -19,10 +18,9 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
         }
         else
         {
-            //Result<_Todo> result = entity.Update(command.Id, command.CategoryId,
-            //    command.Description, command.DueDate, command.CompleteDate, command.IsImportant);
+            Result<_Todo> result = entity.Update(command.Id, command.CategoryId,
+                command.Description, command.DueDate, command.CompleteDate, command.IsImportant);
 
-            Result<_Todo> result = Result<_Todo>.Failure(Error.NotFound(nameof(_Todo)));
             _repository.DisposeEntity(entity);
 
             if (result.IsFailure && result.Error is Error error)
