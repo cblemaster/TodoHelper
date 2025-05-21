@@ -24,7 +24,7 @@ internal static class EndpointExtension
                         Result<GetCategories.Response> result = await handler.HandleAsync(command);
                         return result.IsFailure && result.Error is not null
                             ? TypedResults.InternalServerError(Error.Unknown.Description)
-                            : result.IsSuccess && result.Value is GetCategories.Response response
+                            : result.IsSuccess && result.Payload is GetCategories.Response response
                                 ? TypedResults.Ok(response.Categories)
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }

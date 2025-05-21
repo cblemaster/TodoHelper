@@ -24,7 +24,7 @@ internal static class EndpointExtension
                         Result<GetCategory.Response> result = await handler.HandleAsync(command);
                         return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
                             ? TypedResults.NotFound(error.Description)
-                            : result.IsSuccess && result.Value is not null and GetCategory.Response response
+                            : result.IsSuccess && result.Payload is not null and GetCategory.Response response
                                 ? TypedResults.Ok(response.Category)
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }

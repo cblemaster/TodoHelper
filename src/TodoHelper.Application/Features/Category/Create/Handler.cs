@@ -18,7 +18,7 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
         {
             return Result<Response>.Failure(Error.NotValid(error.Description));
         }
-        else if (result.IsSuccess && result.Value is _Category category)
+        else if (result.IsSuccess && result.Payload is _Category category)
         {
             category = await _repository.CreateAsync(category);
             Response response = new(category.MapToDTO());

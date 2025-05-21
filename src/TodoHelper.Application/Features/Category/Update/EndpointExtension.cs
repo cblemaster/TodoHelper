@@ -26,7 +26,7 @@ internal static class EndpointExtension
                                 : error.ErrorCode == ErrorCode.NotValid
                                     ? TypedResults.BadRequest(error.Description)
                                     : TypedResults.InternalServerError(Error.Unknown.Description)
-                            : result.IsSuccess && result.Value is UpdateCategory.Response response
+                            : result.IsSuccess && result.Payload is UpdateCategory.Response response
                                 ? TypedResults.NoContent()
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }

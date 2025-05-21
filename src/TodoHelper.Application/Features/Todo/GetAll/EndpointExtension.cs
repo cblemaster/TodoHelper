@@ -23,7 +23,7 @@ internal static class EndpointExtension
                     Result<GetTodos.Response> result = await handler.HandleAsync(command);
                     return result.IsFailure && result.Error is not null
                         ? TypedResults.InternalServerError(Error.Unknown.Description)
-                        : result.IsSuccess && result.Value is GetTodos.Response response
+                        : result.IsSuccess && result.Payload is GetTodos.Response response
                             ? TypedResults.Ok(response.Todos)
                             : TypedResults.InternalServerError(Error.Unknown.Description);
                 }

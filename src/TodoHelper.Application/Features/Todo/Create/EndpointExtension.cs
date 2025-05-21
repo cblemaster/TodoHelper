@@ -22,7 +22,7 @@ internal static class EndpointExtension
                     Result<CreateTodo.Response> result = await handler.HandleAsync(command);
                     return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotValid
                         ? TypedResults.BadRequest(error.Description)
-                        : result.IsSuccess && result.Value is CreateTodo.Response response
+                        : result.IsSuccess && result.Payload is CreateTodo.Response response
                             ? TypedResults.Created("no uri for this resource", response.Todo)
                             : TypedResults.InternalServerError(Error.Unknown.Description);
                 }

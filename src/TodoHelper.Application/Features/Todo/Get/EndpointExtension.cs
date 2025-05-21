@@ -27,7 +27,7 @@ internal static class EndpointExtension
                             && error.ErrorCode == ErrorCode.NotFound
                             ? TypedResults.NotFound(error.Description)
                             : result.IsSuccess
-                                && result.Value is not null and GetTodo.Response response
+                                && result.Payload is not null and GetTodo.Response response
                                 ? TypedResults.Ok(response.Todo)
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }

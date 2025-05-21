@@ -1,7 +1,6 @@
 ﻿
 using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Domain.Entities;
-using TodoHelper.Domain.Extensions;
 
 namespace TodoHelper.Application.Extensions;
 

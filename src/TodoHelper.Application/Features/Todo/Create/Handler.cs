@@ -17,7 +17,7 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
         {
             return Result<Response>.Failure(Error.NotValid(error.Description));
         }
-        else if (result.IsSuccess && result.Value is _Todo todo)
+        else if (result.IsSuccess && result.Payload is _Todo todo)
         {
             todo = await _repository.CreateAsync(todo);
             Response response = new(todo.MapToDTO());

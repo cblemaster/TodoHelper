@@ -23,7 +23,7 @@ internal static class EndpointExtension
                         Result<DeleteCategory.Response> result = await handler.HandleAsync(command);
                         return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
                             ? TypedResults.NotFound(error.Description)
-                            : result.IsSuccess && result.Value is DeleteCategory.Response response
+                            : result.IsSuccess && result.Payload is DeleteCategory.Response response
                                 ? TypedResults.NoContent()
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }
