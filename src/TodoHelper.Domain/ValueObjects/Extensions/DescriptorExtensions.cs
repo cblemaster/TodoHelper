@@ -15,7 +15,7 @@ internal static class DescriptorExtensions
         string attribute =
             descriptor
             .AttributeName
-            .MapToAttributeNameValueOrDefault(descriptor.IsUnique);
+            .GetAttributeNameValueOrDefault(descriptor.IsUnique);
 
         uint maxLength = descriptor.MaxLength == 0 ? 1 : descriptor.MaxLength;
 
@@ -27,7 +27,7 @@ internal static class DescriptorExtensions
                 : Result<Descriptor>.Success(descriptor);
     }
 
-    private static string MapToAttributeNameValueOrDefault(this string s, bool isUnique)
+    private static string GetAttributeNameValueOrDefault(this string s, bool isUnique)
     {
         if (!s.IsValueValid())
         {
