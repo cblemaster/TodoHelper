@@ -16,12 +16,12 @@ internal static class DescriptorExtensions
             descriptor
             .AttributeName
             .MapToAttributeNameValueOrDefault(descriptor.IsUnique);
-        
+
         uint maxLength = descriptor.MaxLength == 0 ? 1 : descriptor.MaxLength;
 
         return !descriptorValue.IsValueValid()
             ? Result<Descriptor>.Failure(Error.StringValueNotValid(attribute))
-            
+
             : descriptorValue.IsLengthValid(maxLength)
                 ? Result<Descriptor>.Failure(Error.StringLengthNotValid(attribute, maxLength))
                 : Result<Descriptor>.Success(descriptor);
