@@ -5,13 +5,17 @@ using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
 using TodoHelper.Domain.Results;
 using _Todo = TodoHelper.Domain.Entities.Todo;
+using _Category = TodoHelper.Domain.Entities.Category;
+using TodoHelper.Domain.BaseClasses;
 namespace TodoHelper.Application.Features.Todo.Create;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
     public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
-        Result<_Todo> result = _Todo.CreateNew(command.CategoryId, command.Description, command.DueDate);
+        _Category? category = _Category.CreateNew("").Payload;
+
+        Result<_Todo> result = _Todo.CreateNew(category!, Identifier<_Category>.Create(command.CategoryId), command.Description, command.DueDate);
 
         if (result.IsFailure && result.Error is Error error)
         {
