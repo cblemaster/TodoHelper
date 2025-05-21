@@ -70,12 +70,12 @@ public sealed class Todo : Entity<Todo>
         }
     }
 
-    private static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,
+    public static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,
         string description, DateOnly? dueDate) =>
             Create(Identifier<Todo>.CreateNew(), category, categoryId, description,
                 new DueDate(dueDate), new CompleteDate(null), new Importance(false));
 
-    private static Result<Todo> CreateWithNew(Identifier<Todo> id, Category category,
+    public static Result<Todo> CreateWithNew(Identifier<Todo> id, Category category,
         Identifier<Category> categoryId, string description, DateOnly? dueDate,
         DateTimeOffset? completeDate, bool isImportant) =>
             Create(id, category, categoryId, description, new DueDate(dueDate),

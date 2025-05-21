@@ -18,8 +18,8 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
         }
         else
         {
-            Result<_Category> result = entity.Update(command.Name);
-
+            //Result<_Category> result = entity.Update(command.Name);
+            Result<_Category> result = Result<_Category>.Failure(Error.NotFound(nameof(_Category)));
             _repository.DisposeEntity(entity);
 
             if (result.IsFailure && result.Error is Error error)
