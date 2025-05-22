@@ -49,25 +49,33 @@ public sealed class Todo : Entity<Todo>
         Identifier<Category> categoryId, string description, DueDate? dueDate,
         CompleteDate? completeDate, Importance importance)
     {
-        Descriptor descriptionDescriptor = new(Value: description,
-            DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
-            DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE,
-            DataDefinitions.IS_TODO_DESCRIPTION_UNIQUE);
+        Descriptor descriptionDescriptor =
+            new
+            (
+                Value: description,
+                DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
+                DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE,
+                DataDefinitions.IS_TODO_DESCRIPTION_UNIQUE
+            );
         Result<Descriptor> result = descriptionDescriptor.GetValidDescriptorOrValidationError();
 
-        if (result.IsFailure && result.Error is Error error)
+        switch (result)
         {
-            return Result<Todo>.Failure(Error.NotValid(error.Description));
-        }
-        else if (result.IsSuccess && result.Payload is Descriptor descriptor)
-        {
-            Todo todo = new(id, category, categoryId, descriptor, dueDate, completeDate, importance);
-            return Result<Todo>.Success(todo);
-        }
-        else
-        {
-            return Result<Todo>.Failure(Error.Unknown);
-        }
+            case Result<Descriptor> failure
+                when failure.IsFailure &&
+                    failure.Error is Error error:
+                return Result<Todo>.Failure(Error.NotValid(error.Description));
+            case Result<Descriptor> success
+                when success.IsSuccess &&
+                    success.Payload is Descriptor descriptor:
+                    {
+                        Todo todo = new(id, category, categoryId, descriptor,
+                            dueDate, completeDate, importance);
+                        return Result<Todo>.Success(todo);
+                    }            
+            default:
+                return Result<Todo>.Failure(Error.Unknown);
+        };
     }
 
     public static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,

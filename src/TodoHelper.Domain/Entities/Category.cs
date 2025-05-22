@@ -32,20 +32,23 @@ public sealed class Category : Entity<Category>
             DataDefinitions.CATEGORY_NAME_ATTRIBUTE,
             DataDefinitions.IS_CATEGORY_NAME_UNIQUE);
 
-        Result<Descriptor> descriptorResult = nameDescriptor.GetValidDescriptorOrValidationError();
+        Result<Descriptor> result = nameDescriptor.GetValidDescriptorOrValidationError();
 
-        if (descriptorResult.IsFailure && descriptorResult.Error is Error error)
+        switch (result)
         {
-            return Result<Category>.Failure(Error.NotValid(error.Description));
-        }
-        else if (descriptorResult.IsSuccess && descriptorResult.Payload is Descriptor descriptor)
-        {
-            Category category = new(id, descriptor, todos);
-            return Result<Category>.Success(category);
-        }
-        else
-        {
-            return Result<Category>.Failure(Error.Unknown);
+            case Result<Descriptor> failure
+                when failure.IsFailure &&
+                    failure.Error is Error error:
+                return Result<Category>.Failure(Error.NotValid(error.Description));
+            case Result<Descriptor> success
+                when success.IsSuccess &&
+                    success.Payload is Descriptor descriptor:
+                    {
+                        Category category = new(id, descriptor, todos);
+                        return Result<Category>.Success(category);
+                    }
+            default:
+                return Result<Category>.Failure(Error.Unknown);
         }
     }
 
