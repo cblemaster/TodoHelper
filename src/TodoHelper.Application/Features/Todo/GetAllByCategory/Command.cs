@@ -1,0 +1,5 @@
+﻿namespace TodoHelper.Application.Features.Todo.GetAllByCategory;
+
+public class Command
+{
+}
