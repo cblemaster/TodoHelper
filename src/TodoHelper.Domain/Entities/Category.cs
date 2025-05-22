@@ -57,4 +57,7 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateWithNewName(Identifier<Category> id, string name, IEnumerable<Todo> todos) =>
         Create(id, name, todos);
+
+    public static Func<Category, string> NameKey() =>
+        (todo) => todo.Name.Value;
 }
