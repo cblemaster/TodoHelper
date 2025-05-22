@@ -2,36 +2,35 @@
 using Microsoft.EntityFrameworkCore;
 using TodoHelper.DataAccess.Context;
 using TodoHelper.Domain.BaseClasses;
-using TodoHelper.Domain.Entities;
 
 namespace TodoHelper.DataAccess.Repository;
 
-internal class TodoRepository(TodosDbContext context) : IRepository<Todo>
+public sealed class TodoRepository<T>(TodosDbContext context) : IRepository<T> where T :Entity<T>
 {
     private readonly TodosDbContext _context = context;
 
-    public async Task<Todo> CreateAsync(Todo entity)
+    public async Task<T> CreateAsync(T entity)
     {
-        _ = _context.Set<Todo>().Add(entity);
+        _ = _context.Set<T>().Add(entity);
         _ = await _context.SaveChangesAsync();
         return entity;
     }
 
-    public async Task<Todo?> GetByIdAsync(Guid id) => await _context.Set<Todo>().FindAsync(Identifier<Category>.Create(id));
+    public async Task<T?> GetByIdAsync(Identifier<T> id) => await _context.Set<T>().FindAsync(id);
 
-    public async Task<IEnumerable<Todo>> GetAllAsync() => await _context.Set<Todo>().ToListAsync();
+    public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
 
-    public async Task UpdateAsync(Todo entity)
+    public async Task UpdateAsync(T entity)
     {
-        _ = _context.Set<Todo>().Update(entity);
+        _ = _context.Set<T>().Update(entity);
         _ = await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Todo entity)
+    public async Task DeleteAsync(T entity)
     {
-        _ = _context.Set<Todo>().Remove(entity);
+        _ = _context.Set<T>().Remove(entity);
         _ = await _context.SaveChangesAsync();
     }
 
-    public void DisposeEntity(Todo entity) => _context.Entry(entity).State = EntityState.Detached;
+    public void DisposeEntity(T entity) => _context.Set<T>().Entry(entity).State = EntityState.Detached;
 }
