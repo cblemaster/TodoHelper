@@ -43,7 +43,7 @@ public sealed class Todo : Entity<Todo>
 
     #endregion Constructors
 
-    #region Factory
+    #region Factory methods
 
     private static Result<Todo> Create(Identifier<Todo> id, Category category,
         Identifier<Category> categoryId, string description, DueDate? dueDate,
@@ -89,5 +89,45 @@ public sealed class Todo : Entity<Todo>
             Create(id, category, categoryId, description, new DueDate(dueDate),
                 new CompleteDate(completeDate), new Importance(isImportant));
 
-    #endregion Factory
+    #endregion Factory methods
+
+    #region Predicates
+    #region Command predicates
+    public static Func<Todo, bool> CanDelete() =>
+        todo => !todo.Importance.IsImportant;
+    public static Func<Todo, bool> CanUpdate() =>
+        todo => !todo.CompleteDate.HasValue;
+    #endregion Command predicates
+
+    #region Key predicates
+    public static Func<Todo, DateOnly?> NullableDueDateKey() =>
+        (todo) => todo.DueDate.HasValue && todo.DueDate.Value.Value.HasValue
+            ? todo.DueDate.Value.Value
+            : null;
+    public static Func<Todo, string> DescriptionKey() =>
+        (todo) => todo.Description.Value;
+    public static Func<Todo, bool> IsCompleteKey() =>
+        (todo) => todo.CompleteDate.HasValue && todo.CompleteDate.Value.Value.HasValue;
+    #endregion Key predicates
+
+    #region Filter predicates
+    public static Func<Todo, bool> GetTodosImportant() =>
+        todo => GetTodosByImportance(new Importance(true)).Invoke(todo);
+    public static Func<Todo, bool> GetTodosDueToday(DueDate today) =>
+        todo => GetTodosByDueDate(today).Invoke(todo);
+    public static Func<Todo, bool> GetTodosOverdue(DueDate today) =>
+        todo => todo.DueDate.HasValue &&
+                todo.DueDate.Value.Value.HasValue &&
+                    today.Value.HasValue &&
+                    todo.DueDate.Value.Value < today.Value.Value;
+    public static Func<Todo, bool> GetTodosCompleted() =>
+        todo => IsCompleteKey().Invoke(todo);
+    public static Func<Todo, bool> GetTodosNotCompleted() =>
+        todo => !GetTodosCompleted().Invoke(todo);
+    private static Func<Todo, bool> GetTodosByImportance(Importance importance) =>
+        todo => todo.Importance == importance;
+    private static Func<Todo, bool> GetTodosByDueDate(DueDate dueDate) =>
+        todo => todo.DueDate.HasValue && todo.DueDate.Value == dueDate;
+    #endregion Filter predicates
+    #endregion Predicates
 }
