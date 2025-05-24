@@ -1,5 +1,6 @@
-﻿namespace TodoHelper.Application.Features.Todo.GetAllDueToday;
+﻿
+using TodoHelper.Application.Interfaces;
 
-public class Command
-{
-}
+namespace TodoHelper.Application.Features.Todo.GetAllDueToday;
+
+internal sealed record Command(bool IncludeComplete) : ICommand<Response>;

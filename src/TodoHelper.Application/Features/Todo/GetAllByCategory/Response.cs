@@ -1,5 +1,7 @@
-﻿namespace TodoHelper.Application.Features.Todo.GetAllByCategory;
+﻿
+using TodoHelper.Application.DataTransferObjects;
+using TodoHelper.Domain.Results;
 
-public class Response
-{
-}
+namespace TodoHelper.Application.Features.Todo.GetAllByCategory;
+
+internal sealed record Response(Result<IEnumerable<TodoDTO>> Todos);

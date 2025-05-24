@@ -1,5 +1,7 @@
-﻿namespace TodoHelper.Application.Features.Todo.GetAllDueToday;
+﻿
+using TodoHelper.Application.DataTransferObjects;
+using TodoHelper.Domain.Results;
 
-public class Response
-{
-}
+namespace TodoHelper.Application.Features.Todo.GetAllDueToday;
+
+internal sealed record Response(Result<IEnumerable<TodoDTO>> Todos);

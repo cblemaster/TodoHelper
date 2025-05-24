@@ -1,5 +1,6 @@
-﻿namespace TodoHelper.Application.Features.Todo.GetAllImportant;
+﻿
+using TodoHelper.Application.Interfaces;
 
-public class Command
-{
-}
+namespace TodoHelper.Application.Features.Todo.GetAllImportant;
+
+internal sealed record Command(bool IncludeComplete) : ICommand<Response>;

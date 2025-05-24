@@ -1,21 +1,29 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Extensions;
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Results;
+using TodoHelper.Domain.ValueObjects.Extensions;
 using _Todo = TodoHelper.Domain.Entities.Todo;
+
 namespace TodoHelper.Application.Features.Todo.GetAll;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
-    public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         IEnumerable<TodoDTO> dtos =
-            (await _repository.GetAllAsync())
-            .Select(c => c.MapToDTO())
-            .OrderBy(c => c.Description);
-        Response response = new(dtos);
-        return Result<Response>.Success(response);
+            (await _repository
+                .GetAllAsync2()
+                .OrderByDescending(t => t.DueDate.MapToNullableDateOnly())
+                .ThenBy(t => t.Description.Value)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken)
+            )
+            .Select(t => t.MapToDTO());
+
+        return new Response(Result<IEnumerable<TodoDTO>>.Success(dtos));
     }
 }
