@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Extensions;
 using TodoHelper.Application.Features.Common;
@@ -10,13 +11,18 @@ namespace TodoHelper.Application.Features.Category.GetAll;
 
 internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
-    public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         IEnumerable<CategoryDTO> dtos =
-            (await _repository.GetAllAsync())
-            .Select(c => c.MapToDTO())
-            .OrderBy(c => c.Name);
-        Response response = new(dtos);
-        return Result<Response>.Success(response);
+            (await _repository
+                .GetAllAsync2()
+                .Include(c => c.Todos.Where(t => !t.IsComplete()))
+                .OrderBy(c => c.Name)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken)
+            )
+            .Select(c => c.MapToDTO());
+        
+        return new Response(Result<IEnumerable<CategoryDTO>>.Success(dtos));
     }
 }

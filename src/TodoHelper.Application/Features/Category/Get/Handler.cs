@@ -1,4 +1,5 @@
 ﻿
+using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.Application.Extensions;
 using TodoHelper.Application.Features.Common;
 using TodoHelper.DataAccess.Repository;
@@ -11,17 +12,16 @@ namespace TodoHelper.Application.Features.Category.Get;
 
 internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
-    public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         _Category? entity = await _repository.GetByIdAsync(Identifier<_Category>.Create(command.Id));
         if (entity is null)
         {
-            return Result<Response>.Failure(Error.NotFound(nameof(_Category)));
+            return new Response(Result<CategoryDTO>.Failure(Error.NotFound(nameof(_Category))));
         }
         else
         {
-            Response response = new(entity.MapToDTO());
-            return Result<Response>.Success(response);
+            return new Response(Result<CategoryDTO>.Success(entity.MapToDTO()));
         }
     }
 }
