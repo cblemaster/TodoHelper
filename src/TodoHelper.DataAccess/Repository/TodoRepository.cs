@@ -19,6 +19,7 @@ public sealed class TodoRepository<T>(TodosDbContext context) : IRepository<T> w
     public async Task<T?> GetByIdAsync(Identifier<T> id) => await _context.Set<T>().FindAsync(id);
 
     public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
+    public IQueryable<T> GetAllAsync2() => _context.Set<T>().AsQueryable();
 
     public async Task UpdateAsync(T entity)
     {
