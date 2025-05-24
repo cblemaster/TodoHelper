@@ -16,6 +16,9 @@ public sealed record Error(ErrorCode ErrorCode, string Description)
     public static Error AlreadyExists(string attribute, string value) =>
         new(ErrorCode.AlreadyExists, $"{attribute} \"{value}\" already exists.");
 
+    public static Error DomainRuleViolation(string description) =>
+        new(ErrorCode.DomainRuleViolation, description);
+
     internal static Error StringValueNotValid(string attribute) =>
         new(ErrorCode.NotValid, $"{attribute} is required and cannot consist of exclusively" +
             $" whitespace characters.");

@@ -10,18 +10,21 @@ namespace TodoHelper.Application.Features.Todo.Delete;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
-    public override async Task<Result<Response>> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         _Todo? entity = await _repository.GetByIdAsync(Identifier<_Todo>.Create(command.Id));
         if (entity is null)
         {
-            return Result<Response>.Failure(Error.NotFound(nameof(_Todo)));
+            return new Response(Result<bool>.Failure(Error.NotFound(nameof(_Todo))));
+        }
+        else if (entity.IsImportant())
+        {
+            return new Response(Result<bool>.Failure(Error.DomainRuleViolation("Important todos cannot be deleted.")));
         }
         else
         {
             await _repository.DeleteAsync(entity);
-            Response response = new();
-            return Result<Response>.Success(response);
+            return new Response(Result<bool>.Success(true));
         }
     }
 }
