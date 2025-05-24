@@ -8,22 +8,18 @@ using TodoHelper.Domain.Results;
 using TodoHelper.Domain.ValueObjects.Extensions;
 using _Todo = TodoHelper.Domain.Entities.Todo;
 
-namespace TodoHelper.Application.Features.Todo.GetAllImportant;
+namespace TodoHelper.Application.Features.Todo.GetCompleted;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
     public override async Task<Response> HandleAsync(Command command)
     {
-        Func<_Todo, bool> completeFilter = t => command.IncludeComplete || !t.IsComplete();
-
         IEnumerable<TodoDTO> dtos =
             (await _repository
                 .GetAllAsync2()
-                .Where(t => t.IsImportant())
-                .Where(completeFilter)
+                .Where(t => t.IsComplete())
                 .OrderByDescending(t => t.DueDate.MapToNullableDateOnly())
                 .ThenBy(t => t.Description.Value)
-                .AsQueryable()
                 .AsNoTracking()
                 .ToListAsync()
             )

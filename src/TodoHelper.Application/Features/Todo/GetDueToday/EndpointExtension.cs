@@ -4,13 +4,13 @@ using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
 using _Todo = TodoHelper.Domain.Entities.Todo;
-using GetTodos = TodoHelper.Application.Features.Todo.GetAllCompleted;
+using GetTodos = TodoHelper.Application.Features.Todo.GetAll;
 
-namespace TodoHelper.Application.Features.Todo.GetAllCompleted;
+namespace TodoHelper.Application.Features.Todo.GetDueToday;
 
 internal static class EndpointExtension
 {
-    internal static WebApplication MapGetAllTodoCompleted(this WebApplication app)
+    internal static WebApplication MapGetTodosDueToday(this WebApplication app)
     {
         _ = app.MapGet
             (
@@ -19,7 +19,7 @@ internal static class EndpointExtension
                 (IRepository<_Todo> repository, GetTodos.Handler handler) =>
                 {
                     GetTodos.Command command = new();
-                    Response response = await handler.HandleAsync(command);
+                    GetTodos.Response response = await handler.HandleAsync(command);
                     return response.Todos.IsFailure &&
                         response.Todos.Error is not null
                             ? TypedResults.InternalServerError(Error.Unknown.Description)

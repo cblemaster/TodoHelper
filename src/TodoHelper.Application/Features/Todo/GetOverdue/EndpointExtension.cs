@@ -4,21 +4,21 @@ using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
 using _Todo = TodoHelper.Domain.Entities.Todo;
-using GetTodos = TodoHelper.Application.Features.Todo.GetAllOverdue;
+using GetTodos = TodoHelper.Application.Features.Todo.GetOverdue;
 
-namespace TodoHelper.Application.Features.Todo.GetAllOverdue;
+namespace TodoHelper.Application.Features.Todo.GetOverdue;
 
 internal static class EndpointExtension
 {
-    internal static WebApplication MapGetAllTodo(this WebApplication app)
+    internal static WebApplication MapGetTodosOverdue(this WebApplication app)
     {
         _ = app.MapGet
             (
                 pattern: "/todo",
                 handler: async Task<Results<InternalServerError<string>, Ok<IEnumerable<TodoDTO>>>>
-                    (IRepository<_Todo> repository, GetTodos.Handler handler) =>
+                    (IRepository<_Todo> repository, Handler handler) =>
                     {
-                        GetTodos.Command command = new(true);
+                        Command command = new(true);
                         Response response = await handler.HandleAsync(command);
                         return response.Todos.IsFailure &&
                             response.Todos.Error is not null

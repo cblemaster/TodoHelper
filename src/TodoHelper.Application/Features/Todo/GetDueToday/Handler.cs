@@ -9,7 +9,7 @@ using TodoHelper.Domain.ValueObjects;
 using TodoHelper.Domain.ValueObjects.Extensions;
 using _Todo = TodoHelper.Domain.Entities.Todo;
 
-namespace TodoHelper.Application.Features.Todo.GetAllDueToday;
+namespace TodoHelper.Application.Features.Todo.GetDueToday;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
