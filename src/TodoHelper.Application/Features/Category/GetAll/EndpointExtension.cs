@@ -21,11 +21,11 @@ internal static class EndpointExtension
                     (IRepository<_Category> repository, GetCategories.Handler handler) =>
                     {
                         GetCategories.Command command = new();
-                        Result<GetCategories.Response> result = await handler.HandleAsync(command);
-                        return result.IsFailure && result.Error is not null
+                        GetCategories.Response response = await handler.HandleAsync(command);
+                        return response.Categories.IsFailure && response.Categories.Error is not null
                             ? TypedResults.InternalServerError(Error.Unknown.Description)
-                            : result.IsSuccess && result.Payload is GetCategories.Response response
-                                ? TypedResults.Ok(response.Categories)
+                            : response.Categories.IsSuccess && response.Categories.Payload is IEnumerable<CategoryDTO> dtos
+                                ? TypedResults.Ok(dtos)
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }
             );

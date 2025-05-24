@@ -21,14 +21,14 @@ internal static class EndpointExtension
                     (IRepository<_Todo> repository, GetTodo.Handler handler, Guid id) =>
                     {
                         GetTodo.Command command = new(id);
-                        Result<GetTodo.Response> result = await handler.HandleAsync(command);
-                        return result.IsFailure
-                            && result.Error is Error error
+                        GetTodo.Response response = await handler.HandleAsync(command);
+                        return response.Todo.IsFailure
+                            && response.Todo.Error is Error error
                             && error.ErrorCode == ErrorCode.NotFound
                             ? TypedResults.NotFound(error.Description)
-                            : result.IsSuccess
-                                && result.Payload is not null and GetTodo.Response response
-                                ? TypedResults.Ok(response.Todo)
+                            : response.Todo.IsSuccess
+                                && response.Todo.Payload is TodoDTO dto
+                                ? TypedResults.Ok(dto)
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }
             );

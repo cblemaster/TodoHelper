@@ -21,11 +21,11 @@ internal static class EndpointExtension
                     (IRepository<_Category> repository, CreateCategory.Command command,
                         CreateCategory.Handler handler) =>
                         {
-                            Result<CreateCategory.Response> result = await handler.HandleAsync(command);
-                            return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotValid
+                            Response response = await handler.HandleAsync(command);
+                            return response.Category.IsFailure && response.Category.Error is Error error && error.ErrorCode == ErrorCode.NotValid
                                 ? TypedResults.BadRequest(error.Description)
-                                : result.IsSuccess && result.Payload is CreateCategory.Response response
-                                    ? TypedResults.Created("no uri for this resource", response.Category)
+                                : response.Category.IsSuccess && response.Category.Payload is CategoryDTO dto
+                                    ? TypedResults.Created("no uri for this resource", dto)
                                     : TypedResults.InternalServerError(Error.Unknown.Description);
                         }
             );

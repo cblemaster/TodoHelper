@@ -20,10 +20,10 @@ internal static class EndpointExtension
                     (IRepository<_Category> repository, DeleteCategory.Handler handler, Guid id) =>
                     {
                         DeleteCategory.Command command = new(id);
-                        Result<DeleteCategory.Response> result = await handler.HandleAsync(command);
-                        return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
+                        Response response = await handler.HandleAsync(command);
+                        return response.Result.IsFailure && response.Result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
                             ? TypedResults.NotFound(error.Description)
-                            : result.IsSuccess && result.Payload is DeleteCategory.Response response
+                            : response.Result.IsSuccess
                                 ? TypedResults.NoContent()
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }

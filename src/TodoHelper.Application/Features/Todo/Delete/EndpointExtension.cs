@@ -20,10 +20,10 @@ internal static class EndpointExtension
                     (IRepository<_Todo> repository, DeleteTodo.Handler handler, Guid id) =>
                     {
                         DeleteTodo.Command command = new(id);
-                        Result<DeleteTodo.Response> result = await handler.HandleAsync(command);
-                        return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
+                        Response response = await handler.HandleAsync(command);
+                        return response.Result.IsFailure && response.Result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
                             ? TypedResults.NotFound(error.Description)
-                            : result.IsSuccess && result.Payload is DeleteTodo.Response response
+                            : response.Result.IsSuccess
                                 ? TypedResults.NoContent()
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }

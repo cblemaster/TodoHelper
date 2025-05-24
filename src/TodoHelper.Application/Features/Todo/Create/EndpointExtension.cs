@@ -19,11 +19,11 @@ internal static class EndpointExtension
                 handler: async Task<Results<BadRequest<string>, Created<TodoDTO>, InternalServerError<string>>>
                 (IRepository<_Todo> repository, CreateTodo.Command command, CreateTodo.Handler handler) =>
                 {
-                    Result<CreateTodo.Response> result = await handler.HandleAsync(command);
-                    return result.IsFailure && result.Error is Error error && error.ErrorCode == ErrorCode.NotValid
+                    Response response = await handler.HandleAsync(command);
+                    return response.Todo.IsFailure && response.Todo.Error is Error error && error.ErrorCode == ErrorCode.NotValid
                         ? TypedResults.BadRequest(error.Description)
-                        : result.IsSuccess && result.Payload is CreateTodo.Response response
-                            ? TypedResults.Created("no uri for this resource", response.Todo)
+                        : response.Todo.IsSuccess && response.Todo.Payload is TodoDTO dto
+                            ? TypedResults.Created("no uri for this resource", dto)
                             : TypedResults.InternalServerError(Error.Unknown.Description);
                 }
             );

@@ -19,14 +19,14 @@ internal static class EndpointExtension
                 (IRepository<_Category> repository, UpdateCategory.Command command,
                     UpdateCategory.Handler handler, Guid id) =>
                     {
-                        Result<UpdateCategory.Response> result = await handler.HandleAsync(command);
-                        return result.IsFailure && result.Error is Error error
+                        Response response = await handler.HandleAsync(command);
+                        return response.Result.IsFailure && response.Result.Error is Error error
                             ? error.ErrorCode == ErrorCode.NotFound
                                 ? TypedResults.NotFound(error.Description)
                                 : error.ErrorCode == ErrorCode.NotValid
                                     ? TypedResults.BadRequest(error.Description)
                                     : TypedResults.InternalServerError(Error.Unknown.Description)
-                            : result.IsSuccess && result.Payload is UpdateCategory.Response response
+                            : response.Result.IsSuccess
                                 ? TypedResults.NoContent()
                                 : TypedResults.InternalServerError(Error.Unknown.Description);
                     }
