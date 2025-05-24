@@ -1,5 +1,6 @@
-﻿namespace TodoHelper.Application.Features.Todo.UpdateCompleteDate;
+﻿
+using TodoHelper.Application.Interfaces;
 
-public class Command
-{
-}
+namespace TodoHelper.Application.Features.Todo.UpdateCompleteDate;
+
+public sealed record Command(Guid Id, DateTimeOffset? CompleteDate) : ICommand<Response>;

@@ -1,5 +1,6 @@
-﻿namespace TodoHelper.Application.Features.Todo.UpdateCompleteDate;
+﻿
+using TodoHelper.Domain.Results;
 
-public class Response
-{
-}
+namespace TodoHelper.Application.Features.Todo.UpdateCompleteDate;
+
+internal sealed record Response(Result<bool> Result);
