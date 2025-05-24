@@ -18,6 +18,13 @@ public sealed class Todo : Entity<Todo>
     public DueDate? DueDate { get; }
     public CompleteDate? CompleteDate { get; }
     public Importance Importance { get; }
+
+    public bool IsComplete() => CompleteDate.MapToNullableDateTimeOffset().HasValue;
+    public bool IsImportant() => Importance.IsImportant;
+    public bool DueDateHasValue() => DueDate.MapToNullableDateOnly().HasValue;
+    public bool HasGivenDueDate(DueDate given) => DueDateHasValue() && DueDate.MapToNullableDateOnly() == given.Value;
+    public bool HasDueDateBeforeGiven(DueDate given) => DueDateHasValue() && DueDate.MapToNullableDateOnly() < given.Value;
+    public bool HasGivenCategory(Category given) => Category == given;
     #endregion Properties
 
     #region Constructors
@@ -101,13 +108,11 @@ public sealed class Todo : Entity<Todo>
 
     #region Key predicates
     public static Func<Todo, DateOnly?> NullableDueDateKey() =>
-        (todo) => todo.DueDate.HasValue && todo.DueDate.Value.Value.HasValue
-            ? todo.DueDate.Value.Value
-            : null;
+        (todo) => todo.DueDate.MapToNullableDateOnly();
     public static Func<Todo, string> DescriptionKey() =>
         (todo) => todo.Description.Value;
     public static Func<Todo, bool> IsCompleteKey() =>
-        (todo) => todo.CompleteDate.HasValue && todo.CompleteDate.Value.Value.HasValue;
+        (todo) => todo.CompleteDate.MapToNullableDateTimeOffset().HasValue;
     #endregion Key predicates
 
     #region Filter predicates
