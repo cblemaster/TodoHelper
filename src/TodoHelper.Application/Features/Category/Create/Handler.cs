@@ -11,7 +11,7 @@ namespace TodoHelper.Application.Features.Category.Create;
 
 internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         Result<_Category> result = _Category.CreateNew(command.Name);
 

@@ -12,7 +12,7 @@ namespace TodoHelper.Application.Features.Category.Get;
 
 internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         _Category? entity = await _repository.GetByIdAsync(Identifier<_Category>.Create(command.Id));
         return entity is null

@@ -12,7 +12,7 @@ namespace TodoHelper.Application.Features.Todo.GetAllByCategory;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         Func<_Todo, bool> completeFilter = t => command.IncludeComplete || !t.IsComplete();
 
@@ -25,7 +25,7 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
                 .ThenBy(t => t.Description.Value)
                 .AsQueryable()
                 .AsNoTracking()
-                .ToListAsync(cancellationToken)
+                .ToListAsync()
             )
             .Select(t => t.MapToDTO());
 

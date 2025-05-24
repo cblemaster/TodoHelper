@@ -10,7 +10,7 @@ namespace TodoHelper.Application.Features.Todo.Delete;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         _Todo? entity = await _repository.GetByIdAsync(Identifier<_Todo>.Create(command.Id));
         if (entity is null)

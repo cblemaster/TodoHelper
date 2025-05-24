@@ -12,7 +12,7 @@ namespace TodoHelper.Application.Features.Todo.UpdateCompleteDate;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
-    public async override Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public async override Task<Response> HandleAsync(Command command)
     {
         _Todo? entity = await _repository.GetByIdAsync(Identifier<_Todo>.Create(command.Id));
         if (entity is null)

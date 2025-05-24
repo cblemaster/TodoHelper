@@ -15,7 +15,7 @@ internal sealed class Handler(IRepository<_Todo> todoRepository, IRepository<_Ca
 {
     private readonly IRepository<_Category> _categoryRepository = categoryRepository;
 
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         _Category? category = await _categoryRepository.GetByIdAsync(Identifier<_Category>.Create(command.CategoryId));
         if (category is null)

@@ -9,5 +9,5 @@ internal abstract class HandlerBase<T, TCommand, TResponse>(IRepository<T> repos
 {
     protected readonly IRepository<T> _repository = repository;
 
-    public abstract Task<TResponse> HandleAsync(TCommand command, CancellationToken cancellationToken = default);
+    public abstract Task<TResponse> HandleAsync(TCommand command);
 }

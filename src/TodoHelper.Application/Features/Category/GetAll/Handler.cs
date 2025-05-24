@@ -11,7 +11,7 @@ namespace TodoHelper.Application.Features.Category.GetAll;
 
 internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_Category, Command, Response>(repository)
 {
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         IEnumerable<CategoryDTO> dtos =
             (await _repository
@@ -19,7 +19,7 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
                 .Include(c => c.Todos.Where(t => !t.IsComplete()))
                 .OrderBy(c => c.Name)
                 .AsNoTracking()
-                .ToListAsync(cancellationToken)
+                .ToListAsync()
             )
             .Select(c => c.MapToDTO());
 

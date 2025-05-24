@@ -12,7 +12,7 @@ namespace TodoHelper.Application.Features.Todo.GetAllCompleted;
 
 internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo, Command, Response>(repository)
 {
-    public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
+    public override async Task<Response> HandleAsync(Command command)
     {
         IEnumerable<TodoDTO> dtos =
             (await _repository
@@ -21,7 +21,7 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
                 .OrderByDescending(t => t.DueDate.MapToNullableDateOnly())
                 .ThenBy(t => t.Description.Value)
                 .AsNoTracking()
-                .ToListAsync(cancellationToken)
+                .ToListAsync()
             )
             .Select(t => t.MapToDTO());
 
