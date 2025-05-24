@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
-using TodoHelper.Domain.Results;
 using _Category = TodoHelper.Domain.Entities.Category;
 using DeleteCategory = TodoHelper.Application.Features.Category.Delete;
 
@@ -21,11 +20,13 @@ internal static class EndpointExtension
                     {
                         DeleteCategory.Command command = new(id);
                         Response response = await handler.HandleAsync(command);
-                        return response.Result.IsFailure && response.Result.Error is Error error && error.ErrorCode == ErrorCode.NotFound
-                            ? TypedResults.NotFound(error.Description)
-                            : response.Result.IsSuccess
-                                ? TypedResults.NoContent()
-                                : TypedResults.InternalServerError(Error.Unknown.Description);
+                        return response.Result.IsFailure &&
+                            response.Result.Error is Error error &&
+                            error.ErrorCode == ErrorCode.NotFound
+                                ? TypedResults.NotFound(error.Description)
+                                : response.Result.IsSuccess
+                                    ? TypedResults.NoContent()
+                                    : TypedResults.InternalServerError(Error.Unknown.Description);
                     }
             );
         return app;

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
-using TodoHelper.Domain.Results;
 using _Category = TodoHelper.Domain.Entities.Category;
 using CreateCategory = TodoHelper.Application.Features.Category.Create;
 

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using TodoHelper.Application.DataTransferObjects;
 using TodoHelper.DataAccess.Repository;
 using TodoHelper.Domain.Errors;
-using TodoHelper.Domain.Results;
 using _Todo = TodoHelper.Domain.Entities.Todo;
 using GetTodo = TodoHelper.Application.Features.Todo.Get;
 
@@ -22,14 +21,14 @@ internal static class EndpointExtension
                     {
                         GetTodo.Command command = new(id);
                         GetTodo.Response response = await handler.HandleAsync(command);
-                        return response.Todo.IsFailure
-                            && response.Todo.Error is Error error
-                            && error.ErrorCode == ErrorCode.NotFound
-                            ? TypedResults.NotFound(error.Description)
-                            : response.Todo.IsSuccess
-                                && response.Todo.Payload is TodoDTO dto
-                                ? TypedResults.Ok(dto)
-                                : TypedResults.InternalServerError(Error.Unknown.Description);
+                        return response.Todo.IsFailure &&
+                            response.Todo.Error is Error error &&
+                            error.ErrorCode == ErrorCode.NotFound
+                                ? TypedResults.NotFound(error.Description)
+                                : response.Todo.IsSuccess &&
+                                    response.Todo.Payload is TodoDTO dto
+                                        ? TypedResults.Ok(dto)
+                                        : TypedResults.InternalServerError(Error.Unknown.Description);
                     }
             );
         return app;
