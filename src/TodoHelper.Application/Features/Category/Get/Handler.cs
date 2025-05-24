@@ -19,4 +19,6 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
             ? new Response(Result<CategoryDTO>.Failure(Error.NotFound(nameof(_Category))))
             : new Response(Result<CategoryDTO>.Success(entity.MapToDTO()));
     }
+
+    // TODO: Include Todos...
 }
