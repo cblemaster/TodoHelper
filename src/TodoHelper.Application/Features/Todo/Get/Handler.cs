@@ -14,13 +14,8 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
     public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         _Todo? entity = await _repository.GetByIdAsync(Identifier<_Todo>.Create(command.Id));
-        if (entity is null)
-        {
-            return new Response(Result<TodoDTO>.Failure(Error.NotFound(nameof(_Todo))));
-        }
-        else
-        {
-            return new Response(Result<TodoDTO>.Success(entity.MapToDTO()));
-        }
+        return entity is null
+            ? new Response(Result<TodoDTO>.Failure(Error.NotFound(nameof(_Todo))))
+            : new Response(Result<TodoDTO>.Success(entity.MapToDTO()));
     }
 }

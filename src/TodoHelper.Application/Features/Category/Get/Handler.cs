@@ -15,13 +15,8 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
     public override async Task<Response> HandleAsync(Command command, CancellationToken cancellationToken = default)
     {
         _Category? entity = await _repository.GetByIdAsync(Identifier<_Category>.Create(command.Id));
-        if (entity is null)
-        {
-            return new Response(Result<CategoryDTO>.Failure(Error.NotFound(nameof(_Category))));
-        }
-        else
-        {
-            return new Response(Result<CategoryDTO>.Success(entity.MapToDTO()));
-        }
+        return entity is null
+            ? new Response(Result<CategoryDTO>.Failure(Error.NotFound(nameof(_Category))))
+            : new Response(Result<CategoryDTO>.Success(entity.MapToDTO()));
     }
 }

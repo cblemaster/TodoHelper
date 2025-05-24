@@ -22,7 +22,7 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
                 .ToListAsync(cancellationToken)
             )
             .Select(c => c.MapToDTO());
-        
+
         return new Response(Result<IEnumerable<CategoryDTO>>.Success(dtos));
     }
 }
