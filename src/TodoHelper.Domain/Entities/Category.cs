@@ -25,7 +25,7 @@ public sealed class Category : Entity<Category>
         Todos = todos;
     }
 
-    public static Result<Category> Create(Identifier<Category> id, string name, IEnumerable<Todo> todos)
+    private static Result<Category> Create(Identifier<Category> id, string name, IEnumerable<Todo> todos)
     {
         Descriptor nameDescriptor = new(Value: name,
             DataDefinitions.CATEGORY_NAME_MAX_LENGTH,
@@ -43,10 +43,10 @@ public sealed class Category : Entity<Category>
             case Result<Descriptor> success
                 when success.IsSuccess &&
                     success.Payload is Descriptor descriptor:
-                    {
-                        Category category = new(id, descriptor, todos);
-                        return Result<Category>.Success(category);
-                    }
+                {
+                    Category category = new(id, descriptor, todos);
+                    return Result<Category>.Success(category);
+                }
             default:
                 return Result<Category>.Failure(Error.Unknown);
         }
@@ -57,7 +57,4 @@ public sealed class Category : Entity<Category>
 
     public static Result<Category> CreateWithNewName(Identifier<Category> id, string name, IEnumerable<Todo> todos) =>
         Create(id, name, todos);
-
-    public static Func<Category, string> NameKey() =>
-        (todo) => todo.Name.Value;
 }

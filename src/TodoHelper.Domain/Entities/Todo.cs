@@ -24,7 +24,7 @@ public sealed class Todo : Entity<Todo>
     public bool DueDateHasValue() => DueDate.MapToNullableDateOnly().HasValue;
     public bool HasGivenDueDate(DueDate given) => DueDateHasValue() && DueDate.MapToNullableDateOnly() == given.Value;
     public bool HasDueDateBeforeGiven(DueDate given) => DueDateHasValue() && DueDate.MapToNullableDateOnly() < given.Value;
-    public bool HasGivenCategory(Category given) => Category == given;
+    public bool HasGivenCategory(Identifier<Category> given) => CategoryId == given;
     #endregion Properties
 
     #region Constructors
@@ -75,14 +75,15 @@ public sealed class Todo : Entity<Todo>
             case Result<Descriptor> success
                 when success.IsSuccess &&
                     success.Payload is Descriptor descriptor:
-                    {
-                        Todo todo = new(id, category, categoryId, descriptor,
-                            dueDate, completeDate, importance);
-                        return Result<Todo>.Success(todo);
-                    }            
+                {
+                    Todo todo = new(id, category, categoryId, descriptor,
+                        dueDate, completeDate, importance);
+                    return Result<Todo>.Success(todo);
+                }
             default:
                 return Result<Todo>.Failure(Error.Unknown);
-        };
+        }
+        ;
     }
 
     public static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,
@@ -92,47 +93,14 @@ public sealed class Todo : Entity<Todo>
 
     public static Result<Todo> CreateWithNew(Identifier<Todo> id, Category category,
         Identifier<Category> categoryId, string description, DateOnly? dueDate,
-        DateTimeOffset? completeDate, bool isImportant) =>
+        CompleteDate? completeDate, bool isImportant) =>
             Create(id, category, categoryId, description, new DueDate(dueDate),
-                new CompleteDate(completeDate), new Importance(isImportant));
+                completeDate, new Importance(isImportant));
+
+    public static Result<Todo> CreateWithNewCompleteDate(Identifier<Todo> id, Category category,
+        Identifier<Category> categoryId, Descriptor description, DueDate? dueDate,
+        CompleteDate completeDate, Importance importance) =>
+            Create(id, category, categoryId, description.Value, dueDate, completeDate, importance);
 
     #endregion Factory methods
-
-    #region Predicates
-    #region Command predicates
-    public static Func<Todo, bool> CanDelete() =>
-        todo => !todo.Importance.IsImportant;
-    public static Func<Todo, bool> CanUpdate() =>
-        todo => !todo.CompleteDate.HasValue;
-    #endregion Command predicates
-
-    #region Key predicates
-    public static Func<Todo, DateOnly?> NullableDueDateKey() =>
-        (todo) => todo.DueDate.MapToNullableDateOnly();
-    public static Func<Todo, string> DescriptionKey() =>
-        (todo) => todo.Description.Value;
-    public static Func<Todo, bool> IsCompleteKey() =>
-        (todo) => todo.CompleteDate.MapToNullableDateTimeOffset().HasValue;
-    #endregion Key predicates
-
-    #region Filter predicates
-    public static Func<Todo, bool> GetTodosImportant() =>
-        todo => GetTodosByImportance(new Importance(true)).Invoke(todo);
-    public static Func<Todo, bool> GetTodosDueToday(DueDate today) =>
-        todo => GetTodosByDueDate(today).Invoke(todo);
-    public static Func<Todo, bool> GetTodosOverdue(DueDate today) =>
-        todo => todo.DueDate.HasValue &&
-                todo.DueDate.Value.Value.HasValue &&
-                    today.Value.HasValue &&
-                    todo.DueDate.Value.Value < today.Value.Value;
-    public static Func<Todo, bool> GetTodosCompleted() =>
-        todo => IsCompleteKey().Invoke(todo);
-    public static Func<Todo, bool> GetTodosNotCompleted() =>
-        todo => !GetTodosCompleted().Invoke(todo);
-    private static Func<Todo, bool> GetTodosByImportance(Importance importance) =>
-        todo => todo.Importance == importance;
-    private static Func<Todo, bool> GetTodosByDueDate(DueDate dueDate) =>
-        todo => todo.DueDate.HasValue && todo.DueDate.Value == dueDate;
-    #endregion Filter predicates
-    #endregion Predicates
 }
