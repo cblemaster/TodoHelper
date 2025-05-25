@@ -9,5 +9,4 @@ public static class NullableDateOnlyExtensions
         dateOnly is not null
             ? new(dateOnly.Value)
             : null;
-    // TODO: does this have any callers?
 }

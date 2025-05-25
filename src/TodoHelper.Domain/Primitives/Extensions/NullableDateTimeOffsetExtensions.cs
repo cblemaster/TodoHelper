@@ -9,5 +9,4 @@ public static class NullableDateTimeOffsetExtensions
         dateTimeOffset is not null
             ? new(dateTimeOffset.Value)
             : null;
-    // TODO: does this have any callers?
 }

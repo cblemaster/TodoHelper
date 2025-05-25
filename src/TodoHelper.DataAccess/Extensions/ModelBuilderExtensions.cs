@@ -5,6 +5,7 @@ using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Entities;
 using TodoHelper.Domain.ValueObjects;
 using TodoHelper.Domain.ValueObjects.Extensions;
+using TodoHelper.Domain.Primitives.Extensions;
 
 namespace TodoHelper.DataAccess.Extensions;
 
@@ -49,9 +50,9 @@ internal static class ModelBuilderExtensions
                 .HasMaxLength(DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH)
                 .IsUnicode(DataDefinitions.IS_UNICODE_DEFAULT_VALUE);
             entity.Property(e => e.DueDate)
-                .HasConversion(d => d.ToNullableDateOnly(), d => new DueDate(d!.Value));
+                .HasConversion(d => d.ToNullableDateOnly(), d => d.ToNullableDueDate());
             entity.Property(e => e.CompleteDate)
-                .HasConversion(c => c.ToNullableDateTimeOffset(), c => new CompleteDate(c!.Value));
+                .HasConversion(c => c.ToNullableDateTimeOffset(), c => c.ToNullableCompleteDate());
             entity.Property(e => e.Importance)
                 .HasConversion(i => i.BoolValue, i => new Importance(i))
                 .HasColumnName("IsImportant");
