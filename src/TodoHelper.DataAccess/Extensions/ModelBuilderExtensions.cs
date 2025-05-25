@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using TodoHelper.Domain.BaseClasses;
 using TodoHelper.Domain.Definitions;
 using TodoHelper.Domain.Entities;
+using TodoHelper.Domain.Primitives.Extensions;
 using TodoHelper.Domain.ValueObjects;
 using TodoHelper.Domain.ValueObjects.Extensions;
-using TodoHelper.Domain.Primitives.Extensions;
 
 namespace TodoHelper.DataAccess.Extensions;
 

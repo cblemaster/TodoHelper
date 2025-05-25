@@ -18,18 +18,6 @@ public sealed class Todo : Entity<Todo>
     public DueDate? DueDate { get; }
     public CompleteDate? CompleteDate { get; }
     public Importance Importance { get; }
-
-    public bool CompleteDateHasValue() => CompleteDate.ToNullableDateTimeOffset().HasValue;
-    private bool DueDateHasValue() => DueDate.ToNullableDateOnly().HasValue;
-    public bool HasGivenCategoryId(Identifier<Category> given) => CategoryId == given;
-    public bool HasGivenDueDate(DueDate given) =>
-        DueDateHasValue() && DueDate.ToNullableDateOnly() == given.DateValue;
-    public bool HasDueDateBeforeGiven(DueDate given) =>
-        DueDateHasValue() && DueDate.ToNullableDateOnly() < given.DateValue;
-    public bool IsImportant() => Importance.BoolValue;
-    
-
-
     #endregion Properties
 
     #region Constructors
@@ -55,6 +43,17 @@ public sealed class Todo : Entity<Todo>
             Category = category;
 
     #endregion Constructors
+
+    #region Methods
+    public bool CompleteDateHasValue() => CompleteDate.ToNullableDateTimeOffset().HasValue;
+    private bool DueDateHasValue() => DueDate.ToNullableDateOnly().HasValue;
+    public bool HasGivenCategoryId(Identifier<Category> given) => CategoryId == given;
+    public bool HasGivenDueDate(DueDate given) =>
+        DueDateHasValue() && DueDate.ToNullableDateOnly() == given.DateValue;
+    public bool HasDueDateBeforeGiven(DueDate given) =>
+        DueDateHasValue() && DueDate.ToNullableDateOnly() < given.DateValue;
+    public bool IsImportant() => Importance.BoolValue;
+    #endregion Methods
 
     #region Factory methods
     private static Result<Todo> Create(Identifier<Todo> id, Category category,
