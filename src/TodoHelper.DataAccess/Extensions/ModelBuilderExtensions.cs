@@ -17,9 +17,9 @@ internal static class ModelBuilderExtensions
             entity.ToTable(nameof(Category));
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .HasConversion(i => i.Value, i => Identifier<Category>.Create(i));
+                .HasConversion(i => i.GuidValue, i => Identifier<Category>.Create(i));
             entity.Property(e => e.Name)
-                .HasConversion(n => n.Value,
+                .HasConversion(n => n.StringValue,
                     n => new Descriptor(n, DataDefinitions.CATEGORY_NAME_MAX_LENGTH,
                         DataDefinitions.CATEGORY_NAME_ATTRIBUTE, true));
             entity.Property(e => e.Name)
@@ -36,22 +36,22 @@ internal static class ModelBuilderExtensions
             entity.ToTable(nameof(Todo));
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .HasConversion(i => i.Value, i => Identifier<Todo>.Create(i));
+                .HasConversion(i => i.GuidValue, i => Identifier<Todo>.Create(i));
             entity.Property(e => e.CategoryId)
-                .HasConversion(c => c.Value, c => Identifier<Category>.Create(c));
+                .HasConversion(c => c.GuidValue, c => Identifier<Category>.Create(c));
             entity.Property(e => e.Description)
-                .HasConversion(d => d.Value,
+                .HasConversion(d => d.StringValue,
                     d => new Descriptor(d, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
                         DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE, false));
             entity.Property(e => e.Description)
                 .HasMaxLength(DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH)
                 .IsUnicode(DataDefinitions.IS_UNICODE_DEFAULT_VALUE);
             entity.Property(e => e.DueDate)
-                .HasConversion(d => d.MapToNullableDateOnly(), d => new DueDate(d!.Value));
+                .HasConversion(d => d.ToNullableDateOnly(), d => new DueDate(d!.Value));
             entity.Property(e => e.CompleteDate)
-                .HasConversion(c => c.MapToNullableDateTimeOffset(), c => new CompleteDate(c!.Value));
+                .HasConversion(c => c.ToNullableDateTimeOffset(), c => new CompleteDate(c!.Value));
             entity.Property(e => e.Importance)
-                .HasConversion(i => i.IsImportant, i => new Importance(i))
+                .HasConversion(i => i.BoolValue, i => new Importance(i))
                 .HasColumnName("IsImportant");
             entity.HasOne(e => e.Category)
                 .WithMany(t => t.Todos)

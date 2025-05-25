@@ -20,7 +20,7 @@ internal sealed class Handler(IRepository<_Todo> todoRepository, IRepository<_Ca
         {
             return new Response(Result<bool>.Failure(Error.NotFound(nameof(_Todo))));
         }
-        else if (entity.IsComplete())
+        else if (entity.CompleteDateHasValue())
         {
             return new Response(Result<bool>.Failure(Error.DomainRuleViolation("Complete todos cannot be updated.")));
         }

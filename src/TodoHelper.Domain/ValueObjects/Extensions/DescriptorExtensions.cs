@@ -9,9 +9,10 @@ internal static class DescriptorExtensions
 {
     internal static Result<Descriptor> GetValidDescriptorOrValidationError(this Descriptor descriptor)
     {
-        string descriptorValue = descriptor.Value;
+        string descriptorValue = descriptor.StringValue;
 
-        // TODO: inform user that defaults are applied...
+        // TODO: I'm not very fond of this implementation;
+        //   at the very least, inform the user that defaults will be applied
         string attribute =
             descriptor
             .AttributeName
@@ -19,6 +20,7 @@ internal static class DescriptorExtensions
 
         uint maxLength = descriptor.MaxLength == 0 ? 1 : descriptor.MaxLength;
 
+        // TODO: replace string validation with pattern matching
         return !descriptorValue.IsValueValid()
             ? Result<Descriptor>.Failure(Error.StringValueNotValid(attribute))
 

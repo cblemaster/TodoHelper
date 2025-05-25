@@ -27,10 +27,15 @@ public sealed class Category : Entity<Category>
 
     private static Result<Category> Create(Identifier<Category> id, string name, IEnumerable<Todo> todos)
     {
-        Descriptor nameDescriptor = new(Value: name,
-            DataDefinitions.CATEGORY_NAME_MAX_LENGTH,
-            DataDefinitions.CATEGORY_NAME_ATTRIBUTE,
-            DataDefinitions.IS_CATEGORY_NAME_UNIQUE);
+        // TODO: replace validation with pattern matching
+        Descriptor nameDescriptor =
+            new
+            (
+                name,
+                DataDefinitions.CATEGORY_NAME_MAX_LENGTH,
+                DataDefinitions.CATEGORY_NAME_ATTRIBUTE,
+                DataDefinitions.IS_CATEGORY_NAME_UNIQUE
+            );
 
         Result<Descriptor> result = nameDescriptor.GetValidDescriptorOrValidationError();
 
@@ -43,18 +48,16 @@ public sealed class Category : Entity<Category>
             case Result<Descriptor> success
                 when success.IsSuccess &&
                     success.Payload is Descriptor descriptor:
-                {
-                    Category category = new(id, descriptor, todos);
-                    return Result<Category>.Success(category);
-                }
+                    {
+                        Category category = new(id, descriptor, todos);
+                        return Result<Category>.Success(category);
+                    }
             default:
                 return Result<Category>.Failure(Error.Unknown);
         }
     }
-
     public static Result<Category> CreateNew(string name) =>
         Create(Identifier<Category>.CreateNew(), name, []);
-
-    public static Result<Category> CreateWithNewName(Identifier<Category> id, string name, IEnumerable<Todo> todos) =>
-        Create(id, name, todos);
+    public static Result<Category> CreateWithNewName(Identifier<Category> id, string name,
+        IEnumerable<Todo> todos) => Create(id, name, todos);
 }

@@ -3,8 +3,8 @@ namespace TodoHelper.Domain.ValueObjects.Extensions;
 
 public static class NullableCompleteDateExtensions
 {
-    public static DateTimeOffset? MapToNullableDateTimeOffset(this CompleteDate? completeDate) =>
-        completeDate is null || completeDate.Value.Value is null
+    public static DateTimeOffset? ToNullableDateTimeOffset(this CompleteDate? completeDate) =>
+        completeDate is null || completeDate.Value.DateValue is null
             ? null
-            : completeDate.Value.Value;
+            : completeDate.Value.DateValue;
 }

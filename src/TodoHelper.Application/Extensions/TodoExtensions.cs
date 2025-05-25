@@ -8,6 +8,6 @@ namespace TodoHelper.Application.Extensions;
 internal static class TodoExtensions
 {
     internal static TodoDTO MapToDTO(this Todo todo) =>
-        new(todo.Id.Value, todo.Category.Name.Value, todo.CategoryId.Value, todo.Description.Value,
-            todo.DueDate.MapToNullableDateOnly(), todo.CompleteDate.MapToNullableDateTimeOffset(), todo.Importance.IsImportant);
+        new(todo.Id.GuidValue, todo.Category.Name.StringValue, todo.CategoryId.GuidValue, todo.Description.StringValue,
+            todo.DueDate.ToNullableDateOnly(), todo.CompleteDate.ToNullableDateTimeOffset(), todo.Importance.BoolValue);
 }

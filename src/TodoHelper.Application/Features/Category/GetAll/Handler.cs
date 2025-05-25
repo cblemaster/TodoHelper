@@ -16,7 +16,7 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
         IEnumerable<CategoryDTO> dtos =
             (await _repository
                 .GetAllAsync2()
-                .Include(c => c.Todos.Where(t => !t.IsComplete()))
+                .Include(c => c.Todos.Where(t => !t.CompleteDateHasValue()))
                 .OrderBy(c => c.Name)
                 .AsNoTracking()
                 .ToListAsync()

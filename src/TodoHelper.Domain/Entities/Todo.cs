@@ -19,12 +19,17 @@ public sealed class Todo : Entity<Todo>
     public CompleteDate? CompleteDate { get; }
     public Importance Importance { get; }
 
-    public bool IsComplete() => CompleteDate.MapToNullableDateTimeOffset().HasValue;
-    public bool IsImportant() => Importance.IsImportant;
-    public bool DueDateHasValue() => DueDate.MapToNullableDateOnly().HasValue;
-    public bool HasGivenDueDate(DueDate given) => DueDateHasValue() && DueDate.MapToNullableDateOnly() == given.Value;
-    public bool HasDueDateBeforeGiven(DueDate given) => DueDateHasValue() && DueDate.MapToNullableDateOnly() < given.Value;
-    public bool HasGivenCategory(Identifier<Category> given) => CategoryId == given;
+    public bool CompleteDateHasValue() => CompleteDate.ToNullableDateTimeOffset().HasValue;
+    private bool DueDateHasValue() => DueDate.ToNullableDateOnly().HasValue;
+    public bool HasGivenCategoryId(Identifier<Category> given) => CategoryId == given;
+    public bool HasGivenDueDate(DueDate given) =>
+        DueDateHasValue() && DueDate.ToNullableDateOnly() == given.DateValue;
+    public bool HasDueDateBeforeGiven(DueDate given) =>
+        DueDateHasValue() && DueDate.ToNullableDateOnly() < given.DateValue;
+    public bool IsImportant() => Importance.BoolValue;
+    
+
+
     #endregion Properties
 
     #region Constructors
@@ -46,20 +51,21 @@ public sealed class Todo : Entity<Todo>
     private Todo(Identifier<Todo> id, Category category, Identifier<Category> categoryId,
         Descriptor description, DueDate? dueDate, CompleteDate? completeDate,
         Importance importance)
-        : this(id, categoryId, description, dueDate, completeDate, importance) => Category = category;
+        : this(id, categoryId, description, dueDate, completeDate, importance) =>
+            Category = category;
 
     #endregion Constructors
 
     #region Factory methods
-
     private static Result<Todo> Create(Identifier<Todo> id, Category category,
         Identifier<Category> categoryId, string description, DueDate? dueDate,
         CompleteDate? completeDate, Importance importance)
     {
+        // TODO: replace validation with pattern matching
         Descriptor descriptionDescriptor =
             new
             (
-                Value: description,
+                description,
                 DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
                 DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE,
                 DataDefinitions.IS_TODO_DESCRIPTION_UNIQUE
@@ -75,15 +81,14 @@ public sealed class Todo : Entity<Todo>
             case Result<Descriptor> success
                 when success.IsSuccess &&
                     success.Payload is Descriptor descriptor:
-                {
-                    Todo todo = new(id, category, categoryId, descriptor,
-                        dueDate, completeDate, importance);
-                    return Result<Todo>.Success(todo);
-                }
+                    {
+                        Todo todo = new(id, category, categoryId, descriptor,
+                            dueDate, completeDate, importance);
+                        return Result<Todo>.Success(todo);
+                    }
             default:
                 return Result<Todo>.Failure(Error.Unknown);
         }
-        ;
     }
 
     public static Result<Todo> CreateNew(Category category, Identifier<Category> categoryId,
@@ -100,7 +105,6 @@ public sealed class Todo : Entity<Todo>
     public static Result<Todo> CreateWithNewCompleteDate(Identifier<Todo> id, Category category,
         Identifier<Category> categoryId, Descriptor description, DueDate? dueDate,
         CompleteDate completeDate, Importance importance) =>
-            Create(id, category, categoryId, description.Value, dueDate, completeDate, importance);
-
+            Create(id, category, categoryId, description.StringValue, dueDate, completeDate, importance);
     #endregion Factory methods
 }

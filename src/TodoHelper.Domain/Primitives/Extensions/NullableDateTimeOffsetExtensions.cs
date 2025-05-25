@@ -5,8 +5,9 @@ namespace TodoHelper.Domain.Primitives.Extensions;
 
 public static class NullableDateTimeOffsetExtensions
 {
-    public static CompleteDate? MapToNullableCompleteDate(this DateTimeOffset? dateTimeOffset) =>
+    public static CompleteDate? ToNullableCompleteDate(this DateTimeOffset? dateTimeOffset) =>
         dateTimeOffset is not null
             ? new(dateTimeOffset.Value)
             : null;
+    // TODO: does this have any callers?
 }

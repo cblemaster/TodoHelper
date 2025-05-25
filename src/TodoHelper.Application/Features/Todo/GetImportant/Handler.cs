@@ -14,15 +14,15 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
 {
     public override async Task<Response> HandleAsync(Command command)
     {
-        Func<_Todo, bool> completeFilter = t => command.IncludeComplete || !t.IsComplete();
+        Func<_Todo, bool> completeFilter = t => command.IncludeComplete || !t.CompleteDateHasValue();
 
         IEnumerable<TodoDTO> dtos =
             (await _repository
                 .GetAllAsync2()
                 .Where(t => t.IsImportant())
                 .Where(completeFilter)
-                .OrderByDescending(t => t.DueDate.MapToNullableDateOnly())
-                .ThenBy(t => t.Description.Value)
+                .OrderByDescending(t => t.DueDate.ToNullableDateOnly())
+                .ThenBy(t => t.Description.StringValue)
                 .AsQueryable()
                 .AsNoTracking()
                 .ToListAsync()
