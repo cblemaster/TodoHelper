@@ -21,7 +21,8 @@ internal static class ModelBuilderExtensions
             entity.Property(e => e.Name)
                 .HasConversion(n => n.StringValue,
                     n => new Descriptor(n, DataDefinitions.CATEGORY_NAME_MAX_LENGTH,
-                        DataDefinitions.CATEGORY_NAME_ATTRIBUTE, true));
+                        DataDefinitions.CATEGORY_NAME_ATTRIBUTE,
+                        DataDefinitions.IS_CATEGORY_NAME_UNIQUE));
             entity.Property(e => e.Name)
                 .HasMaxLength(DataDefinitions.CATEGORY_NAME_MAX_LENGTH)
                 .IsUnicode(DataDefinitions.IS_UNICODE_DEFAULT_VALUE);
@@ -42,7 +43,8 @@ internal static class ModelBuilderExtensions
             entity.Property(e => e.Description)
                 .HasConversion(d => d.StringValue,
                     d => new Descriptor(d, DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH,
-                        DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE, false));
+                        DataDefinitions.TODO_DESCRIPTION_ATTRIBUTE,
+                        DataDefinitions.IS_TODO_DESCRIPTION_UNIQUE));
             entity.Property(e => e.Description)
                 .HasMaxLength(DataDefinitions.TODO_DESCRIPTION_MAX_LENGTH)
                 .IsUnicode(DataDefinitions.IS_UNICODE_DEFAULT_VALUE);

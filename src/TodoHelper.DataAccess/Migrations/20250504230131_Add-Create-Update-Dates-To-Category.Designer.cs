@@ -12,7 +12,7 @@ using TodoHelper.DataAccess.Context;
 
 namespace TodoHelper.DataAccess.Migrations
 {
-    [DbContext(typeof(TodosDbContext))]
+    [DbContext(typeof(TodoHelperDbContext))]
     [Migration("20250504230131_Add-Create-Update-Dates-To-Category")]
     partial class AddCreateUpdateDatesToCategory
     {

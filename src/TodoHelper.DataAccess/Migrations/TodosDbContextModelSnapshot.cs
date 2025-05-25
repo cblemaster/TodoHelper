@@ -10,7 +10,7 @@ using TodoHelper.DataAccess.Context;
 
 namespace TodoHelper.DataAccess.Migrations
 {
-    [DbContext(typeof(TodosDbContext))]
+    [DbContext(typeof(TodoHelperDbContext))]
     partial class TodosDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

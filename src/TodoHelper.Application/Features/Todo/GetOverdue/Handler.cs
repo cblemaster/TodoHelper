@@ -21,7 +21,7 @@ internal sealed class Handler(IRepository<_Todo> repository) : HandlerBase<_Todo
 
         IEnumerable<TodoDTO> dtos =
             (await _repository
-                .GetAllAsync2()
+                .GetAllAsyncQueryable()
                 .Where(t => t.HasDueDateBeforeGiven(new DueDate(today)))
                 .Where(completeFilter)
                 .OrderByDescending(t => t.DueDate.ToNullableDateOnly())

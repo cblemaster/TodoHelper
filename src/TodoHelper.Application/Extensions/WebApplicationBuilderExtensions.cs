@@ -27,8 +27,8 @@ internal static class WebApplicationBuilderExtensions
     {
         _ = builder.Services
             
-            .AddScoped<IRepository<Category>, TodoRepository<Category>>()
-            .AddScoped<IRepository<Todo>, TodoRepository<Todo>>()
+            .AddScoped<IRepository<Category>, Repository<Category>>()
+            .AddScoped<IRepository<Todo>, Repository<Todo>>()
 
             .AddScoped<CreateCategory.Handler>()
             .AddScoped<CreateTodo.Handler>()

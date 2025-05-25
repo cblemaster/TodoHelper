@@ -11,7 +11,7 @@ using TodoHelper.DataAccess.Context;
 
 namespace TodoHelper.DataAccess.Migrations
 {
-    [DbContext(typeof(TodosDbContext))]
+    [DbContext(typeof(TodoHelperDbContext))]
     [Migration("20250511182459_Remove-update-and-create-dates")]
     partial class Removeupdateandcreatedates
     {

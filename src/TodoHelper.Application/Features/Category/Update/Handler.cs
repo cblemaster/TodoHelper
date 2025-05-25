@@ -18,7 +18,7 @@ internal sealed class Handler(IRepository<_Category> repository) : HandlerBase<_
         {
             return new Response(Result<bool>.Failure(Error.NotFound(nameof(_Category))));
         }
-        else if ((await _repository.GetAllAsync()).Select(c => c.Name.StringValue).Contains(command.Name))
+        else if ((await _repository.GetAllEnumerable()).Select(c => c.Name.StringValue).Contains(command.Name))
         {
             return new Response(Result<bool>.Failure(Error.DomainRuleViolation($"Category with name {command.Name} already exists.")));
         }
