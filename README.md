@@ -3,9 +3,11 @@
 An application with basic todo management features, including custom categories, important flags, and optional due dates
 ### Built with
 + .NET 9, C#13
++ ASP.NET Core
 + EF Core 9.x.x
 ### Features
 |#|Feature|Specifications|Rules|
+|-|-|-|-|
 |1|Create category|n/a|Category name must be forty (40) characters or fewer|
 |1|Create category|n/a|Category name must be unique|
 |1|Create category|n/a|Category name must not be null, an empty string, nor all-whitespace characters|
@@ -33,7 +35,13 @@ An application with basic todo management features, including custom categories,
 |16|Update todo complete date|n/a|n/a|
 ### Improvement opportunities
 + Tackle TODO comments
-+ Automated testing (what kinds?)
-+ Error logging
++ Add automated testing (unit tests, endpoint tests, what else?)
++ Add logging (errors, what else?)
++ Override db context SaveChanges() to set create and update dates in data access project
++ Condider base classes for commands/queries and responses in application project
++ Reduce handler code duplication and complexity in application project
++ Add both high-level and detailed architecture diagrams
++ Standardize crud operation names, esp. concerning gets, in data access project
++ Replace conditionals with pattern matching where possible
++ Add new errors as needed by the application project
 + Add features: recurring todos, sub-todos, reminders
-+ Override db context SaveChanges() to set create and update dates
