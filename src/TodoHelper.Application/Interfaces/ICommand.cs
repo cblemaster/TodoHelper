@@ -3,5 +3,5 @@ namespace TodoHelper.Application.Interfaces;
 
 public interface ICommand<TResponse>
 {
-    // marker interface
+    // NOTE: marker interface
 }
